@@ -6,8 +6,8 @@ Este é o repositório oficial do projeto **Eventos Cariri**, uma plataforma web
 
 Siga os passos abaixo para configurar o ambiente de desenvolvimento do projeto em sua máquina.
 
-
 ### 1. Clonar o Repositório
+
 Primeiro, clone o repositório para sua máquina local:
 
 `git clone https://github.com/AlfaTeamUninassau/eventos_cariri.git`
@@ -39,10 +39,6 @@ No Linux/Mac:
 
 `source venv/bin/activate`
 
-No Windows:
-
-`venv\Scripts\activate`
-
 ### 5. Instalar Dependências
 
 Agora, com o ambiente virtual ativo, instale as dependências do projeto. As dependências estão listadas no arquivo **`requirements.txt`** (por exemplo, Django, Pillow e outras bibliotecas necessárias).
@@ -57,6 +53,7 @@ pillow`
 ### 6. Realizar Migrações do Banco de Dados
 
 O Django utiliza um sistema de migrações para criar e manter a estrutura do banco de dados. Execute os comandos abaixo para criar as tabelas necessárias:
+`python manage.py makemigrations comments `
 
 `python manage.py migrate`
 
@@ -107,4 +104,12 @@ Para garantir que tudo está funcionando corretamente, você pode rodar os teste
 
 ## 👥 Contribuidores
 
-<div> <a href=“https://github.com/Azinth”> <img src=“https://avatars.githubusercontent.com/u/75175601?v=4” style=“border-radius:50%” width=“70” height=“70” alt=“@Azinth”> </a> <a href=“https://github.com/PedroGleidson”> <img src=“https://avatars.githubusercontent.com/u/100448815?v=4” style=“border-radius:50%” width=“70” height=“70” alt=“@PedroGleidson”> </a> <a href=“https://github.com/alancglima”> <img src=“https://avatars.githubusercontent.com/u/100448739?v=4” style=“border-radius:50%” width=“70” height=“70” alt=“@alancglima”> </a> </div>
+<div> 
+    <a href=“https://github.com/Azinth”> 
+        <img src=“https://avatars.githubusercontent.com/u/75175601?v=4” style=“border-radius:50%” width=“70” height=“70” alt=“@Azinth”> 
+    </a> 
+    <a href=“https://github.com/PedroGleidson”> <img src=“https://avatars.githubusercontent.com/u/100448815?v=4” style=“border-radius:50%” width=“70” height=“70” alt=“@PedroGleidson”> 
+    </a> 
+    <a href=“https://github.com/alancglima”> <img src=“https://avatars.githubusercontent.com/u/100448739?v=4” style=“border-radius:50%” width=“70” height=“70” alt=“@alancglima”> 
+    </a> 
+</div>
