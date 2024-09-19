@@ -72,6 +72,20 @@ TEMPLATES = [
     },
 ]
 
+# settings.py
+
+# Diretório onde os arquivos estáticos serão coletados
+STATIC_ROOT = BASE_DIR / 'staticfiles'
+
+# URL para acessar os arquivos estáticos
+STATIC_URL = '/static/'
+
+# Diretórios adicionais para buscar arquivos estáticos
+STATICFILES_DIRS = [
+    BASE_DIR / 'eventos_cariri/static',
+]
+
+
 WSGI_APPLICATION = 'eventos_cariri.wsgi.application'
 
 
