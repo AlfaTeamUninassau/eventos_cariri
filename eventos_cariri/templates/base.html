@@ -25,7 +25,7 @@
                 <span class="ml-2 text-xl font-bold">Eventos Cariri</span>
             </div>
             <nav class="flex space-x-4">
-                <a class="text-gray-700 hover:text-black" href="#">Home</a>
+                <a class="text-gray-700 hover:text-black" href="{% url 'home' %}">Home</a>
                 <a class="text-gray-700 hover:text-black" href="#">Eventos</a>
                 <a class="text-gray-700 hover:text-black" href="#">Categorias</a>
                 <a class="text-gray-700 hover:text-black" href="#">Criar Eventos</a>
@@ -35,7 +35,7 @@
                 {% if user.is_authenticated %}
                     <a class="text-red-700 hover:text-gray-400" href="#">Sair</a>
                 {% else %}
-                    <a class="text-gray-700 hover:text-black" href="#">Login</a>
+                    <a class="text-gray-700 hover:text-black" href="{% url 'login' %}">Login</a>
                     <a class="text-gray-700 hover:text-black" href="#">Sign Up</a>
                 {% endif %}
                 <i class="fas fa-search text-gray-700 hover:text-black"></i>
