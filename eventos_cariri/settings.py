@@ -59,7 +59,7 @@ ROOT_URLCONF = 'eventos_cariri.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': ['eventos_cariri/templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
