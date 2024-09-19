@@ -53,7 +53,8 @@ pillow`
 ### 6. Realizar Migrações do Banco de Dados
 
 O Django utiliza um sistema de migrações para criar e manter a estrutura do banco de dados. Execute os comandos abaixo para criar as tabelas necessárias:
-`python manage.py makemigrations comments `
+
+`python manage.py makemigrations comments, events, reviews, users`
 
 `python manage.py migrate`
 
