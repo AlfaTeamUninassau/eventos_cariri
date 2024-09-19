@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<!-- Main Content -->
+    <main class="container mx-auto px-4 py-16 flex">
+        <div class="w-1/2">
+        <ul class="list-disc pl-5 space-y-4 text-lg text-gray-800">
+        <li>
+        Veja os eventos da nossa região
+        </li>
+        <li>
+        Cadastre eventos
+        </li>
+        <li>
+        Faça reviews
+        </li>
+        <li>
+        Veja o que estão comentando
+        </li>
+        <li>
+        E mais
+        </li>
+        </ul>
+        </div>
+        <div class="w-1/2 flex justify-center items-center">
+        <div class="bg-white bg-opacity-75 p-8 rounded-lg shadow-lg w-96">
+        <form>
+        <div class="mb-4">
+            <input class="w-full p-3 rounded bg-gray-200 text-gray-700" placeholder="email" type="email"/>
+        </div>
+        <div class="mb-4">
+            <input class="w-full p-3 rounded bg-gray-200 text-gray-700" placeholder="password" type="password"/>
+        </div>
+        <button class="w-full p-3 rounded bg-gray-800 text-white" type="submit">
+            login
+        </button>
+        </form>
+        <div class="flex justify-between mt-4 text-sm text-gray-600">
+        <a class="hover:underline" href="#">
+            sing-in
+        </a>
+        <a class="hover:underline" href="#">
+            forgot your password?
+        </a>
+        </div>
+        </div>
+        </div>
+    </main>
+
+{% endblock content %}

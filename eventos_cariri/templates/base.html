@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title> 
+        {% block title %}
+        {% endblock title %}  
+    </title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&amp;display=swap" rel="stylesheet"/>
+    <style>
+    body {
+        font-family: 'Roboto', sans-serif;
+    }
+    </style>
+</head>
+<body class="bg-gray-100">
+    <!-- Header -->
+    <header class="bg-white shadow-md">
+        <div class="container mx-auto px-4 py-4 flex justify-between items-center">
+            <div class="flex items-center">
+                <img alt="Eventos Cariri Logo" class="h-10 w-10" height="40" src="https://oaidalleapiprodscus.blob.core.windows.net/private/org-BVbpSZmLndA7MfHIxv2ahIKS/user-IBY8IaMXtVn7IVIdZeyvjx16/img-LCg4jZ17tK6idiieMi1GymGF.png?st=2024-09-19T14%3A55%3A34Z&amp;se=2024-09-19T16%3A55%3A34Z&amp;sp=r&amp;sv=2024-08-04&amp;sr=b&amp;rscd=inline&amp;rsct=image/png&amp;skoid=d505667d-d6c1-4a0a-bac7-5c84a87759f8&amp;sktid=a48cca56-e6da-484e-a814-9c849652bcb3&amp;skt=2024-09-19T02%3A03%3A43Z&amp;ske=2024-09-20T02%3A03%3A43Z&amp;sks=b&amp;skv=2024-08-04&amp;sig=jH2G%2BtXbmFW2XLaBDQrRImihhsDwFZehkcb40gtZ/Qw%3D" width="40"/>
+                <span class="ml-2 text-xl font-bold">Eventos Cariri</span>
+            </div>
+            <nav class="flex space-x-4">
+                <a class="text-gray-700 hover:text-black" href="#">Home</a>
+                <a class="text-gray-700 hover:text-black" href="#">Eventos</a>
+                <a class="text-gray-700 hover:text-black" href="#">Categorias</a>
+                <a class="text-gray-700 hover:text-black" href="#">Criar Eventos</a>
+                <a class="text-gray-700 hover:text-black" href="#">Sobre</a>
+            </nav>
+            <div class="flex space-x-4">
+                {% if user.is_authenticated %}
+                    <a class="text-red-700 hover:text-gray-400" href="#">Sair</a>
+                {% else %}
+                    <a class="text-gray-700 hover:text-black" href="#">Login</a>
+                    <a class="text-gray-700 hover:text-black" href="#">Sign Up</a>
+                {% endif %}
+                <i class="fas fa-search text-gray-700 hover:text-black"></i>
+            </div>
+        </div>
+    </header>
+    <main>
+        {% block content %}
+        {% endblock content %}
+    </main>
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-white py-8">
+        <div class="container mx-auto px-4 flex justify-between">
+            <div>
+                <h5 class="font-bold mb-2">Quick Links</h5>
+                <ul class="space-y-2">
+                    <li><a class="hover:underline" href="#">Sobre</a></li>
+                    <li><a class="hover:underline" href="#">Contato</a></li>
+                    <li><a class="hover:underline" href="#">Política de Privacidade</a></li>
+                    <li><a class="hover:underline" href="#">Termos do Serviço</a></li>
+                </ul>
+            </div>
+            <div>
+                <h5 class="font-bold mb-2">Siga-nos</h5>
+                <div class="flex space-x-4">
+                    <a class="hover:text-gray-400" href="#"><i class="fab fa-facebook-f"></i></a>
+                    <a class="hover:text-gray-400" href="#"><i class="fab fa-twitter"></i></a>
+                    <a class="hover:text-gray-400" href="#"><i class="fab fa-instagram"></i></a>
+                    <a class="hover:text-gray-400" href="#"><i class="fab fa-linkedin-in"></i></a>
+                </div>
+            </div>
+            <div>
+                <h5 class="font-bold mb-2">Se inscreva em nossa Newsletter</h5>
+                <form class="flex">
+                    <input class="p-2 rounded-l bg-gray-200 text-gray-700" placeholder="coloque o seu e-mail" type="email"/>
+                    <button class="p-2 rounded-r bg-blue-600 text-white" type="submit">Inscrever-se</button>
+                </form>
+            </div>
+        </div>
+        <div class="text-center mt-8 text-gray-500">
+            <p>2024 - Eventos Cariri</p>
+        </div>
+    </footer>
+</body>
+</html>
