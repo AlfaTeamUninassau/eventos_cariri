@@ -1,3 +1,5 @@
+{% load static %}
+
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
@@ -17,11 +19,12 @@
     </style>
 </head>
 <body class="bg-gray-100">
+    
     <!-- Header -->
     <header class="bg-white shadow-md">
         <div class="container mx-auto px-4 py-4 flex justify-between items-center">
             <div class="flex items-center">
-                <img alt="Eventos Cariri Logo" class="h-10 w-10" height="40" src="https://oaidalleapiprodscus.blob.core.windows.net/private/org-BVbpSZmLndA7MfHIxv2ahIKS/user-IBY8IaMXtVn7IVIdZeyvjx16/img-LCg4jZ17tK6idiieMi1GymGF.png?st=2024-09-19T14%3A55%3A34Z&amp;se=2024-09-19T16%3A55%3A34Z&amp;sp=r&amp;sv=2024-08-04&amp;sr=b&amp;rscd=inline&amp;rsct=image/png&amp;skoid=d505667d-d6c1-4a0a-bac7-5c84a87759f8&amp;sktid=a48cca56-e6da-484e-a814-9c849652bcb3&amp;skt=2024-09-19T02%3A03%3A43Z&amp;ske=2024-09-20T02%3A03%3A43Z&amp;sks=b&amp;skv=2024-08-04&amp;sig=jH2G%2BtXbmFW2XLaBDQrRImihhsDwFZehkcb40gtZ/Qw%3D" width="40"/>
+                <img alt="Eventos Cariri Logo" class="h-10 w-10" height="40" src="{% static 'eventos_cariri/images/logomarca.png' %}"/>
                 <span class="ml-2 text-xl font-bold">Eventos Cariri</span>
             </div>
             <nav class="flex space-x-4">
@@ -32,17 +35,19 @@
                 <a class="text-gray-700 hover:text-black" href="#">Sobre</a>
             </nav>
             <div class="flex space-x-4">
+                <i class="fas fa-search text-gray-700 rounded-full px-2 py-2 hover:text-black"></i>
                 {% if user.is_authenticated %}
                     <a class="text-red-700 hover:text-gray-400" href="#">Sair</a>
                 {% else %}
-                    <a class="text-gray-700 hover:text-black" href="{% url 'login' %}">Login</a>
-                    <a class="text-gray-700 hover:text-black" href="#">Sign Up</a>
+                    <a class="text-gray-700 rounded-full px-2 py-1" href="{% url 'login' %}">Login</a>
+                    <a class="text-gray-700 hover:text-black border border-gray-700 rounded-full px-2 py-1 hover:bg-gray-200" href="#">Cadastre-se</a>
                 {% endif %}
-                <i class="fas fa-search text-gray-700 hover:text-black"></i>
             </div>
         </div>
+
     </header>
     <main>
+    
         {% block content %}
         {% endblock content %}
     </main>
