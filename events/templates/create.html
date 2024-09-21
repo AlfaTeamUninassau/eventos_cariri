@@ -1,0 +1,117 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+
+<body class="bg-gray-100 flex items-center justify-center min-h-screen">
+    <div class="bg-white w-full max-w-2xl mx-auto p-8 rounded-lg shadow-lg">
+        <h1 class="text-2xl font-semibold text-center mb-6">
+            Criar Novo Evento
+        </h1>
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="mb-6">
+                <h2 class="text-lg font-semibold mb-2">
+                    Informações do Evento
+                </h2>
+                <div class="space-y-4">
+                    {{ form.non_field_errors }}
+                    <div>
+                        <label class="block text-sm font-medium">
+                            Título do Evento
+                        </label>
+                        {{ form.title }}
+                        {{ form.title.errors }}
+                    </div>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm font-medium">
+                                Data do Evento
+                            </label>
+                            {{ form.date }}
+                            {{ form.date.errors }}
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium">
+                                Local do Evento
+                            </label>
+                            {{ form.location }}
+                            {{ form.location.errors }}
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium">
+                            Descrição do Evento
+                        </label>
+                        {{ form.description }}
+                        {{ form.description.errors }}
+                    </div>
+                </div>
+            </div>
+            <div class="mb-6">
+                <h2 class="text-lg font-semibold mb-2">
+                    Mídia do Evento
+                </h2>
+                <div class="border-dashed border-2 border-gray-300 rounded p-4 text-center">
+                    <div class="text-gray-500 mb-4">
+                        <i class="fas fa-cloud-upload-alt text-4xl"></i>
+                        <p>Arraste e solte suas imagens ou vídeos aqui</p>
+                    </div>
+                    {{ image_form.images }}
+                    {{ image_form.images.errors }}
+                    <button type="button" class="bg-blue-500 text-white px-4 py-2 rounded" onclick="document.getElementById('file-input').click();">
+                        Procurar Arquivos
+                    </button>
+                </div>
+                <div class="mt-4 flex items-center space-x-4" id="preview-container"></div>
+            </div>
+            <div class="flex justify-between">
+                <button class="bg-gray-300 text-gray-700 px-4 py-2 rounded">
+                    Cancelar Criação
+                </button>
+                <button type="submit" class="bg-green-500 text-white px-4 py-2 rounded">
+                    Publicar Evento
+                </button>
+            </div>
+        </form>
+    </div>
+</body>
+
+<script>
+    document.getElementById('file-input').addEventListener('change', function(event) {
+        const files = event.target.files;
+        const previewContainer = document.getElementById('preview-container');
+        previewContainer.innerHTML = ''; // Clear previous previews
+
+        if (files.length > 5) {
+            alert('Você pode enviar no máximo 5 fotos.');
+            event.target.value = ''; // Clear the input
+            return;
+        }
+
+        for (let i = 0; i < files.length; i++) {
+            const file = files[i];
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const img = document.createElement('img');
+                img.src = e.target.result;
+                img.className = 'w-16 h-16 border rounded';
+                img.height = 100;
+                img.width = 100;
+                previewContainer.appendChild(img);
+            };
+            reader.readAsDataURL(file);
+        }
+    });
+
+    function validateForm() {
+        const files = document.getElementById('file-input').files;
+        if (files.length === 0) {
+            alert('Por favor, envie pelo menos uma foto.');
+            return false;
+        }
+        return true;
+    }
+</script>
+
+{% endblock content %}
