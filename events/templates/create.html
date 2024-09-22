@@ -2,116 +2,456 @@
 {% load static %}
 
 {% block content %}
-
 <body class="bg-gray-100 flex items-center justify-center min-h-screen">
     <div class="bg-white w-full max-w-2xl mx-auto p-8 rounded-lg shadow-lg">
-        <h1 class="text-2xl font-semibold text-center mb-6">
-            Criar Novo Evento
-        </h1>
-        <form method="post" enctype="multipart/form-data">
+        <h1 class="text-2xl font-semibold text-center mb-6">Criar Novo Evento</h1>
+        <form method="post" enctype="multipart/form-data" onsubmit="return validateForm();">
             {% csrf_token %}
+            
             <div class="mb-6">
-                <h2 class="text-lg font-semibold mb-2">
-                    Informações do Evento
-                </h2>
+                <h2 class="text-lg font-semibold mb-2">Informações do Evento</h2>
                 <div class="space-y-4">
                     {{ form.non_field_errors }}
+
                     <div>
-                        <label class="block text-sm font-medium">
-                            Título do Evento
-                        </label>
+                        <label for="id_title" class="block text-sm font-medium">Título do Evento</label>
                         {{ form.title }}
                         {{ form.title.errors }}
                     </div>
+
                     <div class="grid grid-cols-2 gap-4">
                         <div>
-                            <label class="block text-sm font-medium">
-                                Data do Evento
-                            </label>
+                            <label for="id_date" class="block text-sm font-medium">Data do Evento</label>
                             {{ form.date }}
                             {{ form.date.errors }}
                         </div>
                         <div>
-                            <label class="block text-sm font-medium">
-                                Local do Evento
-                            </label>
-                            {{ form.location }}
-                            {{ form.location.errors }}
+                            <label for="id_time" class="block text-sm font-medium">Horário do Evento</label>
+                            <input type="time" id="id_time" name="time" class="w-full mt-1 p-2 border rounded">
+                            {{ form.time.errors }}
                         </div>
                     </div>
+
                     <div>
-                        <label class="block text-sm font-medium">
-                            Descrição do Evento
-                        </label>
+                        <label for="id_cep" class="block text-sm font-medium">CEP</label>
+                        <input type="text" id="id_cep" name="cep" maxlength="10" class="w-full mt-1 p-2 border rounded" oninput="mascaraCEP(this)">
+                    </div>
+                    <div>
+                        <label for="id_street" class="block text-sm font-medium">Rua</label>
+                        <input type="text" id="id_street" name="street" class="w-full mt-1 p-2 border rounded" readonly>
+                    </div>
+                    <div>
+                        <label for="id_number" class="block text-sm font-medium">Número</label>
+                        <input type="text" id="id_number" name="number" class="w-full mt-1 p-2 border rounded" oninput="mascaraNumero(this)">
+                    </div>
+                    <div>
+                        <label for="id_neighborhood" class="block text-sm font-medium">Bairro</label>
+                        <input type="text" id="id_neighborhood" name="neighborhood" class="w-full mt-1 p-2 border rounded" readonly>
+                    </div>
+                    <div>
+                        <label for="id_city" class="block text-sm font-medium">Cidade</label>
+                        <input type="text" id="id_city" name="city" class="w-full mt-1 p-2 border rounded" readonly>
+                    </div>
+                    <div>
+                        <label for="id_state" class="block text-sm font-medium">Estado</label>
+                        <input type="text" id="id_state" name="state" class="w-full mt-1 p-2 border rounded" readonly>
+                    </div>
+                    <div>
+                        <label for="id_description" class="block text-sm font-medium">Descrição do Evento</label>
                         {{ form.description }}
                         {{ form.description.errors }}
+                        <div class="text-right text-sm mt-1">
+                            <span id="char_count">0</span>/1000
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mb-6">
+                <h2 class="text-lg font-semibold mb-2">Ingressos</h2>
+                                <div class="space-y-4">
+                    <div>
+                        <label for="id_ticket_type" class="block text-sm font-medium">Tipo de Ingresso</label>
+                        <select id="id_ticket_type" name="ticket_type" class="w-full mt-1 p-2 border rounded" onchange="togglePriceField(this.value);">
+                            <option value="grátis">Grátis</option>
+                            <option value="pago">Pago</option>
+                        </select>
+                    </div>
+                    <div id="ticket_price_container" style="display: none;">
+                        <label for="id_price" class="block text-sm font-medium">Preço (R$)</label>
+                        <input type="text" id="id_price" name="price" class="w-full mt-1 p-2 border rounded" oninput="formatarMoeda(this);" maxlength="10">
+                    </div>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <label for="id_tickets" class="block text-sm font-medium">Quantidade de Ingressos</label>
+                            <input type="number" id="id_tickets" name="tickets" class="w-full mt-1 p-2 border rounded" required max="500000">
+                        </div>
                     </div>
                 </div>
             </div>
             <div class="mb-6">
-                <h2 class="text-lg font-semibold mb-2">
-                    Mídia do Evento
-                </h2>
+                <h2 class="text-lg font-semibold mb-2">Mídia do Evento</h2>
                 <div class="border-dashed border-2 border-gray-300 rounded p-4 text-center">
                     <div class="text-gray-500 mb-4">
                         <i class="fas fa-cloud-upload-alt text-4xl"></i>
-                        <p>Arraste e solte suas imagens ou vídeos aqui</p>
+                        <p>Arraste e solte suas imagens ou vídeos aqui (máximo 5)</p>
+                        <p class="text-sm text-gray-600">Tamanho máximo de imagem: 10MB. Duração máxima de vídeo: 1 minuto.</p>
                     </div>
                     {{ image_form.images }}
                     {{ image_form.images.errors }}
-                    <button type="button" class="bg-blue-500 text-white px-4 py-2 rounded" onclick="document.getElementById('file-input').click();">
-                        Procurar Arquivos
-                    </button>
                 </div>
                 <div class="mt-4 flex items-center space-x-4" id="preview-container"></div>
             </div>
+            <div class="mb-6">
+                <h2 class="text-lg font-semibold mb-2">Configurações do Evento</h2>
+                <div class="space-y-4">
+                    <div>
+                        <label for="id_capacity" class="block text-sm font-medium">Capacidade Máxima do Evento (máximo 500.000)</label>
+                        <input type="text" id="id_capacity" name="capacity" class="w-full mt-1 p-2 border rounded" oninput="mascaraCapacidade(this);">
+                    </div>
+                    <div>
+                        <label for="id_age_restriction" class="block text-sm font-medium">Faixa Etária</label>
+                        <select id="id_age_restriction" name="age_restriction" class="w-full mt-1 p-2 border rounded">
+                            <option value="livre">Livre</option>
+                            <option value="+12">+12 Anos</option>
+                            <option value="+16">+16 Anos</option>
+                            <option value="+18">+18 Anos</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label for="id_privacy" class="block text-sm font-medium">Privacidade</label>
+                        <div class="flex items-center mt-2">
+                            <input type="radio" id="id_public" name="privacy" value="public" checked>
+                            <label for="id_public" class="ml-2 text-sm font-medium">Público</label>
+                            <input type="radio" id="id_private" name="privacy" value="private" class="ml-6">
+                            <label for="id_private" class="ml-2 text-sm font-medium">Privado</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
             <div class="flex justify-between">
-                <button class="bg-gray-300 text-gray-700 px-4 py-2 rounded">
-                    Cancelar Criação
-                </button>
-                <button type="submit" class="bg-green-500 text-white px-4 py-2 rounded">
-                    Publicar Evento
-                </button>
+                <button class="bg-gray-300 text-gray-700 px-4 py-2 rounded">Cancelar Criação</button>
+                <button type="submit" class="bg-green-500 text-white px-4 py-2 rounded">Publicar Evento</button>
             </div>
         </form>
     </div>
 </body>
 
 <script>
-    document.getElementById('file-input').addEventListener('change', function(event) {
-        const files = event.target.files;
-        const previewContainer = document.getElementById('preview-container');
-        previewContainer.innerHTML = ''; // Clear previous previews
 
-        if (files.length > 5) {
-            alert('Você pode enviar no máximo 5 fotos.');
-            event.target.value = ''; // Clear the input
-            return;
+    function togglePriceField(ticketType) {
+        const priceContainer = document.getElementById('ticket_price_container');
+        if (ticketType === 'pago') {
+            priceContainer.style.display = 'block';
+        } else {
+            priceContainer.style.display = 'none';
+            document.getElementById('id_price').value = ''; // Limpa o valor do campo de preço
+        }
+    }
+
+    function formatarMoeda(input) {
+        let value = input.value.replace(/\D/g, '');
+        value = (value / 100).toFixed(2) + '';
+        value = value.replace('.', ',');
+        value = value.replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1.');
+        input.value = value;
+    }
+
+    document.addEventListener('DOMContentLoaded', (event) => {
+        const ticketTypeSelect = document.getElementById('id_ticket_type');
+        togglePriceField(ticketTypeSelect.value); // Inicializa a visibilidade do campo de preço com base no valor atual
+    });
+    function validateForm() {
+        let isValid = true;
+        const requiredFields = document.querySelectorAll('input[required], textarea[required], select[required]');
+        const maxImageSize = 10 * 1024 * 1024; // 10MB
+        const maxVideoDuration = 60; // 1 minuto
+        const maxTickets = 500000; // 500.000 ingressos
+
+        requiredFields.forEach(field => {
+            if (!field.value.trim()) {
+                field.classList.add('border-red-500');
+                isValid = false;
+            } else {
+                field.classList.remove('border-red-500');
+            }
+        });
+
+        const ticketsInput = document.getElementById('id_tickets');
+        if (parseInt(ticketsInput.value) > maxTickets) {
+            alert(`A quantidade de ingressos não pode exceder ${maxTickets}.`);
+            ticketsInput.classList.add('border-red-500');
+            isValid = false;
+        } else {
+            ticketsInput.classList.remove('border-red-500');
         }
 
+        const files = document.getElementById('id_images').files;
         for (let i = 0; i < files.length; i++) {
             const file = files[i];
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                const img = document.createElement('img');
-                img.src = e.target.result;
-                img.className = 'w-16 h-16 border rounded';
-                img.height = 100;
-                img.width = 100;
-                previewContainer.appendChild(img);
-            };
-            reader.readAsDataURL(file);
+            if (file.type.startsWith('image/') && file.size > maxImageSize) {
+                alert(`A imagem ${file.name} excede o tamanho máximo de 10MB.`);
+                isValid = false;
+            } else if (file.type.startsWith('video/')) {
+                const video = document.createElement('video');
+                video.preload = 'metadata';
+                video.onloadedmetadata = function() {
+                    window.URL.revokeObjectURL(video.src);
+                    if (video.duration > maxVideoDuration) {
+                        alert(`O vídeo ${file.name} excede a duração máxima de 1 minuto.`);
+                        isValid = false;
+                    }
+                }
+                video.src = URL.createObjectURL(file);
+            }
         }
+
+        return isValid;
+    }
+
+    function mascaraNumero(input) {
+        // Remove tudo que não for número
+        input.value = input.value.replace(/\D/g, '');
+    
+        // Limita a entrada a 9 caracteres
+        if (input.value.length > 9) {
+            input.value = input.value.substring(0, 9);
+        }
+    }
+
+    // Máscara para o CEP no formato 63.030-000
+    function mascaraCEP(input) {
+        var cep = input.value.replace(/\D/g, ''); // Remove tudo que não for número
+        if (cep.length > 5) {
+            input.value = cep.substring(0, 2) + '.' + cep.substring(2, 5) + '-' + cep.substring(5, 8);
+        } else {
+            input.value = cep;
+        }
+        
+        // Quando o CEP estiver completo (9 caracteres incluindo o hífen), buscar o endereço
+        if (cep.length === 8) {
+            buscaEndereco(input.value);
+        }
+    }
+
+    // Função para buscar o endereço via API do ViaCEP
+    function buscaEndereco(cep) {
+        if (cep.length === 10) { // Formato correto: 63.030-000
+            console.log(`Buscando endereço para o CEP: ${cep}`);
+            fetch(`https://viacep.com.br/ws/${cep.replace('.', '').replace('-', '')}/json/`)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Erro na resposta da API');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    if (data.erro) {
+                        alert('CEP não encontrado.');
+                        return;
+                    }
+                    console.log('Dados recebidos da API:', data);
+                    document.getElementById('id_street').value = data.logradouro || '';
+                    document.getElementById('id_neighborhood').value = data.bairro || '';
+                    document.getElementById('id_city').value = data.localidade || '';
+                    document.getElementById('id_state').value = data.uf || '';
+                })
+                .catch(error => console.error('Erro ao buscar endereço:', error));
+        }
+    }
+
+    function mascaraCapacidade(input) {
+        let value = input.value.replace(/\D/g, ''); 
+        value = value.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+        input.value = value;
+
+        // Verifica se o valor é maior que 500.000
+        let numericValue = parseInt(value.replace(/\./g, ''), 10);
+        if (numericValue > 500000) {
+            input.value = '500.000';
+        }
+    }
+
+    document.addEventListener('DOMContentLoaded', (event) => {
+        const descriptionInput = document.getElementById('id_description');
+        const charCount = document.getElementById('char_count');
+        const maxChars = 1000;
+
+        descriptionInput.addEventListener('input', () => {
+            const currentLength = descriptionInput.value.length;
+            charCount.textContent = currentLength;
+
+            if (currentLength > maxChars) {
+                descriptionInput.value = descriptionInput.value.substring(0, maxChars);
+                charCount.textContent = maxChars;
+            }
+
+            if (currentLength >= maxChars) {
+                charCount.classList.add('text-red-500');
+            } else {
+                charCount.classList.remove('text-red-500');
+            }
+        });
+
+        const imageInput = document.getElementById('id_images');
+        const previewContainer = document.getElementById('preview-container');
+
+        imageInput.addEventListener('change', () => {
+            previewContainer.innerHTML = ''; // Limpa as miniaturas anteriores
+            const files = imageInput.files;
+
+            for (let i = 0; i < files.length; i++) {
+                const file = files[i];
+                const reader = new FileReader();
+
+                reader.onload = (e) => {
+                    const img = document.createElement('img');
+                    img.src = e.target.result;
+                    img.classList.add('h-20', 'w-20', 'object-cover', 'mr-2', 'mb-2');
+                    previewContainer.appendChild(img);
+                };
+
+                reader.readAsDataURL(file);
+            }
+        });
     });
 
-    function validateForm() {
-        const files = document.getElementById('file-input').files;
-        if (files.length === 0) {
-            alert('Por favor, envie pelo menos uma foto.');
-            return false;
-        }
-        return true;
-    }
+    document.addEventListener('DOMContentLoaded', (event) => {
+        const dateInput = document.getElementById('id_date');
+        dateInput.setAttribute('type', 'date');
+        dateInput.setAttribute('min', new Date().toISOString().split('T')[0]);
+    });
 </script>
 
+<!-- <script>
+    function validateForm() {
+        let isValid = true;
+        const requiredFields = document.querySelectorAll('input[required], textarea[required], select[required]');
+        const maxImageSize = 10 * 1024 * 1024; // 10MB
+        const maxVideoDuration = 60; // 1 minuto
+
+        requiredFields.forEach(field => {
+            if (!field.value.trim()) {
+                field.classList.add('border-red-500');
+                isValid = false;
+            } else {
+                field.classList.remove('border-red-500');
+            }
+        });
+
+        const files = document.getElementById('id_images').files;
+        for (let i = 0; i < files.length; i++) {
+            const file = files[i];
+            if (file.type.startsWith('image/') && file.size > maxImageSize) {
+                alert(`A imagem ${file.name} excede o tamanho máximo de 10MB.`);
+                isValid = false;
+            } else if (file.type.startsWith('video/')) {
+                const video = document.createElement('video');
+                video.preload = 'metadata';
+                video.onloadedmetadata = function() {
+                    window.URL.revokeObjectURL(video.src);
+                    if (video.duration > maxVideoDuration) {
+                        alert(`O vídeo ${file.name} excede a duração máxima de 1 minuto.`);
+                        isValid = false;
+                    }
+                }
+                video.src = URL.createObjectURL(file);
+            }
+        }
+
+        return isValid;
+    }
+
+    function mascaraNumero(input) {
+        // Remove tudo que não for número
+        input.value = input.value.replace(/\D/g, '');
+    
+        // Limita a entrada a 9 caracteres
+        if (input.value.length > 9) {
+            input.value = input.value.substring(0, 9);
+        }
+    }
+
+    // Máscara para o CEP no formato 63.030-000
+    function mascaraCEP(input) {
+        var cep = input.value.replace(/\D/g, ''); // Remove tudo que não for número
+        if (cep.length > 5) {
+            input.value = cep.substring(0, 2) + '.' + cep.substring(2, 5) + '-' + cep.substring(5, 8);
+        } else {
+            input.value = cep;
+        }
+        
+        // Quando o CEP estiver completo (9 caracteres incluindo o hífen), buscar o endereço
+        if (cep.length === 8) {
+            buscaEndereco(input.value);
+        }
+    }
+
+    // Função para buscar o endereço via API do ViaCEP
+    function buscaEndereco(cep) {
+        if (cep.length === 10) { // Formato correto: 63.030-000
+            console.log(`Buscando endereço para o CEP: ${cep}`);
+            fetch(`https://viacep.com.br/ws/${cep.replace('.', '').replace('-', '')}/json/`)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Erro na resposta da API');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    if (data.erro) {
+                        alert('CEP não encontrado.');
+                        return;
+                    }
+                    console.log('Dados recebidos da API:', data);
+                    document.getElementById('id_street').value = data.logradouro || '';
+                    document.getElementById('id_neighborhood').value = data.bairro || '';
+                    document.getElementById('id_city').value = data.localidade || '';
+                    document.getElementById('id_state').value = data.uf || '';
+                })
+                .catch(error => console.error('Erro ao buscar endereço:', error));
+        }
+    }
+
+    function mascaraCapacidade(input) {
+        let value = input.value.replace(/\D/g, ''); 
+        value = value.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+        input.value = value;
+
+        // Verifica se o valor é maior que 500.000
+        let numericValue = parseInt(value.replace(/\./g, ''), 10);
+        if (numericValue > 500000) {
+            input.value = '500.000';
+        }
+    }
+
+    document.addEventListener('DOMContentLoaded', (event) => {
+        const descriptionInput = document.getElementById('id_description');
+        const charCount = document.getElementById('char_count');
+        const maxChars = 1000;
+
+        descriptionInput.addEventListener('input', () => {
+            const currentLength = descriptionInput.value.length;
+            charCount.textContent = currentLength;
+
+            if (currentLength > maxChars) {
+                descriptionInput.value = descriptionInput.value.substring(0, maxChars);
+                charCount.textContent = maxChars;
+            }
+
+            if (currentLength >= maxChars) {
+                charCount.classList.add('text-red-500');
+            } else {
+                charCount.classList.remove('text-red-500');
+            }
+        });
+    });
+
+    document.addEventListener('DOMContentLoaded', (event) => {
+        const dateInput = document.getElementById('id_date');
+        dateInput.setAttribute('type', 'date');
+        dateInput.setAttribute('min', new Date().toISOString().split('T')[0]);
+    });
+</script> -->
 {% endblock content %}
