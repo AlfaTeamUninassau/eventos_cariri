@@ -1,0 +1,2 @@
+msgid "This field is required."
+msgstr "Digite seu e-mail"
