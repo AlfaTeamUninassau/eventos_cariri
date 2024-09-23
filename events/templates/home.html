@@ -2,10 +2,9 @@
 
 {% load static %}
 
-
 {% block content %}
 
- <!-- Hero Section -->
+<!-- Hero Section -->
 <section class="relative bg-cover bg-center h-96 flex items-center justify-center" style="background-image: url('{% static "eventos_cariri/images/background_home_image.png" %}');">
     <div class="absolute inset-0 bg-black opacity-40"></div>
     <div class="container mx-auto px-10 py-20 text-center relative z-10">
@@ -17,214 +16,136 @@
         </button>
     </div>
 </section>
-   <!-- Event Categories -->
-   <section class="container mx-auto px-4 py-8">
-    <h2 class="text-2xl font-bold mb-4">
-     Categorias de Eventos
-    </h2>
-    <div class="grid grid-cols-4 gap-4">
-     <div class="bg-white p-4 rounded shadow text-center">
-      <i class="fas fa-palette text-purple-500 text-3xl mb-2">
-      </i>
-      <p class="font-semibold">
-       Cultura
-      </p>
-     </div>
-     <div class="bg-white p-4 rounded shadow text-center">
-      <i class="fas fa-futbol text-blue-500 text-3xl mb-2">
-      </i>
-      <p class="font-semibold">
-       Esportes
-      </p>
-     </div>
-     <div class="bg-white p-4 rounded shadow text-center">
-      <i class="fas fa-book text-green-500 text-3xl mb-2">
-      </i>
-      <p class="font-semibold">
-       Educacional
-      </p>
-     </div>
-     <div class="bg-white p-4 rounded shadow text-center">
-      <i class="fas fa-coffee text-yellow-500 text-3xl mb-2">
-      </i>
-      <p class="font-semibold">
-       Leitura
-      </p>
-     </div>
-    </div>
-   </section>
-   <!-- Create Event Button -->
-   <section class="text-center py-8">
-    <button class="px-6 py-2 bg-blue-500 text-white font-semibold rounded">
-     Crie seu Evento
-    </button>
-   </section>
-   <!-- Upcoming Events -->
-   <section class="container mx-auto px-4 py-8">
-    <h2 class="text-2xl font-bold mb-4">
-     Eventos Próximos
-    </h2>
-    <div class="grid grid-cols-3 gap-4">
-     <div class="bg-white p-4 rounded shadow">
-      <img alt="Event Image" class="w-full h-48 object-cover rounded" height="200" src="https://i.ytimg.com/vi/BrTzRUc714E/maxresdefault.jpg" width="300"/>
-      <div class="mt-4">
-       <span class="bg-purple-500 text-white text-xs px-2 py-1 rounded">
-        Em breve
-       </span>
-       <h3 class="text-xl font-bold mt-2">
-        Pau da Bandeira
-       </h3>
-       <p class="text-gray-600 mt-1">
-        <i class="fas fa-calendar-alt">
-        </i>
-        Junho
-       </p>
-       <p class="text-gray-600">
-        <i class="fas fa-map-marker-alt">
-        </i>
-        Centro, Barbalha
-       </p>
-       <p class="text-gray-700 mt-2">
-        Venha celebrar a festa de Santo Antônio, padroeiro de Barbalha, com a tradicional subida do Pau da Bandeira.
-       </p>
-       <button class="mt-4 px-4 py-2 bg-blue-500 text-white font-semibold rounded">
-        Leia mais
-       </button>
-      </div>
-     </div>
-     <div class="bg-white p-4 rounded shadow">
-      <img alt="Event Image" class="w-full h-48 object-cover rounded" height="200" src="https://cn7.com.br/wp-content/uploads/2022/05/Festival-Expocrato-5.jpeg" width="300"/>
-      <div class="mt-4">
-       <span class="bg-purple-500 text-white text-xs px-2 py-1 rounded">
-        Em breve
-       </span>
-       <h3 class="text-xl font-bold mt-2">
-        Expocrato 2025
-       </h3>
-       <p class="text-gray-600 mt-1">
-        <i class="fas fa-calendar-alt">
-        </i>
-        Julho
-       </p>
-       <p class="text-gray-600">
-        <i class="fas fa-map-marker-alt">
-        </i>
-        Centro de Convenções, Crato
-       </p>
-       <p class="text-gray-700 mt-2">
-        Venha conferir a maior feira agropecuária do Cariri, com shows, exposições, e muito mais.
-       </p>
-       <button class="mt-4 px-4 py-2 bg-blue-500 text-white font-semibold rounded">
-        Leia mais
-       </button>
-      </div>
-     </div>
-     <div class="bg-white p-4 rounded shadow">
-      <img alt="Event Image" class="w-full h-48 object-cover rounded" height="200" src="https://www.badalo.com.br/wp-content/uploads/2023/07/vaquejada-juazeiro-do-norte-2023-600x375.jpg" width="300"/>
-      <div class="mt-4">
-       <span class="bg-purple-500 text-white text-xs px-2 py-1 rounded">
-        Em breve
-       </span>
-       <h3 class="text-xl font-bold mt-2">
-        Vaquejada de Juazeiro do Norte
-       </h3>
-       <p class="text-gray-600 mt-1">
-        <i class="fas fa-calendar-alt">
-        </i>
-        Junho
-       </p>
-       <p class="text-gray-600">
-        <i class="fas fa-map-marker-alt">
-        </i>
-        Parque de Eventos, Juazeiro do Norte
-       </p>
-       <p class="text-gray-700 mt-2">
-        Junte-se à festa da vaquejada, com competições, shows, e muito mais
-       </p>
-       <button class="mt-4 px-4 py-2 bg-blue-500 text-white font-semibold rounded">
-        Leia mais
-       </button>
-      </div>
-     </div>
-    </div>
-    <div class="text-center mt-8">
-     <button class="px-6 py-2 bg-blue-500 text-white font-semibold rounded">
-      Veja todos os Eventos
-     </button>
-    </div>
-   </section>
-   <!-- Testimonials -->
-   <section class="container mx-auto px-4 py-8">
-    <h2 class="text-2xl font-bold mb-4 text-center">
-     O que os nossos usuários estão comentando
-    </h2>
-    <div class="grid grid-cols-2 gap-4">
-     <div class="bg-white p-4 rounded shadow">
-      <div class="flex items-center">
-       <img alt="User Image" class="h-12 w-12 rounded-full" src="https://placehold.co/50x50"/>
-       <div class="ml-4">
-        <p class="font-semibold">
-         Jane Doe
+
+<!-- Wrapper Section -->
+<section class="mx-auto px-10">
+
+    <!-- Event Categories -->
+    <section class="container mx-auto px-4 py-8">
+        <h2 class="text-2xl font-bold mb-4">
+            Categorias de Eventos
+        </h2>
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 overflow-x-auto">
+            <div class="bg-white p-4 rounded shadow text-center">
+                <i class="fas fa-palette text-purple-500 text-3xl mb-2"></i>
+                <p class="font-semibold">Cultura</p>
+            </div>
+            <div class="bg-white p-4 rounded shadow text-center">
+                <i class="fas fa-futbol text-blue-500 text-3xl mb-2"></i>
+                <p class="font-semibold">Esportes</p>
+            </div>
+            <div class="bg-white p-4 rounded shadow text-center">
+                <i class="fas fa-book text-green-500 text-3xl mb-2"></i>
+                <p class="font-semibold">Educacional</p>
+            </div>
+            <div class="bg-white p-4 rounded shadow text-center">
+                <i class="fas fa-coffee text-yellow-500 text-3xl mb-2"></i>
+                <p class="font-semibold">Leitura</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Create Event Button -->
+    <section class="text-center py-8">
+        <button class="px-6 py-2 bg-blue-500 text-white font-semibold rounded">
+            Crie seu Evento
+        </button>
+    </section>
+
+    <!-- Upcoming Events -->
+    <section class="container mx-auto px-4 py-8">
+        <h2 class="text-2xl font-bold mb-4">
+            Eventos Próximos
+        </h2>
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 overflow-x-auto">
+            <div class="bg-white p-4 rounded shadow">
+                <img alt="Event Image" class="w-full h-48 object-cover rounded" height="200" src="https://i.ytimg.com/vi/BrTzRUc714E/maxresdefault.jpg" width="300"/>
+                <div class="mt-4">
+                    <span class="bg-purple-500 text-white text-xs px-2 py-1 rounded">Em breve</span>
+                    <h3 class="text-xl font-bold mt-2">Pau da Bandeira</h3>
+                    <p class="text-gray-600 mt-1"><i class="fas fa-calendar-alt"></i> Junho</p>
+                    <p class="text-gray-600"><i class="fas fa-map-marker-alt"></i> Centro, Barbalha</p>
+                    <p class="text-gray-700 mt-2">Venha celebrar a festa de Santo Antônio, padroeiro de Barbalha, com a tradicional subida do Pau da Bandeira.</p>
+                    <button class="mt-4 px-4 py-2 bg-blue-500 text-white font-semibold rounded">Leia mais</button>
+                </div>
+            </div>
+            <div class="bg-white p-4 rounded shadow">
+                <img alt="Event Image" class="w-full h-48 object-cover rounded" height="200" src="https://cn7.com.br/wp-content/uploads/2022/05/Festival-Expocrato-5.jpeg" width="300"/>
+                <div class="mt-4">
+                    <span class="bg-purple-500 text-white text-xs px-2 py-1 rounded">Em breve</span>
+                    <h3 class="text-xl font-bold mt-2">Expocrato 2025</h3>
+                    <p class="text-gray-600 mt-1"><i class="fas fa-calendar-alt"></i> Julho</p>
+                    <p class="text-gray-600"><i class="fas fa-map-marker-alt"></i> Centro de Convenções, Crato</p>
+                    <p class="text-gray-700 mt-2">Venha conferir a maior feira agropecuária do Cariri, com shows, exposições, e muito mais.</p>
+                    <button class="mt-4 px-4 py-2 bg-blue-500 text-white font-semibold rounded">Leia mais</button>
+                </div>
+            </div>
+            <div class="bg-white p-4 rounded shadow">
+                <img alt="Event Image" class="w-full h-48 object-cover rounded" height="200" src="https://www.badalo.com.br/wp-content/uploads/2023/07/vaquejada-juazeiro-do-norte-2023-600x375.jpg" width="300"/>
+                <div class="mt-4">
+                    <span class="bg-purple-500 text-white text-xs px-2 py-1 rounded">Em breve</span>
+                    <h3 class="text-xl font-bold mt-2">Vaquejada de Juazeiro do Norte</h3>
+                    <p class="text-gray-600 mt-1"><i class="fas fa-calendar-alt"></i> Junho</p>
+                    <p class="text-gray-600"><i class="fas fa-map-marker-alt"></i> Parque de Eventos, Juazeiro do Norte</p>
+                    <p class="text-gray-700 mt-2">Junte-se à festa da vaquejada, com competições, shows, e muito mais</p>
+                    <button class="mt-4 px-4 py-2 bg-blue-500 text-white font-semibold rounded">Leia mais</button>
+                </div>
+            </div>
+        </div>
+        <div class="text-center mt-8">
+            <button class="px-6 py-2 bg-blue-500 text-white font-semibold rounded">Veja todos os Eventos</button>
+        </div>
+    </section>
+
+    <!-- Testimonials -->
+    <section class="container mx-auto px-4 py-8">
+        <h2 class="text-2xl font-bold mb-4 text-center">O que os nossos usuários estão comentando</h2>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div class="bg-white p-4 rounded shadow">
+                <div class="flex items-center">
+                    <img alt="User Image" class="h-12 w-12 rounded-full" src="https://placehold.co/50x50"/>
+                    <div class="ml-4">
+                        <p class="font-semibold">Jane Doe</p>
+                        <p class="text-gray-600">User</p>
+                    </div>
+                </div>
+                <p class="text-gray-700 mt-4">"Eu tô é lá!"</p>
+                <div class="mt-4">
+                    <i class="fas fa-star text-yellow-500"></i>
+                    <i class="fas fa-star text-yellow-500"></i>
+                    <i class="fas fa-star text-yellow-500"></i>
+                    <i class="fas fa-star text-yellow-500"></i>
+                    <i class="fas fa-star text-yellow-500"></i>
+                </div>
+            </div>
+            <div class="bg-white p-4 rounded shadow">
+                <div class="flex items-center">
+                    <img alt="User Image" class="h-12 w-12 rounded-full" src="https://placehold.co/50x50"/>
+                    <div class="ml-4">
+                        <p class="font-semibold">Jane Doe</p>
+                        <p class="text-gray-600">User</p>
+                    </div>
+                </div>
+                <p class="text-gray-700 mt-4">"Toda festa da vaquejada eu tô lá!"</p>
+                <div class="mt-4">
+                    <i class="fas fa-star text-yellow-500"></i>
+                    <i class="fas fa-star text-yellow-500"></i>
+                    <i class="fas fa-star text-yellow-500"></i>
+                    <i class="fas fa-star text-yellow-500"></i>
+                    <i class="fas fa-star text-yellow-500"></i>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section class="container mx-auto px-4 py-8">
+        <h2 class="text-2xl font-bold mb-4 text-center">Sobre o Cariri</h2>
+        <p class="text-gray-700 text-center">
+            O Cariri é uma região do Ceará, localizada no sul do estado. Conhecida por sua cultura rica e diversa, o Cariri é um local de festas tradicionais, eventos culturais, e muito mais. Descubra o que a região tem a oferecer!
         </p>
-        <p class="text-gray-600">
-         User
-        </p>
-       </div>
-      </div>
-      <p class="text-gray-700 mt-4">
-       "Eu tô é lá!"
-      </p>
-      <div class="mt-4">
-       <i class="fas fa-star text-yellow-500">
-       </i>
-       <i class="fas fa-star text-yellow-500">
-       </i>
-       <i class="fas fa-star text-yellow-500">
-       </i>
-       <i class="fas fa-star text-yellow-500">
-       </i>
-       <i class="fas fa-star text-yellow-500">
-       </i>
-      </div>
-     </div>
-     <div class="bg-white p-4 rounded shadow">
-      <div class="flex items-center">
-       <img alt="User Image" class="h-12 w-12 rounded-full" src="https://placehold.co/50x50"/>
-       <div class="ml-4">
-        <p class="font-semibold">
-         Jane Doe
-        </p>
-        <p class="text-gray-600">
-         User
-        </p>
-       </div>
-      </div>
-      <p class="text-gray-700 mt-4">
-       "Toda festa da vaquejada eu tô lá!"
-      </p>
-      <div class="mt-4">
-       <i class="fas fa-star text-yellow-500">
-       </i>
-       <i class="fas fa-star text-yellow-500">
-       </i>
-       <i class="fas fa-star text-yellow-500">
-       </i>
-       <i class="fas fa-star text-yellow-500">
-       </i>
-       <i class="fas fa-star text-yellow-500">
-       </i>
-      </div>
-     </div>
-    </div>
-   </section>
-   <!-- About Section -->
-   <section class="container mx-auto px-4 py-8">
-    <h2 class="text-2xl font-bold mb-4 text-center">
-     Sobre o Cariri
-    </h2>
-    <p class="text-gray-700 text-center">
-        O Cariri é uma região do Ceará, localizada no sul do estado. Conhecida por sua cultura rica e diversa, o Cariri é um local de festas tradicionais, eventos culturais, e muito mais. Descubra o que a região tem a oferecer!
-    </p>
-   </section>
+    </section>
+
+</section>
 
 {% endblock content %}
