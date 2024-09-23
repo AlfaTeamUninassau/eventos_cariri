@@ -5,6 +5,7 @@ from .forms import EventForm, EventImageForm, LocationForm
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
 from django.views.generic.edit import FormView
+from django.contrib import messages
 from django.views.generic import (
     ListView,
     CreateView,
@@ -41,8 +42,7 @@ class EventCreateView(FormView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         if self.request.POST:
-            context['image_form'] = EventImageForm(
-                self.request.POST, self.request.FILES)
+            context['image_form'] = EventImageForm(self.request.POST, self.request.FILES)
             context['location_form'] = LocationForm(self.request.POST)
         else:
             context['image_form'] = EventImageForm()
@@ -57,9 +57,12 @@ class EventCreateView(FormView):
             location = location_form.save()
             event = form.save(commit=False)
             event.location = location
+            event.status = Event.EM_ANALISE  # Define o status inicial como "em análise"
             event.save()
             for file in self.request.FILES.getlist('images'):
                 EventImage.objects.create(event=event, image=file)
+            messages.success(self.request, 'Evento criado com sucesso e está em análise.')
             return super().form_valid(form)
         else:
+            messages.error(self.request, 'Erro ao criar o evento. Verifique os dados e tente novamente.')
             return self.form_invalid(form)

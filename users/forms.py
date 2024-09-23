@@ -67,7 +67,7 @@ class UserCreationForm(forms.ModelForm):
         user.set_password(self.cleaned_data['password1'])
         if commit:
             user.save()
-            # Adiciona o usuário ao grupo "usuário normal"
-            normal_user_group = Group.objects.get(name='Usuário Normal')
+            # Verifica se o grupo "Usuário Normal" existe, caso contrário, cria-o
+            normal_user_group, created = Group.objects.get_or_create(name='Usuário Normal')
             user.groups.add(normal_user_group)
         return user

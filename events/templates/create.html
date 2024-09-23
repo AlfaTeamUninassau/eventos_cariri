@@ -6,6 +6,16 @@
     <div style="margin-top: 10px;"></div>
     <div class="bg-white w-full max-w-2xl mx-auto p-8 rounded-lg shadow-lg">
         <h1 class="text-2xl font-semibold text-center mb-6">Criar Novo Evento</h1>
+        {% if user.is_authenticated %}
+        {% if messages %}
+        <div>
+            {% for message in messages %}
+            <div class="alert {% if message.tags %}alert-{{ message.tags }}{% endif %}">
+                {{ message }}
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
         <form method="post" enctype="multipart/form-data" onsubmit="return validateForm();">
             {% csrf_token %}
             {{ form.non_field_errors }}
@@ -31,6 +41,11 @@
                             <label for="id_time" class="block text-sm font-medium">Horário do Evento</label>
                             <input type="time" id="id_time" name="time" class="w-full mt-1 p-2 border rounded">
                             {{ form.time.errors }}
+                        </div>
+                        <div>
+                            <label for="id_category" class="block text-sm font-medium">Categoria</label>
+                            {{ form.category }}
+                            {{ form.category.errors }}
                         </div>
                     </div>
 
@@ -137,6 +152,16 @@
                 <button type="submit" class="bg-green-500 text-white px-4 py-2 rounded">Publicar Evento</button>
             </div>
         </form>
+        {% else %}
+        <div class="flex justify-center mt-20">
+            <i class="fas fa-exclamation-triangle center text-4xl text-red-500"></i>
+        </div>
+        <p class="text-center text-red-500">Você precisa estar logado para criar um evento.</p>
+        <div class="flex justify-center mt-40">
+            <a href="{% url 'login' %}" class="bg-green-500 text-white px-4 py-2 rounded">Fazer Login</a>
+        </div>
+        
+        {% endif %}
     </div>
 </body>
 

@@ -19,17 +19,20 @@ class LocationForm(forms.ModelForm):
 
 
 class EventForm(forms.ModelForm):
-    tickets = forms.IntegerField(min_value=1, max_value=500000, required=True, widget=forms.NumberInput(attrs={'class': 'w-full mt-1 p-2 border rounded'}))
-    price = forms.DecimalField(max_digits=7, decimal_places=2, required=False, widget=forms.NumberInput(attrs={'class': 'w-full mt-1 p-2 border rounded'}))
+    tickets = forms.IntegerField(min_value=1, max_value=500000, required=True, widget=forms.NumberInput(
+        attrs={'class': 'w-full mt-1 p-2 border rounded'}))
+    price = forms.DecimalField(max_digits=7, decimal_places=2, required=False, widget=forms.NumberInput(
+        attrs={'class': 'w-full mt-1 p-2 border rounded'}))
 
     class Meta:
         model = Event
-        fields = ['title', 'date', 'description', 'location', 'age_group', 'privacy', 'ticket_type', 'tickets', 'price']
+        fields = ['title', 'date', 'description', 'category',
+                  'age_group', 'privacy', 'ticket_type', 'tickets', 'price']
         widgets = {
             'title': forms.TextInput(attrs={'class': 'w-full mt-1 p-2 border rounded'}),
             'date': forms.DateTimeInput(attrs={'class': 'w-full mt-1 p-2 border rounded'}),
             'description': forms.Textarea(attrs={'class': 'w-full mt-1 p-2 border rounded'}),
-            'location': forms.TextInput(attrs={'class': 'w-full mt-1 p-2 border rounded'}),
+            'category': forms.Select(attrs={'class': 'w-full mt-1 p-2 border rounded'}),
             'age_group': forms.Select(attrs={'class': 'w-full mt-1 p-2 border rounded'}),
             'privacy': forms.Select(attrs={'class': 'w-full mt-1 p-2 border rounded'}),
             'ticket_type': forms.TextInput(attrs={'class': 'w-full mt-1 p-2 border rounded'}),
@@ -64,7 +67,8 @@ class MultipleFileInput(forms.ClearableFileInput):
 
 
 class EventImageForm(forms.Form):
-    images = forms.FileField(widget=MultipleFileInput(attrs={'multiple': True}), required=True)
+    images = forms.FileField(widget=MultipleFileInput(
+        attrs={'multiple': True}), required=True)
 
     def clean_images(self):
         files = self.files.getlist('images')
@@ -73,7 +77,8 @@ class EventImageForm(forms.Form):
 
         for file in files:
             if file.size > max_image_size:
-                raise ValidationError(f'A imagem {file.name} excede o tamanho máximo de 10MB.')
+                raise ValidationError(
+                    f'A imagem {file.name} excede o tamanho máximo de 10MB.')
 
             mime = magic.Magic(mime=True)
             file_type = mime.from_buffer(file.read(1024))
@@ -83,6 +88,7 @@ class EventImageForm(forms.Form):
                 from moviepy.editor import VideoFileClip
                 clip = VideoFileClip(file.temporary_file_path())
                 if clip.duration > max_video_duration:
-                    raise ValidationError(f'O vídeo {file.name} excede a duração máxima de 1 minuto.')
+                    raise ValidationError(
+                        f'O vídeo {file.name} excede a duração máxima de 1 minuto.')
 
         return files
