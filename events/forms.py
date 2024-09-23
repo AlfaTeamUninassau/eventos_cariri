@@ -1,7 +1,22 @@
 from django import forms
-from .models import Event, EventImage
+from .models import Event, EventImage, Location
 from django.core.exceptions import ValidationError
 import magic
+
+
+class LocationForm(forms.ModelForm):
+    class Meta:
+        model = Location
+        fields = ['cep', 'street', 'number', 'neighborhood', 'city', 'state']
+        widgets = {
+            'cep': forms.TextInput(attrs={'class': 'w-full mt-1 p-2 border rounded'}),
+            'street': forms.TextInput(attrs={'class': 'w-full mt-1 p-2 border rounded'}),
+            'number': forms.TextInput(attrs={'class': 'w-full mt-1 p-2 border rounded'}),
+            'neighborhood': forms.TextInput(attrs={'class': 'w-full mt-1 p-2 border rounded'}),
+            'city': forms.TextInput(attrs={'class': 'w-full mt-1 p-2 border rounded'}),
+            'state': forms.TextInput(attrs={'class': 'w-full mt-1 p-2 border rounded'}),
+        }
+
 
 class EventForm(forms.ModelForm):
     tickets = forms.IntegerField(min_value=1, max_value=500000, required=True, widget=forms.NumberInput(attrs={'class': 'w-full mt-1 p-2 border rounded'}))

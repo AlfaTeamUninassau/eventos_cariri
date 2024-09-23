@@ -1,6 +1,18 @@
 from django.db import models
 
 
+class Location(models.Model):
+    cep = models.CharField(max_length=9)
+    street = models.CharField(max_length=255)
+    number = models.CharField(max_length=10)
+    neighborhood = models.CharField(max_length=255)
+    city = models.CharField(max_length=255)
+    state = models.CharField(max_length=2)
+
+    def __str__(self):
+        return f"{self.street}, {self.number} - {self.city}/{self.state}"
+
+
 class Event(models.Model):
     PUBLIC = 'public'
     PRIVATE = 'private'
@@ -24,18 +36,21 @@ class Event(models.Model):
     description = models.TextField(max_length=1000)
     date = models.DateTimeField()
     time = models.TimeField(null=True, blank=True)
-    location = models.CharField(max_length=255)
+    location = models.ForeignKey(Location, on_delete=models.CASCADE)
     age_group = models.CharField(max_length=50, choices=AGE_GROUP_CHOICES)
     privacy = models.CharField(max_length=50, choices=PRIVACY_CHOICES)
     ticket_type = models.CharField(max_length=50)
     tickets = models.IntegerField()
-    price = models.DecimalField(max_digits=7, decimal_places=2, null=True, blank=True)
+    price = models.DecimalField(
+        max_digits=7, decimal_places=2, null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
         return self.title
 
+
 class EventImage(models.Model):
-    event = models.ForeignKey(Event, related_name='images', on_delete=models.CASCADE)
+    event = models.ForeignKey(
+        Event, related_name='images', on_delete=models.CASCADE)
     image = models.ImageField(upload_to='events/images/')
