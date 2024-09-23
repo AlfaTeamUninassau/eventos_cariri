@@ -1,3 +1,4 @@
+#views.py
 from django.shortcuts import render
 from events.models import Event, EventImage, Location
 from django.urls import reverse_lazy
@@ -13,6 +14,10 @@ from django.views.generic import (
     UpdateView,
     DeleteView
 )
+import logging
+
+
+logger = logging.getLogger(__name__)
 
 
 class HomeView(ListView):
@@ -53,16 +58,22 @@ class EventCreateView(FormView):
         context = self.get_context_data()
         image_form = context['image_form']
         location_form = context['location_form']
+
         if image_form.is_valid() and location_form.is_valid():
             location = location_form.save()
             event = form.save(commit=False)
             event.location = location
-            event.status = Event.EM_ANALISE  # Define o status inicial como "em análise"
+            event.status = Event.EM_ANALISE
             event.save()
             for file in self.request.FILES.getlist('images'):
                 EventImage.objects.create(event=event, image=file)
             messages.success(self.request, 'Evento criado com sucesso e está em análise.')
             return super().form_valid(form)
         else:
-            messages.error(self.request, 'Erro ao criar o evento. Verifique os dados e tente novamente.')
+            # Adiciona logs para depuração
+            if not image_form.is_valid():
+                logger.error(f"Erros no formulário de imagem: {image_form.errors}")
+            if not location_form.is_valid():
+                logger.error(f"Erros no formulário de localização: {location_form.errors}")
+            messages.error(self.request, 'Erro ao criar evento. Verifique os dados e tente novamente.')
             return self.form_invalid(form)

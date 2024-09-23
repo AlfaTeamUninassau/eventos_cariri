@@ -1,3 +1,5 @@
+<!-- create.html -->
+
 {% extends 'base.html' %}
 {% load static %}
 
@@ -16,6 +18,33 @@
             {% endfor %}
         </div>
         {% endif %}
+        {% if form.errors %}
+    <div class="alert alert-danger">
+        <ul>
+            {% for field, errors in form.errors.items %}
+                <li>{{ field }}: {{ errors|join:", " }}</li>
+            {% endfor %}
+        </ul>
+    </div>
+{% endif %}
+{% if image_form.errors %}
+    <div class="alert alert-danger">
+        <ul>
+            {% for field, errors in image_form.errors.items %}
+                <li>{{ field }}: {{ errors|join:", " }}</li>
+            {% endfor %}
+        </ul>
+    </div>
+{% endif %}
+{% if location_form.errors %}
+    <div class="alert alert-danger">
+        <ul>
+            {% for field, errors in location_form.errors.items %}
+                <li>{{ field }}: {{ errors|join:", " }}</li>
+            {% endfor %}
+        </ul>
+    </div>
+{% endif %}
         <form method="post" enctype="multipart/form-data" onsubmit="return validateForm();">
             {% csrf_token %}
             {{ form.non_field_errors }}
@@ -90,7 +119,7 @@
                     <div>
                         <label for="id_ticket_type" class="block text-sm font-medium">Tipo de Ingresso</label>
                         <select id="id_ticket_type" name="ticket_type" class="w-full mt-1 p-2 border rounded" onchange="togglePriceField(this.value);">
-                            <option value="grátis">Grátis</option>
+                            <option value="gratuito">Grátis</option>
                             <option value="pago">Pago</option>
                         </select>
                     </div>
@@ -255,7 +284,7 @@
         } else {
             input.value = cep;
         }
-        
+
         // Quando o CEP estiver completo (9 caracteres incluindo o hífen), buscar o endereço
         if (cep.length === 8) {
             buscaEndereco(input.value);

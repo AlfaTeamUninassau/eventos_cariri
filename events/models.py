@@ -1,8 +1,10 @@
+#models.py
+
 from django.db import models
 
 
 class Location(models.Model):
-    cep = models.CharField(max_length=9)
+    cep = models.CharField(max_length=10)
     street = models.CharField(max_length=255)
     number = models.CharField(max_length=10)
     neighborhood = models.CharField(max_length=255)
@@ -70,7 +72,7 @@ class Event(models.Model):
 
     title = models.CharField(max_length=255, null=False, blank=False)
     description = models.TextField(max_length=1000, null=False, blank=False)
-    date = models.DateTimeField()
+    date = models.DateTimeField( null=False, blank=False)
     time = models.TimeField(null=False, blank=False)
     category = models.CharField(
         max_length=50, choices=CATEGORY_CHOICES, null=False, blank=False, default='other')
@@ -81,7 +83,7 @@ class Event(models.Model):
     privacy = models.CharField(
         max_length=50, choices=PRIVACY_CHOICES, null=False, blank=False, default=PUBLIC)
     ticket_type = models.CharField(
-        max_length=50, choices=INGRESSO_CHOICES, null=False, blank=False, default=INGRESSO_PAGO)
+        max_length=50, choices=INGRESSO_CHOICES, null=False, blank=False, default=INGRESSO_GRATUITO)
     tickets = models.IntegerField(null=False, blank=False, default=1)
     price = models.DecimalField(
         max_digits=7, decimal_places=2, null=True, blank=True)
