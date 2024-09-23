@@ -3,9 +3,9 @@
 
 {% block content %}
 <!-- Main Content -->
-<main class="flex h-screen">
+<main class="flex flex-col md:flex-row h-screen">
   <!-- Left Side Content -->
-  <div class="w-1/2 flex items-center justify-center bg-gray-100">
+  <div class="w-full md:w-1/2 flex items-center justify-center bg-gray-100 p-4 md:p-0">
     <ul class="list-disc pl-5 space-y-4 text-lg text-gray-800">
       <li>Veja os eventos da nossa região</li>
       <li>Cadastre eventos</li>
@@ -15,32 +15,83 @@
     </ul>
   </div>
   <!-- Right Side Content with Background Image -->
-  <div class="w-1/2 flex justify-center items-center bg-cover bg-center" style="background-image: url('{% static "eventos_cariri/images/back_login.png" %}');">
-    <div class="bg-white bg-opacity-80 p-8 rounded-lg shadow-lg w-96">
-      <form>
+  <div class="w-full md:w-1/2 flex justify-center items-center bg-cover bg-center" style="background-image: url('{% static "eventos_cariri/images/back_login.png" %}');">
+    <div class="bg-white bg-opacity-80 p-8 rounded-lg shadow-lg w-full max-w-md">
+      {% if messages %}
+        <div id="message-container" class="fixed top-20 right-30 p-1 rounded-lg shadow-lg">
+          {% for message in messages %}
+            <div class="alert-success">
+              {{ message }}
+            </div>
+          {% endfor %}
+        </div>
+      {% endif %}
+      <form method="post">
+        {% csrf_token %}
+        {% if login_form.non_field_errors %}
+          <div class="alert-error">
+            {{ login_form.non_field_errors }}
+          </div>
+        {% endif %}
         <div class="mb-4">
+          {{ login_form.username.errors }}
           <input
-            class="w-full p-3 rounded bg-gray-200 text-gray-700"
-            placeholder="email"
+            class="w-full p-3 rounded bg-gray-200 text-gray-700 {% if login_form.username.errors %}border border-red-500{% endif %}"
+            placeholder="digite seu email"
             type="email"
+            name="{{ login_form.username.name }}"
+            id="{{ login_form.username.id_for_label }}"
+            value="{{ login_form.username.value|default_if_none:'' }}"
           />
         </div>
-        <div class="mb-4">
+        <div class="mb-4 relative">
+          {{ login_form.password.errors }}
           <input
-            class="w-full p-3 rounded bg-gray-200 text-gray-700"
-            placeholder="password"
+            class="w-full p-3 rounded bg-gray-200 text-gray-700 {% if login_form.password.errors %}border border-red-500{% endif %}"
+            placeholder="digite sua senha"
             type="password"
+            name="{{ login_form.password.name }}"
+            id="{{ login_form.password.id_for_label }}"
+            value="{{ login_form.password.value|default_if_none:'' }}"
           />
+          <button type="button" class="absolute inset-y-0 right-0 pr-3 flex items-center text-sm leading-5" onclick="togglePasswordVisibility()">
+            <i class="fas fa-eye"></i>
+          </button>
         </div>
         <button class="w-full p-3 rounded bg-gray-800 text-white" type="submit">
-          login
+          entrar
         </button>
       </form>
       <div class="flex justify-between mt-4 text-sm text-gray-600">
-        <a class="hover:underline" href="#"> sing-in </a>
-        <a class="hover:underline" href="#"> forgot your password? </a>
+        <a class="hover:underline" href="{% url 'register' %}"> cadastre-se </a>
+        <a class="hover:underline" href="#"> esqueçeu a sua senha? </a>
       </div>
     </div>
   </div>
 </main>
+
+<script>
+  function togglePasswordVisibility() {
+    var passwordField = document.getElementById('{{ login_form.password.id_for_label }}');
+    var eyeIcon = document.querySelector('.fa-eye');
+    if (passwordField.type === 'password') {
+      passwordField.type = 'text';
+      eyeIcon.classList.remove('fa-eye');
+      eyeIcon.classList.add('fa-eye-slash');
+    } else {
+      passwordField.type = 'password';
+      eyeIcon.classList.remove('fa-eye-slash');
+      eyeIcon.classList.add('fa-eye');
+    }
+  }
+
+  document.addEventListener('DOMContentLoaded', function() {
+    const messageContainer = document.getElementById('message-container');
+    if (messageContainer) {
+      setTimeout(() => {
+        messageContainer.style.display = 'none';
+      }, 3000); // 3000 milissegundos = 3 segundos
+    }
+  });
+</script>
 {% endblock content %}

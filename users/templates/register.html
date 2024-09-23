@@ -1,0 +1,107 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<!-- Main Content -->
+<main class="flex flex-col md:flex-row h-screen">
+  <!-- Left Side Content -->
+  <div class="w-full md:w-1/2 flex items-center justify-center bg-gray-100 p-4 md:p-0">
+    <ul class="list-disc pl-5 space-y-4 text-lg text-gray-800">
+      <li>Veja os eventos da nossa região</li>
+      <li>Cadastre eventos</li>
+      <li>Faça reviews</li>
+      <li>Veja o que estão comentando</li>
+      <li>E mais</li>
+    </ul>
+  </div>
+  <!-- Right Side Content with Background Image -->
+  <div class="w-full md:w-1/2 flex justify-center items-center bg-cover bg-center" style="background-image: url('{% static "eventos_cariri/images/back_login.png" %}');">
+    <div class="bg-white bg-opacity-80 p-8 rounded-lg shadow-lg w-full max-w-md">
+      <form method="post">
+        {% csrf_token %}
+        {% if user_form.non_field_errors %}
+          <div class="alert-error">
+            {{ user_form.non_field_errors }}
+          </div>
+        {% endif %}
+        <div class="mb-4">
+          {{ user_form.username.errors }}
+          <input
+            class="w-full p-3 rounded bg-gray-200 text-gray-700"
+            placeholder="Nome de usuário"
+            type="text"
+            name="{{ user_form.username.name }}"
+            id="{{ user_form.username.id_for_label }}"
+            value="{{ user_form.username.value|default_if_none:'' }}"
+          />
+        </div>
+        <div class="mb-4">
+          {{ user_form.name.errors }}
+          <input
+            class="w-full p-3 rounded bg-gray-200 text-gray-700"
+            placeholder="Nome completo"
+            type="text"
+            name="{{ user_form.name.name }}"
+            id="{{ user_form.name.id_for_label }}"
+            value="{{ user_form.name.value|default_if_none:'' }}"
+          />
+        </div>
+        <div class="mb-4">
+          {{ user_form.email.errors }}
+          <input
+            class="w-full p-3 rounded bg-gray-200 text-gray-700"
+            placeholder="Email"
+            type="email"
+            name="{{ user_form.email.name }}"
+            id="{{ user_form.email.id_for_label }}"
+            value="{{ user_form.email.value|default_if_none:'' }}"
+          />
+        </div>
+        <div class="mb-4">
+          {{ user_form.phone.errors }}
+          <input
+            class="w-full p-3 rounded bg-gray-200 text-gray-700"
+            placeholder="Telefone"
+            type="text"
+            name="{{ user_form.phone.name }}"
+            id="{{ user_form.phone.id_for_label }}"
+            value="{{ user_form.phone.value|default_if_none:'' }}"
+          />
+        </div>
+        <div class="mb-4">
+          {{ user_form.city.errors }}
+          {{ user_form.city }}
+        </div>
+        <div class="mb-4">
+          {{ user_form.password1.errors }}
+          <input
+            class="w-full p-3 rounded bg-gray-200 text-gray-700"
+            placeholder="Senha"
+            type="password"
+            name="{{ user_form.password1.name }}"
+            id="{{ user_form.password1.id_for_label }}"
+            value="{{ user_form.password1.value|default_if_none:'' }}"
+          />
+        </div>
+        <div class="mb-4">
+          {{ user_form.password2.errors }}
+          <input
+            class="w-full p-3 rounded bg-gray-200 text-gray-700"
+            placeholder="Confirme a senha"
+            type="password"
+            name="{{ user_form.password2.name }}"
+            id="{{ user_form.password2.id_for_label }}"
+            value="{{ user_form.password2.value|default_if_none:'' }}"
+          />
+        </div>
+        <button class="w-full p-3 rounded bg-gray-800 text-white" type="submit">
+          cadastrar-se
+        </button>
+      </form>
+      <div class="flex justify-between mt-4 text-sm text-gray-600">
+        <a class="hover:underline" href="{% url 'login' %}">Já tem uma conta? Faça login</a>
+      </div>
+    </div>
+  </div>
+</main>
+{% endblock content %}

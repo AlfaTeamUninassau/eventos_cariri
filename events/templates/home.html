@@ -4,8 +4,18 @@
 
 {% block content %}
 
+
 <!-- Hero Section -->
 <section class="relative bg-cover bg-center h-96 flex items-center justify-center" style="background-image: url('{% static "eventos_cariri/images/background_home_image.png" %}');">
+    {% if messages %}
+  <div id="message-container" class="fixed top-20 right-30  p-1 rounded-lg shadow-lg">
+    {% for message in messages %}
+      <div class="alert-success">
+        {{ message }}
+      </div>
+    {% endfor %}
+  </div>
+{% endif %}
     <div class="absolute inset-0 bg-black opacity-40"></div>
     <div class="container mx-auto px-10 py-20 text-center relative z-10">
         <h1 class="text-4xl text-white font-bold">
@@ -147,5 +157,16 @@
     </section>
 
 </section>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const messageContainer = document.getElementById('message-container');
+      if (messageContainer) {
+        setTimeout(() => {
+          messageContainer.style.display = 'none';
+        }, 3000); // 3000 milissegundos = 3 segundos
+      }
+    });
+  </script>
 
 {% endblock content %}
