@@ -6,6 +6,8 @@ from .views import (
     # EventUpdateView,
     # EventDeleteView
     )
+from django.conf import settings
+from django.conf.urls.static import static
 
 urlpatterns = [
     path('', EventListView.as_view(), name='events'),
@@ -13,4 +15,4 @@ urlpatterns = [
     path('new/', EventCreateView.as_view(), name='event_create'),
     # path('<int:pk>/edit/', EventUpdateView.as_view(), name='event_update'),
     # path('<int:pk>/delete/', EventDeleteView.as_view(), name='event_delete'),
-]
+]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -1,9 +1,8 @@
-# users/signals.py
 from django.db.models.signals import post_migrate
-from django.dispatch import receiver
 from django.contrib.auth.models import Group, Permission
+from django.dispatch import receiver
 from django.contrib.contenttypes.models import ContentType
-from events.models import Event, EventImage, Location
+from events.models import Event
 from comments.models import Comment
 from reviews.models import Review
 
@@ -13,30 +12,23 @@ def create_user_groups(sender, **kwargs):
     normal_user_group, created = Group.objects.get_or_create(name='Usuário Normal')
     
     if created:
-        # Adiciona permissões ao grupo "Usuário Normal"
+        # Define as permissões para o grupo "Usuário Normal"
+        event_content_type = ContentType.objects.get_for_model(Event)
+        comment_content_type = ContentType.objects.get_for_model(Comment)
+        review_content_type = ContentType.objects.get_for_model(Review)
+        
         normal_permissions = [
-            # Permissões de eventos
-            Permission.objects.get(codename='add_event'),
-            Permission.objects.get(codename='change_event'),
-            Permission.objects.get(codename='delete_event'),
-            Permission.objects.get(codename='view_event'),
-            Permission.objects.get(codename='add_eventimage'),
-            Permission.objects.get(codename='change_eventimage'),
-            Permission.objects.get(codename='delete_eventimage'),
-            Permission.objects.get(codename='view_eventimage'),
-            Permission.objects.get(codename='add_location'),
-            Permission.objects.get(codename='change_location'),
-            Permission.objects.get(codename='delete_location'),
-            Permission.objects.get(codename='view_location'),
-            # Permissões de comentários
-            Permission.objects.get(codename='add_comment'),
-            Permission.objects.get(codename='change_comment'),
-            Permission.objects.get(codename='delete_comment'),
-            Permission.objects.get(codename='view_comment'),
-            # Permissões de reviews
-            Permission.objects.get(codename='add_review'),
-            Permission.objects.get(codename='change_review'),
-            Permission.objects.get(codename='view_review'),
+            Permission.objects.get_or_create(codename='add_event', name='Can add event', content_type=event_content_type)[0],
+            Permission.objects.get_or_create(codename='change_event', name='Can change event', content_type=event_content_type)[0],
+            Permission.objects.get_or_create(codename='delete_event', name='Can delete event', content_type=event_content_type)[0],
+            Permission.objects.get_or_create(codename='view_event', name='Can view event', content_type=event_content_type)[0],
+            Permission.objects.get_or_create(codename='add_comment', name='Can add comment', content_type=comment_content_type)[0],
+            Permission.objects.get_or_create(codename='change_comment', name='Can change comment', content_type=comment_content_type)[0],
+            Permission.objects.get_or_create(codename='delete_comment', name='Can delete comment', content_type=comment_content_type)[0],
+            Permission.objects.get_or_create(codename='view_comment', name='Can view comment', content_type=comment_content_type)[0],
+            Permission.objects.get_or_create(codename='add_review', name='Can add review', content_type=review_content_type)[0],
+            Permission.objects.get_or_create(codename='change_review', name='Can change review', content_type=review_content_type)[0],
+            Permission.objects.get_or_create(codename='view_review', name='Can view review', content_type=review_content_type)[0],
         ]
         
         # Adiciona as permissões ao grupo "Usuário Normal"

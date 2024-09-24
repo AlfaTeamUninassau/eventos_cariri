@@ -85,6 +85,9 @@ STATICFILES_DIRS = [
     BASE_DIR / 'eventos_cariri/static',
 ]
 
+MEDIA_URL = '/media/'
+MEDIA_ROOT = BASE_DIR / 'media'
+
 
 WSGI_APPLICATION = 'eventos_cariri.wsgi.application'
 

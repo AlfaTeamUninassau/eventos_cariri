@@ -1,4 +1,4 @@
-#views.py
+#events.views.py
 from django.shortcuts import render
 from events.models import Event, EventImage, Location
 from django.urls import reverse_lazy
@@ -46,7 +46,7 @@ class EventCreateView(FormView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        if self.request.POST:
+        if self.request.method == 'POST':
             context['image_form'] = EventImageForm(self.request.POST, self.request.FILES)
             context['location_form'] = LocationForm(self.request.POST)
         else:
@@ -59,21 +59,27 @@ class EventCreateView(FormView):
         image_form = context['image_form']
         location_form = context['location_form']
 
-        if image_form.is_valid() and location_form.is_valid():
+        if form.is_valid():  # Verifica o formulário principal primeiro
             location = location_form.save()
             event = form.save(commit=False)
             event.location = location
             event.status = Event.EM_ANALISE
             event.save()
-            for file in self.request.FILES.getlist('images'):
-                EventImage.objects.create(event=event, image=file)
-            messages.success(self.request, 'Evento criado com sucesso e está em análise.')
+
+            if image_form.is_valid():  # Só processa as imagens se o formulário de imagem for válido
+                for file in image_form.cleaned_data['images']:  # Usa cleaned_data para acesso seguro
+                    EventImage.objects.create(event=event, image=file)
+                messages.success(self.request, 'Evento criado com sucesso e está em análise.')
+            else:
+                messages.error(self.request, 'Erro ao criar o evento. Verifique os dados e tente novamente.')
+                return self.form_invalid(form)  # Retorna inválido se houver erro nas imagens
+
             return super().form_valid(form)
         else:
-            # Adiciona logs para depuração
-            if not image_form.is_valid():
-                logger.error(f"Erros no formulário de imagem: {image_form.errors}")
+            if not form.is_valid():
+                logger.error(f"Erros no formulário principal: {form.errors}")
             if not location_form.is_valid():
                 logger.error(f"Erros no formulário de localização: {location_form.errors}")
-            messages.error(self.request, 'Erro ao criar evento. Verifique os dados e tente novamente.')
+            messages.error(self.request, 'Erro ao criar o evento. Verifique os dados e tente novamente.')
             return self.form_invalid(form)
+        
