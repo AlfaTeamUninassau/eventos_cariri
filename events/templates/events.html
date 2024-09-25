@@ -1,318 +1,154 @@
-{% extends 'base.html' %}
+{% extends 'base.html' %} 
+{% load static %}
 
 {% block content %}
 
- <body class="bg-gray-100 font-sans">
+<body class="bg-gray-100 font-sans">
   <div class="flex">
-   <!-- Sidebar -->
-   <div class="w-1/4 bg-white p-6 shadow-md">
-    <h2 class="text-2xl font-bold mb-6">
-     Filters
-    </h2>
-    <div class="mb-6">
-     <h3 class="text-lg font-semibold mb-2">
-      Category
-     </h3>
-     <div class="flex flex-col space-y-2">
-      <label class="inline-flex items-center">
-       <input class="form-checkbox text-blue-600" type="checkbox"/>
-       <span class="ml-2">
-        Cultural
-       </span>
-      </label>
-      <label class="inline-flex items-center">
-       <input class="form-checkbox text-blue-600" type="checkbox"/>
-       <span class="ml-2">
-        Sports
-       </span>
-      </label>
-      <label class="inline-flex items-center">
-       <input class="form-checkbox text-blue-600" type="checkbox"/>
-       <span class="ml-2">
-        Educational
-       </span>
-      </label>
-      <label class="inline-flex items-center">
-       <input class="form-checkbox text-blue-600" type="checkbox"/>
-       <span class="ml-2">
-        Leisure
-       </span>
-      </label>
-     </div>
-    </div>
-    <div class="mb-6">
-     <h3 class="text-lg font-semibold mb-2">
-      Date Range
-     </h3>
-     <div class="bg-gray-100 p-4 rounded-lg">
-      <div class="flex justify-between items-center mb-2">
-       <button class="text-gray-500">
-        <i class="fas fa-chevron-left">
-        </i>
-       </button>
-       <span>
-        September 2024
-       </span>
-       <button class="text-gray-500">
-        <i class="fas fa-chevron-right">
-        </i>
-       </button>
+    <!-- Sidebar -->
+    <div class="w-1/4 bg-white p-6 shadow-md">
+      <h2 class="text-2xl font-bold mb-6">Filters</h2>
+      <div class="mb-6">
+        <h3 class="text-lg font-semibold mb-2">Category</h3>
+        <div class="flex flex-col space-y-2">
+          <label class="inline-flex items-center">
+            <input class="form-checkbox text-blue-600" type="checkbox" />
+            <span class="ml-2"> Cultural </span>
+          </label>
+          <label class="inline-flex items-center">
+            <input class="form-checkbox text-blue-600" type="checkbox" />
+            <span class="ml-2"> Sports </span>
+          </label>
+          <label class="inline-flex items-center">
+            <input class="form-checkbox text-blue-600" type="checkbox" />
+            <span class="ml-2"> Educational </span>
+          </label>
+          <label class="inline-flex items-center">
+            <input class="form-checkbox text-blue-600" type="checkbox" />
+            <span class="ml-2"> Leisure </span>
+          </label>
+        </div>
       </div>
-      <div class="grid grid-cols-7 gap-1 text-center text-sm">
-       <div>
-        Su
-       </div>
-       <div>
-        Mo
-       </div>
-       <div>
-        Tu
-       </div>
-       <div>
-        We
-       </div>
-       <div>
-        Th
-       </div>
-       <div>
-        Fr
-       </div>
-       <div>
-        Sa
-       </div>
-       <div class="text-gray-400">
-        1
-       </div>
-       <div class="text-gray-400">
-        2
-       </div>
-       <div class="text-gray-400">
-        3
-       </div>
-       <div class="text-gray-400">
-        4
-       </div>
-       <div class="text-gray-400">
-        5
-       </div>
-       <div class="text-gray-400">
-        6
-       </div>
-       <div class="text-gray-400">
-        7
-       </div>
-       <div>
-        8
-       </div>
-       <div>
-        9
-       </div>
-       <div>
-        10
-       </div>
-       <div>
-        11
-       </div>
-       <div>
-        12
-       </div>
-       <div>
-        13
-       </div>
-       <div>
-        14
-       </div>
-       <div>
-        15
-       </div>
-       <div>
-        16
-       </div>
-       <div>
-        17
-       </div>
-       <div>
-        18
-       </div>
-       <div>
-        19
-       </div>
-       <div>
-        20
-       </div>
-       <div>
-        21
-       </div>
-       <div>
-        22
-       </div>
-       <div>
-        23
-       </div>
-       <div>
-        24
-       </div>
-       <div>
-        25
-       </div>
-       <div>
-        26
-       </div>
-       <div>
-        27
-       </div>
-       <div>
-        28
-       </div>
-       <div>
-        29
-       </div>
-       <div>
-        30
-       </div>
-       <div class="text-gray-400">
-        1
-       </div>
-       <div class="text-gray-400">
-        2
-       </div>
-       <div class="text-gray-400">
-        3
-       </div>
-       <div class="text-gray-400">
-        4
-       </div>
+      <div class="mb-6">
+        <h3 class="text-lg font-semibold mb-2">Date Range</h3>
+        <div class="bg-gray-100 p-4 rounded-lg">
+          <div class="flex justify-between items-center mb-2">
+            <button class="text-gray-500">
+              <i class="fas fa-chevron-left"> </i>
+            </button>
+            <span> September 2024 </span>
+            <button class="text-gray-500">
+              <i class="fas fa-chevron-right"> </i>
+            </button>
+          </div>
+          <div class="grid grid-cols-7 gap-1 text-center text-sm">
+            <div>Su</div>
+            <div>Mo</div>
+            <div>Tu</div>
+            <div>We</div>
+            <div>Th</div>
+            <div>Fr</div>
+            <div>Sa</div>
+            <div class="text-gray-400">1</div>
+            <div class="text-gray-400">2</div>
+            <div class="text-gray-400">3</div>
+            <div class="text-gray-400">4</div>
+            <div class="text-gray-400">5</div>
+            <div class="text-gray-400">6</div>
+            <div class="text-gray-400">7</div>
+            <div>8</div>
+            <div>9</div>
+            <div>10</div>
+            <div>11</div>
+            <div>12</div>
+            <div>13</div>
+            <div>14</div>
+            <div>15</div>
+            <div>16</div>
+            <div>17</div>
+            <div>18</div>
+            <div>19</div>
+            <div>20</div>
+            <div>21</div>
+            <div>22</div>
+            <div>23</div>
+            <div>24</div>
+            <div>25</div>
+            <div>26</div>
+            <div>27</div>
+            <div>28</div>
+            <div>29</div>
+            <div>30</div>
+            <div class="text-gray-400">1</div>
+            <div class="text-gray-400">2</div>
+            <div class="text-gray-400">3</div>
+            <div class="text-gray-400">4</div>
+          </div>
+        </div>
       </div>
-     </div>
-    </div>
-    <div class="mb-6">
-     <h3 class="text-lg font-semibold mb-2">
-      Location
-     </h3>
-     <select class="w-full p-2 border border-gray-300 rounded-lg">
-      <option>
-       Select a location
-      </option>
-     </select>
-    </div>
-    <div class="mb-6">
-     <h3 class="text-lg font-semibold mb-2">
-      Price Range
-     </h3>
-     <div class="flex items-center justify-between mb-2">
-      <span>
-       R$0
-      </span>
-      <span>
-       R$1000
-      </span>
-     </div>
-     <input class="w-full" type="range"/>
-    </div>
-    <button class="w-full bg-blue-600 text-white py-2 rounded-lg">
-     Apply Filters
-    </button>
-   </div>
-   <!-- Main Content -->
-   <div class="w-3/4 p-6">
-    <div class="flex justify-end mb-6">
-     <button class="bg-white border border-gray-300 text-gray-700 py-2 px-4 rounded-lg">
-      Sort by
-     </button>
-    </div>
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-     <!-- Event Card 1 -->
-     <div class="bg-white rounded-lg shadow-md overflow-hidden">
-      <img alt="Tech Conference 2023" class="w-full h-48 object-cover" height="400" src="https://oaidalleapiprodscus.blob.core.windows.net/private/org-RcpoXHkzChYnDbFAyeQ8tamr/user-ehrvabJ3DufsCu8YJ7PqY5gl/img-tErL5pP2kjRhkQiSwhhmw7eT.png?st=2024-09-25T18%3A09%3A39Z&amp;se=2024-09-25T20%3A09%3A39Z&amp;sp=r&amp;sv=2024-08-04&amp;sr=b&amp;rscd=inline&amp;rsct=image/png&amp;skoid=d505667d-d6c1-4a0a-bac7-5c84a87759f8&amp;sktid=a48cca56-e6da-484e-a814-9c849652bcb3&amp;skt=2024-09-24T23%3A08%3A11Z&amp;ske=2024-09-25T23%3A08%3A11Z&amp;sks=b&amp;skv=2024-08-04&amp;sig=sidDKTa%2BbDhz1h8GpMZmhqCS78A/Hu5fVFbHsGGBZhE%3D" width="600"/>
-      <div class="p-4">
-       <h3 class="text-xl font-semibold mb-2">
-        Tech Conference 2023
-       </h3>
-       <p class="text-gray-600 mb-2">
-        August
-       </p>
-       <p class="text-gray-600 mb-2">
-        San Francisco, CA
-       </p>
-       <p class="text-gray-700 mb-4">
-        Join us for the biggest tech conference of the year, featuring keynotes from industry leaders and hands-on workshops.
-       </p>
-       <button class="bg-blue-600 text-white py-2 px-4 rounded-lg">
-        Register Now
-       </button>
+      <div class="mb-6">
+        <h3 class="text-lg font-semibold mb-2">Location</h3>
+        <select class="w-full p-2 border border-gray-300 rounded-lg">
+          <option>Select a location</option>
+        </select>
       </div>
-     </div>
-     <!-- Event Card 2 -->
-     <div class="bg-white rounded-lg shadow-md overflow-hidden">
-      <img alt="Music Festival 2023" class="w-full h-48 object-cover" height="400" src="https://oaidalleapiprodscus.blob.core.windows.net/private/org-RcpoXHkzChYnDbFAyeQ8tamr/user-ehrvabJ3DufsCu8YJ7PqY5gl/img-qjEdVyq3vwAIvziiyOgKeJyN.png?st=2024-09-25T18%3A09%3A41Z&amp;se=2024-09-25T20%3A09%3A41Z&amp;sp=r&amp;sv=2024-08-04&amp;sr=b&amp;rscd=inline&amp;rsct=image/png&amp;skoid=d505667d-d6c1-4a0a-bac7-5c84a87759f8&amp;sktid=a48cca56-e6da-484e-a814-9c849652bcb3&amp;skt=2024-09-24T23%3A24%3A46Z&amp;ske=2024-09-25T23%3A24%3A46Z&amp;sks=b&amp;skv=2024-08-04&amp;sig=BqiwbjhB%2By%2BU1BXgVfAQbog9UQcI%2BZWHTUnMgW5W7wo%3D" width="600"/>
-      <div class="p-4">
-       <h3 class="text-xl font-semibold mb-2">
-        Music Festival 2023
-       </h3>
-       <p class="text-gray-600 mb-2">
-        July
-       </p>
-       <p class="text-gray-600 mb-2">
-        New York City, NY
-       </p>
-       <p class="text-gray-700 mb-4">
-        Experience three days of non-stop music from top artists across multiple genres. Food, art, and unforgettable memories await!
-       </p>
-       <button class="bg-green-600 text-white py-2 px-4 rounded-lg">
-        Learn More
-       </button>
+      <div class="mb-6">
+        <h3 class="text-lg font-semibold mb-2">Price Range</h3>
+        <div class="flex items-center justify-between mb-2">
+          <span> R$0 </span>
+          <span> R$1000 </span>
+        </div>
+        <input class="w-full" type="range" />
       </div>
-     </div>
-     <!-- Event Card 3 -->
-     <div class="bg-white rounded-lg shadow-md overflow-hidden">
-      <img alt="Food &amp; Wine Expo" class="w-full h-48 object-cover" height="400" src="https://oaidalleapiprodscus.blob.core.windows.net/private/org-RcpoXHkzChYnDbFAyeQ8tamr/user-ehrvabJ3DufsCu8YJ7PqY5gl/img-GhkOT5joioRiUhb2JtNRymrA.png?st=2024-09-25T18%3A09%3A46Z&amp;se=2024-09-25T20%3A09%3A46Z&amp;sp=r&amp;sv=2024-08-04&amp;sr=b&amp;rscd=inline&amp;rsct=image/png&amp;skoid=d505667d-d6c1-4a0a-bac7-5c84a87759f8&amp;sktid=a48cca56-e6da-484e-a814-9c849652bcb3&amp;skt=2024-09-24T23%3A50%3A27Z&amp;ske=2024-09-25T23%3A50%3A27Z&amp;sks=b&amp;skv=2024-08-04&amp;sig=YuC8pL7MSEu%2BeO%2BOkb1opd4gPNTYTfhSaXsy/aSSyN4%3D" width="600"/>
-      <div class="p-4">
-       <h3 class="text-xl font-semibold mb-2">
-        Food &amp; Wine Expo
-       </h3>
-       <p class="text-gray-600 mb-2">
-        September
-       </p>
-       <p class="text-gray-600 mb-2">
-        Chicago, IL
-       </p>
-       <p class="text-gray-700 mb-4">
-        Indulge in culinary delights from renowned chefs and sample exquisite wines from around the world at this premier gastronomic event.
-       </p>
-       <button class="bg-red-600 text-white py-2 px-4 rounded-lg">
-        Get Tickets
-       </button>
-      </div>
-     </div>
-     <!-- Event Card 4 -->
-     <div class="bg-white rounded-lg shadow-md overflow-hidden">
-      <img alt="Art Exhibition: Modern Masters" class="w-full h-48 object-cover" src="https://placehold.co/600x400"/>
-      <div class="p-4">
-       <h3 class="text-xl font-semibold mb-2">
-        Art Exhibition: Modern Masters
-       </h3>
-       <p class="text-gray-600 mb-2">
-        October
-       </p>
-       <p class="text-gray-600 mb-2">
-        Los Angeles, CA
-       </p>
-       <p class="text-gray-700 mb-4">
-        Explore a curated collection of contemporary masterpieces from acclaimed artists around the globe. A visual feast for art enthusiasts.
-       </p>
-       <button class="bg-purple-600 text-white py-2 px-4 rounded-lg">
-        Reserve Spot
-       </button>
-      </div>
-     </div>
+      <button class="w-full bg-blue-600 text-white py-2 rounded-lg">
+        Apply Filters
+      </button>
     </div>
-    <div class="flex justify-center mt-6">
-     <button class="bg-blue-600 text-white py-2 px-6 rounded-lg">
-      Load More Events
-     </button>
+    <!-- Main Content -->
+    <div class="container mx-auto px-4 py-8">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {% for event in events %}
+            <div class="bg-white rounded-lg shadow-md overflow-hidden">
+                {% if event.image.exists %}
+                <img src="{{ event.image.first.image.url }}" alt="{{ event.title }}" class="w-full h-48 object-cover">
+                {% else %}
+                <img src="{% static 'eventos_cariri/images/no_photo.png' %}" alt="No Image" class="w-full h-48 object-cover">
+                {% endif %}
+                <div class="p-4">
+                    <h3 class="text-xl font-semibold mb-2">{{ event.title }}</h3>
+                    <p class="text-gray-600 mb-2">{{ event.date|date:"d \d\e F" }}</p>
+                    <p class="text-gray-600 mb-2">{{ event.location.city }}, {{ event.location.state }}</p>
+                    <p class="text-gray-700 mb-4">{{ event.description|truncatewords:20 }}</p>
+                    <a href="{% url 'event_detail' event.pk %}" class="bg-blue-600 text-white py-2 px-4 rounded-lg">Learn More</a>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        <div class="flex justify-center mt-6">
+            <button class="bg-blue-600 text-white py-2 px-6 rounded-lg">
+                Load More Events
+            </button>
+        </div>
+        <div class="flex justify-center mt-6">
+            {% if is_paginated %}
+            <div class="pagination">
+                <span class="page-links">
+                    {% if page_obj.has_previous %}
+                    <a href="?page=1">&laquo; first</a>
+                    <a href="?page={{ page_obj.previous_page_number }}">previous</a>
+                    {% endif %}
+                    <span class="current">
+                        Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+                    </span>
+                    {% if page_obj.has_next %}
+                    <a href="?page={{ page_obj.next_page_number }}">next</a>
+                    <a href="?page={{ page_obj.paginator.num_pages }}">last &raquo;</a>
+                    {% endif %}
+                </span>
+            </div>
+            {% endif %}
+        </div>
     </div>
-   </div>
-  </div>
- </body>
+</body>
 
 {% endblock %}

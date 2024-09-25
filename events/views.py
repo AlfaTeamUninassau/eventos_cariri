@@ -35,6 +35,16 @@ class HomeView(ListView):
     context_object_name = 'home'
 
 
+class ApprovedEventListView(ListView):
+    model = Event
+    template_name = 'events/approved_events.html'
+    context_object_name = 'events'
+    paginate_by = 10
+
+    def get_queryset(self):
+        return Event.objects.filter(status=Event.APROVADO)
+
+
 class EventListView(ListView):
     model = Event
     template_name = 'events.html'
