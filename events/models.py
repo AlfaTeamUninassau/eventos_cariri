@@ -1,15 +1,29 @@
 #events.models.py
 
 from django.db import models
+import logging
+
+
+logger = logging.getLogger(__name__)
 
 
 class Location(models.Model):
+    id = models.AutoField(primary_key=True)
     cep = models.CharField(max_length=10)
     street = models.CharField(max_length=255)
     number = models.CharField(max_length=10)
     neighborhood = models.CharField(max_length=255)
     city = models.CharField(max_length=255)
     state = models.CharField(max_length=2)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    
+    def save(self, *args, **kwargs):
+        logger.debug("Saving location: %s", self.cep)  # Log location before saving
+        print("Saving location: %s", self.cep)  # Log location before saving
+        print("Location id: %s", self.id)  # Log location before saving
+        print("Location state: %s", self.state)  # Log location before saving
+        super(Location, self).save(*args, **kwargs)
 
     def __str__(self):
         return f"{self.street}, {self.number} - {self.city}/{self.state}"
@@ -70,6 +84,7 @@ class Event(models.Model):
         (REPROVADO, 'Reprovado'),
     ]
 
+    id = models.AutoField(primary_key=True)
     title = models.CharField(max_length=255, null=False, blank=False)
     description = models.TextField(max_length=1000, null=False, blank=False)
     date = models.DateTimeField( null=False, blank=False)
@@ -95,12 +110,32 @@ class Event(models.Model):
         choices=STATUS_CHOICES,
         default=EM_ANALISE
     )
+    
+    def save(self, *args, **kwargs):
+        logger.debug("Saving event: %s", self.title)  # Log event title before saving
+        print("Saving event: %s", self.title)  # Log event title before saving
+        print("Event id: %s", self.id)  # Log event title before saving
+        print("Event max_capacity: %s", self.max_capacity)  # Log event title before saving
+        super(Event, self).save(*args, **kwargs)
 
     def __str__(self):
         return self.title
 
 
 class EventImage(models.Model):
+    id = models.AutoField(primary_key=True)
     event = models.ForeignKey(
         Event, related_name='image', on_delete=models.CASCADE)
-    image = models.ImageField(upload_to='event_images/')
+    image = models.ImageField(upload_to='event_images/', null=False, blank=False)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    
+    def save(self, *args, **kwargs):
+        logger.debug("Saving event image: %s", self.image)  # Log event image before saving
+        print("Saving event image: %s", self.image)  # Log event image before saving
+        print("Event image: %s", self.event)  # Log event image before saving
+        print("Event image id: %s", self.event.id)  # Log event image before saving
+        super(EventImage, self).save(*args, **kwargs)
+    
+    def __str__(self):
+        return self.id

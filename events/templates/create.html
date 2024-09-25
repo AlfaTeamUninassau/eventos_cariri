@@ -6,7 +6,7 @@
 {% block content %}
 <body class="bg-gray-100 flex items-center justify-center min-h-screen">
     <div style="margin-top: 10px;"></div>
-    <div class="bg-gray-250 w-full max-w-2xl mx-auto p-8 rounded-lg shadow-lg">
+    <div class="bg-white w-full max-w-2xl mx-auto p-8 rounded-lg shadow-lg">
         <h1 class="text-2xl font-semibold text-center mb-6">Criar Novo Evento</h1>
         {% if user.is_authenticated %}
         {% if messages %}
@@ -18,35 +18,36 @@
             {% endfor %}
         </div>
         {% endif %}
-        {% if form.errors %}
-        <div class="alert alert-danger">
-            <ul>
-                {% for field, errors in form.errors.items %}
-                <li>{{ field }}: {{ errors|join:", " }}</li>
-                {% endfor %}
-            </ul>
-        </div>
-        {% endif %}
-        {% if image_form.errors %}
-        <div class="alert alert-danger">
-            <ul>
-                {% for field, errors in image_form.errors.items %}
-                <li>{{ field }}: {{ errors|join:", " }}</li>
-                {% endfor %}
-            </ul>
-        </div>
-        {% endif %}
-        {% if location_form.errors %}
-        <div class="alert alert-danger">
-            <ul>
-                {% for field, errors in location_form.errors.items %}
-                <li>{{ field }}: {{ errors|join:", " }}</li>
-                {% endfor %}
-            </ul>
-        </div>
-        {% endif %}
-        <form method="post" action="{% url 'event_create' %}" enctype="multipart/form-data" onsubmit="return validateForm();">
+
+        <form method="post" enctype="multipart/form-data" class="space-y-4" onsubmit="return validateForm()" id="form">
             {% csrf_token %}
+            {% if form.errors %}
+            <div class="alert alert-danger">
+                <ul>
+                    {% for field, errors in form.errors.items %}
+                    <li>{{ field }}: {{ errors|join:", " }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+            {% endif %}
+            {% if image_form.errors %}
+            <div class="alert alert-danger">
+                <ul>
+                    {% for field, errors in image_form.errors.items %}
+                    <li>{{ field }}: {{ errors|join:", " }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+            {% endif %}
+            {% if location_form.errors %}
+            <div class="alert alert-danger">
+                <ul>
+                    {% for field, errors in location_form.errors.items %}
+                    <li>{{ field }}: {{ errors|join:", " }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+            {% endif %}
             {{ form.non_field_errors }}
             <!-- Informações do Evento -->
             <div class="mb-6">
@@ -66,7 +67,7 @@
                         </div>
                         <div>
                             <label for="id_time" class="block text-sm font-medium">Horário do Evento</label>
-                            <input type="time" id="id_time" name="time" class="w-full mt-1 p-2 border rounded">
+                            {{ form.time }}
                             {{ form.time.errors }}
                         </div>
                         <div>
@@ -143,32 +144,32 @@
                     </div>
                 </div>
             </div>
-<!-- Mídia -->
-<div class="mb-6">
-    <h2 class="text-lg font-semibold mb-2">Mídia do Evento</h2>
-    <div class="border-dashed border-2 border-gray-300 rounded p-4 text-center">
-        <div class="text-gray-500 mb-4">
-            <i class="fas fa-cloud-upload-alt text-4xl"></i>
-            <p>Arraste e solte suas imagens ou vídeos aqui (máximo 5)</p>
-            <p class="text-sm text-gray-600">Tamanho máximo de imagem: 10MB. Duração máxima de vídeo: 1 minuto.</p>
-        </div>
-        {{ image_form.as_p }}
-        <input type="file" name="images" id="id_images" multiple>
-        {{ image_form.images.errors }}
-    </div>
-    <div class="mt-4 flex items-center space-x-4" id="preview-container"></div>
-</div>
+            <!-- Mídia -->
+            <div class="mb-6">
+                <h2 class="text-lg font-semibold mb-2">Mídia do Evento</h2>
+                <div class="border-dashed border-2 border-gray-300 rounded p-4 text-center">
+                    <div class="text-gray-500 mb-4">
+                        <i class="fas fa-cloud-upload-alt text-4xl"></i>
+                        <p>Arraste e solte sua imagem aqui (máximo 1)</p>
+                        <p class="text-sm text-gray-600">Tamanho máximo de imagem: 10MB.</p>
+                    </div>
+                    <label for="id_images" class="sr-only">Imagem do Evento</label> <!-- Added label -->
+                    <input type="file" name="images" id="id_images" multiple>
+                    {{ image_form.images.errors }}
+                </div>
+                <div class="mt-4 flex items-center space-x-4" id="preview-container"></div>
+            </div>
             <!-- Configurações -->
             <div class="mb-6">
                 <h2 class="text-lg font-semibold mb-2">Configurações do Evento</h2>
                 <div class="space-y-4">
                     <div>
-                        <label for="id_capacity" class="block text-sm font-medium">Capacidade Máxima do Evento (máximo 500.000)</label>
+                        <label for="id_max_capacity" class="block text-sm font-medium">Capacidade Máxima do Evento (máximo 500.000)</label>
                         {{ form.max_capacity }}
                         {{ form.max_capacity.errors }}
                     </div>
                     <div>
-                        <label for="id_age_restriction" class="block text-sm font-medium">Faixa Etária</label>
+                        <label for="id_age_group" class="block text-sm font-medium">Faixa Etária</label>
                         {{ form.age_group }}
                         {{ form.age_group.errors }}
                     </div>
@@ -222,6 +223,7 @@
 
     function validateForm() {
         let isValid = true;
+        console.log("Validating form...");
     
         const ticketsInput = document.getElementById('id_tickets');
         if (parseInt(ticketsInput.value) > maxTickets) {
@@ -251,7 +253,7 @@
                 video.src = URL.createObjectURL(file);
             }
         }
-    
+        console.log("Form validation result: ", isValid);  // Log validation result
         return isValid;
     }
 
@@ -357,8 +359,37 @@
             }
         });
     });
+    document.addEventListener('DOMContentLoaded', (event) => {
+        const imageInput = document.getElementById('id_images');
+        const previewContainer = document.getElementById('image-preview-container');
 
-        // Adiciona o evento de input ao campo de CEP para aplicar a máscara
+        imageInput.addEventListener('change', () => {
+            previewContainer.innerHTML = ''; // Limpa as miniaturas anteriores
+            const files = imageInput.files;
+            for (let i = 0; i < files.length; i++) {
+                const file = files[i];
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    const img = document.createElement('img');
+                    img.src = e.target.result;
+                    img.classList.add('preview-image');
+                    previewContainer.appendChild(img);
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+
+        const cepInput = document.getElementById('id_cep');
+        cepInput.addEventListener('blur', () => {
+            mascaraCEP(cepInput);
+        });
+
+        const dateInput = document.getElementById('id_date');
+        dateInput.setAttribute('type', 'date');
+        dateInput.setAttribute('min', new Date().toISOString().split('T')[0]);
+    });
+
+    // Adiciona o evento de input ao campo de CEP para aplicar a máscara
     document.addEventListener('DOMContentLoaded', function () {
         const cepInput = document.getElementById('id_cep');
         cepInput.addEventListener('input', function () {
@@ -370,6 +401,29 @@
         const dateInput = document.getElementById('id_date');
         dateInput.setAttribute('type', 'date');
         dateInput.setAttribute('min', new Date().toISOString().split('T')[0]);
+    });
+    document.addEventListener('DOMContentLoaded', function() {
+        const dateInput = document.getElementById('id_date');
+        const timeInput = document.getElementById('id_time');
+
+        function updateMinTime() {
+            const selectedDate = new Date(dateInput.value);
+            const now = new Date();
+
+            if (selectedDate.toDateString() === now.toDateString()) {
+                const currentHours = String(now.getHours()).padStart(2, '0');
+                const currentMinutes = String(now.getMinutes()).padStart(2, '0');
+                timeInput.min = `${currentHours}:${currentMinutes}`;
+            } else {
+                timeInput.min = '00:00';
+            }
+        }
+
+        dateInput.addEventListener('change', updateMinTime);
+        timeInput.addEventListener('focus', updateMinTime);
+
+        // Initial call to set the correct min time
+        updateMinTime();
     });
 </script>
 {% endblock content %}
