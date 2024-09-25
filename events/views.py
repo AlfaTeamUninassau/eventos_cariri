@@ -46,40 +46,36 @@ class EventCreateView(FormView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        if self.request.method == 'POST':
-            context['image_form'] = EventImageForm(self.request.POST, self.request.FILES)
-            context['location_form'] = LocationForm(self.request.POST)
-        else:
-            context['image_form'] = EventImageForm()
-            context['location_form'] = LocationForm()
+        context['image_form'] = EventImageForm()
+        context['location_form'] = LocationForm()
         return context
 
-    def form_valid(self, form):
-        context = self.get_context_data()
-        image_form = context['image_form']
-        location_form = context['location_form']
+    def post(self, request, *args, **kwargs):
+        form = self.get_form()
+        image_form = EventImageForm(request.POST, request.FILES)
+        location_form = LocationForm(request.POST)
 
-        if form.is_valid():  # Verifica o formulário principal primeiro
-            location = location_form.save()
-            event = form.save(commit=False)
-            event.location = location
-            event.status = Event.EM_ANALISE
-            event.save()
-
-            if image_form.is_valid():  # Só processa as imagens se o formulário de imagem for válido
-                for file in image_form.cleaned_data['images']:  # Usa cleaned_data para acesso seguro
-                    EventImage.objects.create(event=event, image=file)
-                messages.success(self.request, 'Evento criado com sucesso e está em análise.')
-            else:
-                messages.error(self.request, 'Erro ao criar o evento. Verifique os dados e tente novamente.')
-                return self.form_invalid(form)  # Retorna inválido se houver erro nas imagens
-
-            return super().form_valid(form)
+        if form.is_valid() and image_form.is_valid() and location_form.is_valid():
+            return self.form_valid(form, image_form, location_form)
         else:
-            if not form.is_valid():
-                logger.error(f"Erros no formulário principal: {form.errors}")
-            if not location_form.is_valid():
-                logger.error(f"Erros no formulário de localização: {location_form.errors}")
-            messages.error(self.request, 'Erro ao criar o evento. Verifique os dados e tente novamente.')
-            return self.form_invalid(form)
+            return self.form_invalid(form, image_form, location_form)
+
+    def form_valid(self, form, image_form, location_form):
+        location = location_form.save()
+        event = form.save(commit=False)
+        event.location = location
+        event.status = Event.EM_ANALISE
+        event.save()
+
+        for file in image_form.cleaned_data['images']:
+            EventImage.objects.create(event=event, image=file)
+
+        messages.success(self.request, 'Evento criado com sucesso e está em análise.')
+        return super().form_valid(form)
+
+    def form_invalid(self, form, image_form, location_form):
+        return self.render_to_response(
+            self.get_context_data(form=form, image_form=image_form, location_form=location_form)
+        )
+
         

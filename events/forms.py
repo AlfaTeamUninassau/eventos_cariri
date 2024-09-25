@@ -85,7 +85,7 @@ class EventImageForm(forms.Form):
     )
 
     def clean_images(self):
-        files = self.files.getlist('images')
+        files = self.cleaned_data['images']
         max_image_size = 10 * 1024 * 1024  # 10MB
         max_upload_count = 5  # Máximo de 5 imagens
 

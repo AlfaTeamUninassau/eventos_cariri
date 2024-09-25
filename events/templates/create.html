@@ -45,7 +45,7 @@
             </ul>
         </div>
         {% endif %}
-        <form method="post" enctype="multipart/form-data" onsubmit="return validateForm();">
+        <form method="post" action="{% url 'event_create' %}" enctype="multipart/form-data" onsubmit="return validateForm();">
             {% csrf_token %}
             {{ form.non_field_errors }}
             <!-- Informações do Evento -->
@@ -143,20 +143,21 @@
                     </div>
                 </div>
             </div>
-            <!-- Mídia -->
-            <div class="mb-6">
-                <h2 class="text-lg font-semibold mb-2">Mídia do Evento</h2>
-                <div class="border-dashed border-2 border-gray-300 rounded p-4 text-center">
-                    <div class="text-gray-500 mb-4">
-                        <i class="fas fa-cloud-upload-alt text-4xl"></i>
-                        <p>Arraste e solte suas imagens ou vídeos aqui (máximo 5)</p>
-                        <p class="text-sm text-gray-600">Tamanho máximo de imagem: 10MB. Duração máxima de vídeo: 1 minuto.</p>
-                    </div>
-                    <input type="file" name="images" id="id_images" multiple>
-                        {{ image_form.images.errors }}
-                </div>
-                <div class="mt-4 flex items-center space-x-4" id="preview-container"></div>
-            </div>
+<!-- Mídia -->
+<div class="mb-6">
+    <h2 class="text-lg font-semibold mb-2">Mídia do Evento</h2>
+    <div class="border-dashed border-2 border-gray-300 rounded p-4 text-center">
+        <div class="text-gray-500 mb-4">
+            <i class="fas fa-cloud-upload-alt text-4xl"></i>
+            <p>Arraste e solte suas imagens ou vídeos aqui (máximo 5)</p>
+            <p class="text-sm text-gray-600">Tamanho máximo de imagem: 10MB. Duração máxima de vídeo: 1 minuto.</p>
+        </div>
+        {{ image_form.as_p }}
+        <input type="file" name="images" id="id_images" multiple>
+        {{ image_form.images.errors }}
+    </div>
+    <div class="mt-4 flex items-center space-x-4" id="preview-container"></div>
+</div>
             <!-- Configurações -->
             <div class="mb-6">
                 <h2 class="text-lg font-semibold mb-2">Configurações do Evento</h2>
