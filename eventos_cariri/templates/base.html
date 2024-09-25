@@ -30,7 +30,7 @@
             </div>
             <nav class="flex flex-wrap space-x-4 mt-4 md:mt-0">
                 <a class="text-gray-700 rounded-full px-2 py-1 hover:bg-gray-500 text-black" href="{% url 'home' %}">Home</a>
-                <a class="text-gray-700 rounded-full px-2 py-1 hover:bg-gray-500 text-black" href="#">Eventos</a>
+                <a class="text-gray-700 rounded-full px-2 py-1 hover:bg-gray-500 text-black" href="{% url 'events' %}">Eventos</a>
                 <a class="text-gray-700 rounded-full px-2 py-1 hover:bg-gray-500 text-black" href="#">Categorias</a>
                 <a class="text-gray-700 rounded-full px-2 py-1 hover:bg-gray-500 text-black" href="{% url 'event_create' %}">Criar Eventos</a>
                 <a class="text-gray-700 rounded-full px-2 py-1 hover:bg-gray-500 text-black" href="#">Sobre</a>
@@ -80,10 +80,10 @@
             </div>
             <div class="w-full md:w-1/3">
                 <h5 class="font-bold mb-2">Se inscreva em nossa Newsletter</h5>
-                <form class="flex">
+                {% comment %} <form class="flex">
                     <input class="p-2 rounded-l bg-gray-200 text-gray-700" placeholder="coloque o seu e-mail" type="email"/>
                     <button class="p-2 rounded-r bg-blue-600 text-white" type="submit">Inscrever-se</button>
-                </form>
+                </form> {% endcomment %}
             </div>
         </div>
         <div class="text-center mt-8 text-gray-500">
