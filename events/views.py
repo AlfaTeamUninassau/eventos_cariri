@@ -39,7 +39,7 @@ class HomeView(ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['upcoming_events'] = Event.objects.filter(date__gte=timezone.now()).order_by('date')[:3]  # Limit to 6 events
+        context['upcoming_events'] = Event.objects.filter(date__gte=timezone.now(), status=Event.APROVADO).order_by('date')[:3]  # Limit to 6 events
         return context
 
 
@@ -117,7 +117,8 @@ class EventDetailView(DetailView):
 
 
 def upcoming_events_view(request):
-    upcoming_events = Event.objects.filter(date__gte=timezone.now()).order_by('date')
+    upcoming_events = Event.objects.filter(date__gte=timezone.now(), status=Event.APROVADO).order_by('date')
+    
     return render(request, 'home.html', {'upcoming_events': upcoming_events})
 
 
