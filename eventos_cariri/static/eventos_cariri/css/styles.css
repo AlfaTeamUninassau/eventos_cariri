@@ -22,3 +22,7 @@
     padding: 10px; /* Espaçamento interno */
     border-radius: 5px; /* Bordas arredondadas */
   }
+
+  .hidden {
+    display: none;
+}

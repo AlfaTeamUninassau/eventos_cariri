@@ -23,35 +23,39 @@
     
     <!-- Header -->
     <header class="bg-white shadow-md">
-        <div class="container mx-auto px-4 py-4 flex flex-wrap justify-between items-center">
-            <div class="flex items-center">
+        <div class="container mx-auto px-4 py-4 flex justify-between items-center">
+            <div id="site-title" class="flex items-center">
                 <img alt="Eventos Cariri Logo" class="h-10 w-10" height="40" src="{% static 'eventos_cariri/images/logomarca.png' %}"/>
-                <span class="ml-2 text-xl font-bold">Eventos Cariri</span>
+                <span id="site-sub-title" class="ml-2 text-xl font-bold">Eventos Cariri</span>
             </div>
-            <nav class="flex flex-wrap space-x-4 mt-4 md:mt-0">
-                <a class="text-gray-700 rounded-full px-2 py-1 hover:bg-gray-500 text-black" href="{% url 'home' %}">Home</a>
-                <a class="text-gray-700 rounded-full px-2 py-1 hover:bg-gray-500 text-black" href="{% url 'events' %}">Eventos</a>
-                <a class="text-gray-700 rounded-full px-2 py-1 hover:bg-gray-500 text-black" href="#">Categorias</a>
-                <a class="text-gray-700 rounded-full px-2 py-1 hover:bg-gray-500 text-black" href="{% url 'event_create' %}">Criar Eventos</a>
-                <a class="text-gray-700 rounded-full px-2 py-1 hover:bg-gray-500 text-black" href="#">Sobre</a>
-                {% if user.is_superuser %}
-                <a class="text-gray-700 rounded-full px-2 py-1 hover:bg-gray-500 text-black" href="{% url 'analysis_events' %}">Análise</a>
-                {% endif %}
-            </nav>
-            <div class="flex space-x-4 mt-4 md:mt-0 items-center">
-                <div class="relative flex items-center">
+            <div class="flex items-center space-x-4">
+                <nav id="menu" class="hidden md:flex flex-wrap space-x-4 mt-4 md:mt-0">
+                    <a class="text-gray-700 rounded-full px-2 py-1 hover:bg-gray-500 hover:text-white" href="{% url 'home' %}">Home</a>
+                    <a class="text-gray-700 rounded-full px-2 py-1 hover:bg-gray-500 hover:text-white" href="{% url 'events' %}">Eventos</a>
+                    <a class="text-gray-700 rounded-full px-2 py-1 hover:bg-gray-500 hover:text-white" href="#">Categorias</a>
+                    <a class="text-gray-700 rounded-full px-2 py-1 hover:bg-gray-500 hover:text-white" href="{% url 'event_create' %}">Criar Eventos</a>
+                    <a class="text-gray-700 rounded-full px-2 py-1 hover:bg-gray-500 hover:text-white" href="#">Sobre</a>
+                    {% if user.is_superuser %}
+                    <a class="text-gray-700 rounded-full px-2 py-1 hover:bg-gray-500 hover:text-white" href="{% url 'analysis_events' %}">Análise</a>
+                    {% endif %}
+                </nav>
+                <div id="search" class="relative flex items-center">
                     <input id="search-input" type="text" class="hidden p-2 border rounded" placeholder="Pesquisar...">
                     <input id="event-name" type="hidden" value="">
                     <i id="search-icon" class="fas fa-search text-gray-700 rounded-full px-2 py-2 hover:text-black cursor-pointer"></i>
-                    <button id="close-search" class="hidden ml-2 text-gray-700 hover:text-black cursor-pointer">&times;</button>                </div>
-
+                    <button id="close-search" class="hidden ml-2 text-gray-700 hover:text-black cursor-pointer">&times;</button>
+                </div>
+                
                 {% if user.is_authenticated %}
-                    <span class="text-gray-700">Olá, {{ user.username }}</span>
-                    <a class="text-red hover:text-white border border-gray-700 rounded-full px-2 py-1 hover:bg-red-500" href="{% url 'logout' %}">Sair</a>
+                    <span id="hi" class="text-gray-700">Olá, {{ user.username }}</span>
+                    <a id="exit" class="text-red hover:text-white border border-gray-700 rounded-full px-2 py-1 hover:bg-red-500" href="{% url 'logout' %}">Sair</a>
                 {% else %}
-                    <a class="text-gray-700 rounded-full px-2 py-1 hover:bg-gray-500" href="{% url 'login' %}">Login</a>
-                    <a class="text-gray-700 hover:text-black border border-gray-700 rounded-full px-2 py-1 hover:bg-gray-500" href="{% url 'register' %}">Cadastre-se</a>
+                    <a id="login" class="text-gray-700 rounded-full px-2 py-1 hover:text-white hover:bg-green-500" href="{% url 'login' %}">Login</a>
+                    <a id="singin" class="text-gray-700 hover:text-black border border-gray-700 rounded-full px-2 py-1 hover:bg-blue-500 hover:text-white" href="{% url 'register' %}">Cadastre-se</a>
                 {% endif %}
+                <button id="menu-toggle" class="block md:hidden text-gray-700 hover:text-black focus:outline-none">
+                    <i class="fas fa-bars"></i>
+                </button>
             </div>
         </div>
     </header>
@@ -96,31 +100,51 @@
     </footer>
 
     <script>
-      document.addEventListener('DOMContentLoaded', function() {
-        const searchIcon = document.getElementById('search-icon');
-        const searchInput = document.getElementById('search-input');
-        const closeSearch = document.getElementById('close-search');
+        document.addEventListener('DOMContentLoaded', function() {
+            const searchIcon = document.getElementById('search-icon');
+            const searchInput = document.getElementById('search-input');
+            const closeSearch = document.getElementById('close-search');
+            const menuToggle = document.getElementById('menu-toggle');
+            const menu = document.getElementById('menu');
+            const siteTitle = document.getElementById('site-title');
+            const login = document.getElementById('login');
+            const singin = document.getElementById('singin');
+            const hi = document.getElementById('hi');
+            const exit = document.getElementById('exit');
+            const user = document.getElementById('user');
+            const userName = document.getElementById('user_name');
 
-        searchIcon.addEventListener('click', function() {
-          searchInput.classList.toggle('hidden');
-          closeSearch.classList.toggle('hidden');
-          if (!searchInput.classList.contains('hidden')) {
-            searchInput.focus();
-          } else {
-            searchEvents();
-          }
+            searchIcon.addEventListener('click', function() {
+                searchInput.classList.toggle('hidden');
+                closeSearch.classList.toggle('hidden');
+                if (!searchInput.classList.contains('hidden')) {
+                    searchInput.focus();
+                } else {
+                    searchEvents();
+                }
+            });
+
+            closeSearch.addEventListener('click', function() {
+                searchInput.classList.add('hidden');
+                closeSearch.classList.add('hidden');
+            });
+
+            menuToggle.addEventListener('click', function() {
+                menu.classList.toggle('hidden');
+                siteTitle.classList.toggle('hidden');
+                if (login) login.classList.toggle('hidden');
+                if (exit) exit.classList.toggle('hidden');
+                if (singin) singin.classList.toggle('hidden');
+                if (hi) hi.classList.toggle('hidden');
+                if (user) user.classList.toggle('hidden');
+                if (userName) userName.classList.toggle('hidden');
+            });
         });
 
-        closeSearch.addEventListener('click', function() {
-          searchInput.classList.add('hidden');
-          closeSearch.classList.add('hidden');
-        });
-      });
-    
-      function searchEvents() {
-        var eventId = document.getElementById('event-id').value;
-        window.location.href = '/events/search/' + eventId;
-      }
+        function searchEvents() {
+            var eventId = document.getElementById('event-id').value;
+            window.location.href = '/events/search/' + eventId;
+        }
     </script>
 </body>
 </html>
