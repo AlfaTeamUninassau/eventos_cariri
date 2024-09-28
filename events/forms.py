@@ -10,19 +10,14 @@ logger = logging.getLogger(__name__)
 
 
 class EventForm(forms.ModelForm):
-    tickets = forms.IntegerField(
-        min_value=1,
-        max_value=500000,
-        required=True,
-        widget=forms.NumberInput(attrs={'class': 'w-full mt-1 p-2 border rounded', 'id': 'id_tickets', 'name': 'tickets'})
-    )
     price = forms.DecimalField(
         max_digits=7,
         decimal_places=2,
         required=False,
-        widget=forms.NumberInput(attrs={'class': 'w-full mt-1 p-2 border rounded', 'id': 'id_price', 'name': 'price'})
+        widget=forms.NumberInput(
+            attrs={'class': 'w-full mt-1 p-2 border rounded', 'id': 'id_price', 'name': 'price'})
     )
-    
+
     date = forms.DateField(
         widget=forms.DateInput(
             attrs={
@@ -51,19 +46,36 @@ class EventForm(forms.ModelForm):
         model = Event
         fields = [
             'title', 'date', 'time', 'description', 'category',
-            'age_group', 'privacy', 'ticket_type', 'tickets',
+            'age_group', 'privacy', 'ticket_type',
             'price', 'max_capacity'
         ]
         widgets = {
-            'title': forms.TextInput(attrs={'class': 'w-full mt-1 p-2 border rounded', 'id': 'id_title', 'name': 'title'}),
+            'title': forms.TextInput(attrs={'class': 'w-full mt-1 p-2 border rounded', 'id': 'id_title', 'name': 'title', 'placeholder': 'qual será o nome do evento?'}),
             'date': forms.DateInput(attrs={'class': 'w-full mt-1 p-2 border rounded', 'type': 'date', 'id': 'id_date', 'name': 'date'}),
             'time': forms.TimeInput(attrs={'class': 'w-full mt-1 p-2 border rounded', 'id': 'id_time', 'name': 'time'}),
-            'description': forms.Textarea(attrs={'class': 'w-full mt-1 p-2 border rounded', 'id': 'id_description', 'name': 'description'}),
+            'description': forms.Textarea(attrs={
+    'class': 'w-full mt-1 p-2 border rounded',
+    'id': 'id_description',
+    'name': 'description',
+    
+    'placeholder': """Crie uma descrição detalhada do evento ex:
+Junte-se a nós para uma experiência inesquecível na Tech Conference 2023!
+Neste evento, reuniremos líderes da indústria, inovadores e entusiastas da tecnologia para três dias de palestras inspiradoras, workshops práticos e oportunidades de networking sem igual.
+Programação:
+Dia 1: Palestras de abertura e painéis de discussão
+Dia 2: Workshops aprofundados e sessões temáticas
+Dia 3: Eventos de networking e cerimônia de encerramento
+O que esperar
+Apresentações inovadoras sobre Inteligência Artificial, blockchain e Internet das Coisas
+Demonstrações interativas dos mais recentes produtos tecnológicos
+Oportunidades de conectar-se com profissionais da indústria e potenciais colaboradores
+Acesso exclusivo à feira de emprego e sessões de recrutamento
+"""
+}),
             'category': forms.Select(attrs={'class': 'w-full mt-1 p-2 border rounded', 'id': 'id_category', 'name': 'category'}),
             'age_group': forms.Select(attrs={'class': 'w-full mt-1 p-2 border rounded', 'id': 'id_age_group', 'name': 'age_group'}),
             'privacy': forms.Select(attrs={'class': 'w-full mt-1 p-2 border rounded', 'id': 'id_privacy', 'name': 'privacy'}),
             'ticket_type': forms.Select(attrs={'class': 'w-full mt-1 p-2 border rounded', 'id': 'id_ticket_type', 'name': 'ticket_type'}),
-            'tickets': forms.NumberInput(attrs={'class': 'w-full mt-1 p-2 border rounded', 'id': 'id_tickets', 'name': 'tickets'}),
             'price': forms.NumberInput(attrs={'class': 'w-full mt-1 p-2 border rounded', 'id': 'id_price', 'name': 'price'}),
             'max_capacity': forms.NumberInput(attrs={'class': 'w-full mt-1 p-2 border rounded', 'id': 'id_max_capacity', 'name': 'max_capacity'}),
         }
@@ -74,16 +86,14 @@ class EventForm(forms.ModelForm):
             'date': {
                 'required': 'Este campo é obrigatório.',
             },
-            'tickets': {
-                'required': 'Este campo é obrigatório.',
-                'max_value': 'A quantidade de ingressos não pode exceder 500.000.',
-                'min_value': 'A quantidade de ingressos deve ser pelo menos 1.',
-            },
             'price': {
                 'max_digits': 'O preço não pode exceder R$9.999,00.',
             },
+            'description': {
+                'required': 'Este campo é obrigatório.',
+            },
         }
-        
+
     def clean(self):
         cleaned_data = super().clean()
         date = cleaned_data.get('date')
@@ -94,13 +104,29 @@ class EventForm(forms.ModelForm):
                 timezone.datetime.combine(date, time)
             )
             if event_datetime <= timezone.now():
-                raise ValidationError("O horário do evento deve ser no futuro.")
+                raise ValidationError(
+                    "O horário do evento deve ser no futuro.")
 
         return cleaned_data
-        
+
     def __init__(self, *args, **kwargs):
         super(EventForm, self).__init__(*args, **kwargs)
         print("EventForm initialized with errors: %s", self.errors)
+        for field in self.fields:
+            if self[field].errors:
+                self.fields[field].widget.attrs['class'] += ' border-red-500'
+
+
+class SearchForm(forms.Form):
+    query = forms.CharField(
+        max_length=100,
+        required=False,
+        widget=forms.TextInput(
+            attrs={'class': 'w-full mt-1 p-2 border rounded', 'id': 'id_query', 'name': 'query'})
+    )
+
+    def __init__(self, *args, **kwargs):
+        super(SearchForm, self).__init__(*args, **kwargs)
         for field in self.fields:
             if self[field].errors:
                 self.fields[field].widget.attrs['class'] += ' border-red-500'
@@ -111,14 +137,14 @@ class LocationForm(forms.ModelForm):
         model = Location
         fields = ['cep', 'street', 'number', 'neighborhood', 'city', 'state']
         widgets = {
-            'cep': forms.TextInput(attrs={'class': 'w-full mt-1 p-2 border rounded', 'id': 'id_cep', 'name': 'cep'}),
+            'cep': forms.TextInput(attrs={'class': 'w-full mt-1 p-2 border rounded', 'id': 'id_cep', 'name': 'cep', 'placeholder': 'Digite o CEP para preencher automaticamente os campos abaixo'}),
             'street': forms.TextInput(attrs={'class': 'w-full mt-1 p-2 border rounded', 'id': 'id_street', 'name': 'street'}),
-            'number': forms.TextInput(attrs={'class': 'w-full mt-1 p-2 border rounded', 'id': 'id_number', 'name': 'number'}),
+            'number': forms.TextInput(attrs={'class': 'w-full mt-1 p-2 border rounded', 'id': 'id_number', 'name': 'number', 'placeholder': 'Digite o número do local'}),
             'neighborhood': forms.TextInput(attrs={'class': 'w-full mt-1 p-2 border rounded', 'id': 'id_neighborhood', 'name': 'neighborhood'}),
             'city': forms.TextInput(attrs={'class': 'w-full mt-1 p-2 border rounded', 'id': 'id_city', 'name': 'city'}),
             'state': forms.TextInput(attrs={'class': 'w-full mt-1 p-2 border rounded', 'id': 'id_state', 'name': 'state'}),
         }
-        
+
     def __init__(self, *args, **kwargs):
         super(LocationForm, self).__init__(*args, **kwargs)
         for field in self.fields:
@@ -137,17 +163,16 @@ class EventImageForm(forms.Form):
         fields = ['images', 'event']
 
     def clean_images(self):
-        # Access files from cleaned_data as Django processes it through request.FILES automatically
-        image = self.cleaned_data.get('images')  # Now we're dealing with a single file
+        image = self.cleaned_data.get('images', None)
 
-        if not image:
-            raise ValidationError("No file was submitted. Check the encoding type on the form.")
-        
-        max_image_size = 10 * 1024 * 1024  # 10MB
-        
-        if image.content_type not in ['image/jpeg', 'image/png', 'image/gif']:
-            raise ValidationError(f'O arquivo {image.name} não é uma imagem válida.')
-        if image.size > max_image_size:
-            raise ValidationError(f'O arquivo {image.name} excede o tamanho máximo de 10MB.')
+        if image:
+            max_image_size = 10 * 1024 * 1024  # 10MB
+
+            if image.content_type not in ['image/jpeg', 'image/png', 'image/gif']:
+                raise ValidationError(
+                    f'O arquivo {image.name} não é uma imagem válida.')
+            if image.size > max_image_size:
+                raise ValidationError(
+                    f'O arquivo {image.name} excede o tamanho máximo de 10MB.')
 
         return image

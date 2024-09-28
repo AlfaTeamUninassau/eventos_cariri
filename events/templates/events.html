@@ -2,6 +2,13 @@
 {% load static %}
 
 {% block content %}
+{% if messages %}
+    <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative" role="alert">
+        {% for message in messages %}
+        <p class="mb-1">{{ message }}</p>
+        {% endfor %}
+    </div>
+    {% endif %}
 
 <body class="bg-gray-100 font-sans">
   <div class="flex">
@@ -104,6 +111,7 @@
         Apply Filters
       </button>
     </div>
+    
     <!-- Main Content -->
         <div class="container mx-auto px-4 py-8">
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -116,10 +124,21 @@
                 {% endif %}
                 <div class="p-4">
                     <h3 class="text-xl font-semibold mb-2">{{ event.title }}</h3>
-                    <p class="text-gray-600 mb-2">{{ event.date|date:"d \d\e F" }}</p>
+                    <p class="text-gray-600 mb-2">
+                      {{ event.date|date:"d \d\e F" }}
+
+                    </p>
+                    {% if event.ticket_type == 'gratuito' %}
+                    <i class="fas fa-money-bill-wave text-green-500"> {{ event.ticket_type }} </i>
+                    {% else %}
+                    <i class="fas fa-money-bill-wave text-blue-500"> {{ event.ticket_type }} | R$ {{ event.price}} </i>
+                    {% endif %}
                     <p class="text-gray-600 mb-2">{{ event.location.city }}, {{ event.location.state }}</p>
                     <p class="text-gray-700 mb-4">{{ event.description|truncatewords:20 }}</p>
-                    <a href="{% url 'event_detail' event.pk %}" class="bg-blue-600 text-white py-2 px-4 rounded-lg">Learn More</a>
+                    <a href="{% url 'event_detail' event.pk %}" class="bg-blue-600 text-white py-2 px-4 rounded-lg">Saiba Mais</a>
+                    {% if user.is_superuser %}
+                    <a href="{% url 'event_delete' event.pk %}" class="bg-red-600 text-white py-2 px-6 rounded-lg" onclick="return confirmAction('deletar')">Excluir</a>
+                    {% endif %}
                 </div>
             </div>
             {% endfor %}
@@ -150,5 +169,14 @@
         </div>
     </div>
 </body>
+<script>
+  function confirmAction(action) {
+    let message = '';
+    if (action === 'deletar') {
+        message = 'Tem certeza que quer deletar esse evento?';
+    }
+    return confirm(message);
+}
+</script>
 
 {% endblock %}

@@ -1,0 +1,282 @@
+{% extends 'base.html' %} {% load static %} {% block content %}
+<body class="bg-gray-100 text-gray-800">
+  <div class="max-w-5xl mx-auto p-4">
+    <!-- Header Section -->
+    <div class="bg-white shadow-md rounded-lg overflow-hidden">
+      {% if event.image.exists %}
+      <img
+        src="{{ event.image.first.image.url }}"
+        alt="{{ event.title }}"
+        class="w-full h-64 object-cover"
+      />
+      {% else %}
+      <img
+        src="{% static 'eventos_cariri/images/no_photo.png' %}"
+        alt="No Image"
+        class="w-full h-64 object-cover"
+      />
+      {% endif %}
+      <div class="p-6">
+        <h1 class="text-3xl font-bold">{{ event.title }}</h1>
+        <div class="flex items-center text-gray-500 mt-2">
+          <i class="fas fa-calendar-alt mr-2"></i>
+          <span>{{ event.date|date:"d \d\e F, Y" }}</span>
+          <i class="fas fa-clock ml-4 mr-2"></i>
+          <span>{{ event.time|time:"H:i" }}</span>
+          <i class="fas fa-map-marker-alt ml-4 mr-2"></i>
+          <span>{{ event.location.city }}, {{ event.location.state }}</span>
+          <i class="fas fa-tag ml-4 mr-2"></i>
+          <span>{{ event.category }}</span>
+          <i class="fas fa-ticket-alt ml-4 mr-2"></i>
+          <span>{{ event.ticket_type }}</span>
+          {% if event.price %}
+          <i class="fas fa-dollar-sign ml-4 mr-2"></i>
+          <span>R${{ event.price }}</span>
+          {% endif %}
+          <i class="fas fa-users ml-4 mr-2"></i>
+          <span>{{ event.age_group }}</span>
+        </div>
+        <div class="mt-4">
+          <button class="bg-blue-600 text-white px-4 py-2 rounded-lg" onclick="comprarIngresso()">
+            Comprar Ingresso
+          </button>
+
+        </div>
+      </div>
+    </div>
+    <!-- About the Event Section -->
+    <div class="bg-white shadow-md rounded-lg overflow-hidden mt-6 p-6">
+      <h2 class="text-2xl font-bold mb-4">Sobre o evento</h2>
+
+      <p class="mb-4">{{ event.description }}</p>
+    </div>
+    <!-- Organizer Section -->
+    <div
+      class="bg-white shadow-md rounded-lg overflow-hidden mt-6 p-6 flex items-center"
+    >
+      <img
+        src="{% static 'eventos_cariri/images/organizer.jpeg' %}"
+        alt="Organizer's profile picture"
+        class="w-24 h-24 rounded-full mr-6"
+      />
+      <div>
+        <h3 class="text-xl font-bold">João Lima</h3>
+        <p class="text-gray-600 mb-4">
+          Apaixonado por nossa cultura e tradição, João Lima 
+          dedica sua vida a manter viva a chama da vaquejada. 
+          Com anos de experiência no evento, ele é o responsável
+          por garantir que cada edição seja ainda mais emocionante 
+          e inesquecível.
+        </p>
+        <button class="bg-blue-600 text-white px-4 py-2 rounded-lg">
+          Fale com o organizador
+        
+        </button>
+      </div>
+    </div>
+    <!-- Event Location Section -->
+    <div class="bg-white shadow-md rounded-lg overflow-hidden mt-6 p-6">
+      <h2 class="text-2xl font-bold mb-4">Local do Evento</h2>
+      <i class="fas fa-map-marker-alt"></i>
+      <span>{{ event.location.street }}, {{ event.location.number }} - {{ event.location.neighborhood }}, {{ event.location.city }}</span>
+      <div id="event-map" class="w-full h-64 rounded-lg"></div>
+
+      <!-- Leaflet.js CSS and JS -->
+      <link
+        rel="stylesheet"
+        href="https://unpkg.com/leaflet/dist/leaflet.css"
+      />
+      <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+
+      <script>
+        // Initialize the map and set its view to the event's location coordinates
+        var map = L.map('event-map').setView([{{ event.location.latitude }}, {{ event.location.longitude }}], 13);
+
+        // Set up the OSM tile layer
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            maxZoom: 18,
+            attribution: '© OpenStreetMap contributors'
+        }).addTo(map);
+
+        // Add a marker at the event location
+        L.marker([{{ event.location.latitude }}, {{ event.location.longitude }}]).addTo(map)
+            .bindPopup("{{ event.title }}")
+            .openPopup();
+      </script>
+    </div>
+    <!-- Similar Events Section -->
+    <div class="bg-white shadow-md rounded-lg overflow-hidden mt-6 p-6">
+      <h2 class="text-2xl font-bold mb-4">Eventos Similares</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+          {% for similar_event in similar_events %}
+          {% if similar_event %}
+            
+          <div class="bg-gray-100 p-4 rounded-lg" onclick="window.location.href='{% url 'event_detail' similar_event.id %}'">
+            {% if similar_event.image.exists %}
+            <img
+              src="{{ similar_event.image.first.image.url }}"
+              alt="{{ similar_event.title }}"
+              class="w-full h-32 object-cover rounded-lg mb-2"
+            />
+            {% else %}
+            <img
+              src="{% static 'eventos_cariri/images/no_photo.png' %}"
+              alt="No Image"
+              class="w-full h-32 object-cover rounded-lg mb-2"
+            />
+            {% endif %}
+            <h3 class="text-lg font-semibold">{{ similar_event.title }}</h3>
+            <p class="text-gray-600">
+              {{ similar_event.date|date:"d \d\e F, Y" }}
+            </p>
+            <p class="text-gray-600">
+              {{ similar_event.location.city }}
+            </p>
+          </div>
+          {% else %}
+          <div class="bg-gray-100 p-4 rounded-lg">
+            <h3 class="text-lg font-semibold">No similar events found</h3>
+          </div>
+          {% endif %}
+          
+          {% endfor %}
+        </div>
+    </div>
+<!-- Share This Event Section -->
+<div class="bg-white shadow-md rounded-lg overflow-hidden mt-6 p-6 text-center">
+    <h2 class="text-2xl font-bold mb-4">Compartilhe esse evento</h2>
+    <div class="flex justify-center space-x-4">
+        <!-- Facebook Share -->
+        <a href="https://www.facebook.com/sharer/sharer.php?u={{ request.build_absolute_uri }}" 
+           target="_blank" 
+           class="bg-blue-600 text-white px-4 py-2 rounded-lg flex items-center">
+            <i class="fab fa-facebook-f mr-2"></i> Facebook
+        </a>
+
+        <!-- X (formerly Twitter) Share -->
+        <a href="https://x.com/intent/tweet?text=Olha esse evento: {{ event.title }}&url={{ request.build_absolute_uri }}" 
+           target="_blank" 
+           class="bg-blue-400 text-white px-4 py-2 rounded-lg flex items-center">
+            <i class="fab fa-twitter mr-2"></i> X
+        </a>
+
+        <!-- WhatsApp Share -->
+        <a href="https://api.whatsapp.com/send?text=Olha esse evento: {{ event.title }} - {{ request.build_absolute_uri }}" 
+           target="_blank" 
+           class="bg-green-500 text-white px-4 py-2 rounded-lg flex items-center">
+            <i class="fab fa-whatsapp mr-2"></i> Whatsapp
+        </a>
+
+        <!-- Instagram Share (Link to Instagram) -->
+        <a href="https://www.instagram.com/" 
+           target="_blank" 
+           class="bg-pink-500 text-white px-4 py-2 rounded-lg flex items-center">
+            <i class="fab fa-instagram mr-2"></i> Instagram
+        </a>
+
+        <!-- Copy Link Button -->
+        <button 
+           onclick="copyToClipboard(' Olha esse evento: {{ event.title }} - {{ request.build_absolute_uri }}')" 
+           class="bg-gray-600 text-white px-4 py-2 rounded-lg flex items-center">
+            <i class="fas fa-link mr-2"></i> Copiar
+        </button>
+        </div>
+    </div>
+    <!-- Comments and Ratings Section -->
+    <div class="bg-white shadow-md rounded-lg overflow-hidden mt-6 p-6">
+      <h2 class="text-2xl font-bold mb-4">Comments and Ratings</h2>
+      <div class="flex justify-between items-center mb-4">
+        {% if user.is_authenticated %}
+        <button class="bg-blue-600 text-white px-4 py-2 rounded-lg">
+          Write a Review
+        </button>
+        {% else %}
+        <a href="{% url 'login' %}" class="bg-blue-600 text-white px-4 py-2 rounded-lg">
+          Fazer login para escrever uma avaliação</a>
+        {% endif %}
+        <span class="text-gray-600">Showing 1-5 of 20 comments</span>
+      </div>
+      <div class="space-y-4">
+        <!-- Comment 1 -->
+        <div class="bg-gray-100 p-4 rounded-lg">
+          <div class="flex items-center mb-2">
+            <img
+              src="{% static 'eventos_cariri/images/profile.png' %}"
+              alt="Profile picture of Jane Doe"
+              class="w-12 h-12 rounded-full mr-4"
+            />
+            <div>
+              <h3 class="text-lg font-semibold">Jane Doe</h3>
+              <div class="flex items-center text-yellow-500">
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+              </div>
+            </div>
+          </div>
+          <p class="text-gray-600 mb-2">
+            The event was amazing! The speakers were top-notch and the
+            networking opportunities were fantastic. Highly recommend!
+          </p>
+          <div class="flex space-x-4">
+            <button class="text-blue-600">
+              <i class="fas fa-reply mr-1"></i> Reply
+            </button>
+            <button class="text-blue-600">
+              <i class="fas fa-flag mr-1"></i> Report
+            </button>
+          </div>
+        </div>
+        <!-- Comment 2 -->
+        <div class="bg-gray-100 p-4 rounded-lg">
+          <div class="flex items-center mb-2">
+            <img
+              src="{% static 'eventos_cariri/images/profile.png' %}"
+              alt="Profile picture of John Smith"
+              class="w-12 h-12 rounded-full mr-4"
+            />
+            <div>
+              <h3 class="text-lg font-semibold">John Smith</h3>
+              <div class="flex items-center text-yellow-500">
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+              </div>
+            </div>
+          </div>
+          <p class="text-gray-600 mb-2">
+            Great event! Learned a lot and met some amazing people.
+          </p>
+          <div class="flex space-x-4">
+            <button class="text-blue-600">
+              <i class="fas fa-reply mr-1"></i> Reply
+            </button>
+            <button class="text-blue-600">
+              <i class="fas fa-flag mr-1"></i> Report
+            </button>
+          </div>
+        </div>
+        <!-- Add more comments as needed -->
+      </div>
+    </div>
+  </div>
+</body>
+
+<script>
+    function comprarIngresso(event){
+        alert("Em breve você poderá comprar o ingresso clicando nesse botão!")
+        event.preventDefault();
+    }
+    function copyToClipboard(text) {
+        navigator.clipboard.writeText(text).then(function() {
+            alert('link copiado para a área de transferência! ✅');
+        }, function(err) {
+            console.error('Async: não foi possível copiar o link: ', err);
+        });
+    }
+</script>
+{% endblock %}

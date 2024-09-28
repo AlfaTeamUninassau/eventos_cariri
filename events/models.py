@@ -15,15 +15,10 @@ class Location(models.Model):
     neighborhood = models.CharField(max_length=255)
     city = models.CharField(max_length=255)
     state = models.CharField(max_length=2)
+    latitude = models.DecimalField(max_digits=9, decimal_places=6, null=True, blank=True)  # Latitude field
+    longitude = models.DecimalField(max_digits=9, decimal_places=6, null=True, blank=True)  # Longitude field
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-    
-    def save(self, *args, **kwargs):
-        logger.debug("Saving location: %s", self.cep)  # Log location before saving
-        print("Saving location: %s", self.cep)  # Log location before saving
-        print("Location id: %s", self.id)  # Log location before saving
-        print("Location state: %s", self.state)  # Log location before saving
-        super(Location, self).save(*args, **kwargs)
 
     def __str__(self):
         return f"{self.street}, {self.number} - {self.city}/{self.state}"
@@ -55,25 +50,25 @@ class Event(models.Model):
         (MAIS_18, '+18 Anos'),
     ]
     CATEGORY_CHOICES = [
-        ('culture', 'Cultura'),
-        ('sport', 'Esporte'),
-        ('education', 'Educacional'),
-        ('music', 'Música'),
-        ('vaquejada', 'Vaquejada'),
-        ('literature', 'Literatura'),
-        ('art', 'Arte'),
-        ('lecture', 'Palestra'),
-        ('food', 'Comida'),
-        ('leisure', 'Lazer'),
-        ('festival', 'Festival'),
-        ('party', 'Festa'),
-        ('theater', 'Teatro'),
-        ('conference', 'Conferência'),
-        ('seminar', 'Seminário'),
-        ('workshop', 'Workshop'),
-        ('course', 'Curso'),
-        ('meeting', 'Reunião'),
-        ('other', 'Outro'),
+        ('Cultura', 'Cultura'),
+        ('Esporte', 'Esporte'),
+        ('Educacional', 'Educacional'),
+        ('Música', 'Música'),
+        ('Vaquejada', 'Vaquejada'),
+        ('Literatura', 'Literatura'),
+        ('Arte', 'Arte'),
+        ('Palestra', 'Palestra'),
+        ('Comida', 'Comida'),
+        ('Lazer', 'Lazer'),
+        ('Festival', 'Festival'),
+        ('Festa', 'Festa'),
+        ('Teatro', 'Teatro'),
+        ('Conferência', 'Conferência'),
+        ('Seminário', 'Seminário'),
+        ('Workshop', 'Workshop'),
+        ('Curso', 'Curso'),
+        ('Reunião', 'Reunião'),
+        ('Outro', 'Outro'),
     ]
     EM_ANALISE = 'em_analise'
     APROVADO = 'aprovado'
@@ -99,10 +94,10 @@ class Event(models.Model):
         max_length=50, choices=PRIVACY_CHOICES, null=False, blank=False, default=PUBLIC)
     ticket_type = models.CharField(
         max_length=50, choices=INGRESSO_CHOICES, null=False, blank=False, default=INGRESSO_GRATUITO)
-    tickets = models.IntegerField(null=False, blank=False, default=1)
     price = models.DecimalField(
         max_digits=7, decimal_places=2, null=True, blank=True)
     max_capacity = models.IntegerField(null=False, blank=False)
+    
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     status = models.CharField(
@@ -126,7 +121,7 @@ class EventImage(models.Model):
     id = models.AutoField(primary_key=True)
     event = models.ForeignKey(
         Event, related_name='image', on_delete=models.CASCADE)
-    image = models.ImageField(upload_to='event_images/', null=False, blank=False)
+    image = models.ImageField(upload_to='event_images/', null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     

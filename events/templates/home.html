@@ -21,9 +21,13 @@
         <h1 class="text-4xl text-white font-bold">
             Descubra Eventos em Cariri
         </h1>
-        <button class="mt-4 px-6 py-2 bg-yellow-500 text-white font-semibold rounded">
+        <p class="text-white mt-10">
+            
+        </p>
+        <a href="{% url 'events' %}" class="mt-2 px-10 py-2 bg-green-600 text-white font-semibold rounded">
             Explorar Eventos
-        </button>
+                </a>
+    
     </div>
 </section>
 
@@ -57,55 +61,51 @@
 
     <!-- Create Event Button -->
     <section class="text-center py-8">
-        <button class="px-6 py-2 bg-blue-500 text-white font-semibold rounded">
+        <a href="{% url 'event_create' %}" class="px-6 py-2 bg-blue-500 text-white font-semibold rounded">
             Crie seu Evento
-        </button>
+        </a>
     </section>
 
-    <!-- Upcoming Events -->
-    <section class="container mx-auto px-4 py-8">
-        <h2 class="text-2xl font-bold mb-4">
-            Eventos Próximos
-        </h2>
-        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 overflow-x-auto">
-            <div class="bg-white p-4 rounded shadow">
-                <img alt="Event Image" class="w-full h-48 object-cover rounded" height="200" src="https://i.ytimg.com/vi/BrTzRUc714E/maxresdefault.jpg" width="300"/>
-                <div class="mt-4">
-                    <span class="bg-purple-500 text-white text-xs px-2 py-1 rounded">Em breve</span>
-                    <h3 class="text-xl font-bold mt-2">Pau da Bandeira</h3>
-                    <p class="text-gray-600 mt-1"><i class="fas fa-calendar-alt"></i> Junho</p>
-                    <p class="text-gray-600"><i class="fas fa-map-marker-alt"></i> Centro, Barbalha</p>
-                    <p class="text-gray-700 mt-2">Venha celebrar a festa de Santo Antônio, padroeiro de Barbalha, com a tradicional subida do Pau da Bandeira.</p>
-                    <button class="mt-4 px-4 py-2 bg-blue-500 text-white font-semibold rounded">Leia mais</button>
-                </div>
-            </div>
-            <div class="bg-white p-4 rounded shadow">
-                <img alt="Event Image" class="w-full h-48 object-cover rounded" height="200" src="https://cn7.com.br/wp-content/uploads/2022/05/Festival-Expocrato-5.jpeg" width="300"/>
-                <div class="mt-4">
-                    <span class="bg-purple-500 text-white text-xs px-2 py-1 rounded">Em breve</span>
-                    <h3 class="text-xl font-bold mt-2">Expocrato 2025</h3>
-                    <p class="text-gray-600 mt-1"><i class="fas fa-calendar-alt"></i> Julho</p>
-                    <p class="text-gray-600"><i class="fas fa-map-marker-alt"></i> Centro de Convenções, Crato</p>
-                    <p class="text-gray-700 mt-2">Venha conferir a maior feira agropecuária do Cariri, com shows, exposições, e muito mais.</p>
-                    <button class="mt-4 px-4 py-2 bg-blue-500 text-white font-semibold rounded">Leia mais</button>
-                </div>
-            </div>
-            <div class="bg-white p-4 rounded shadow">
-                <img alt="Event Image" class="w-full h-48 object-cover rounded" height="200" src="https://www.badalo.com.br/wp-content/uploads/2023/07/vaquejada-juazeiro-do-norte-2023-600x375.jpg" width="300"/>
-                <div class="mt-4">
-                    <span class="bg-purple-500 text-white text-xs px-2 py-1 rounded">Em breve</span>
-                    <h3 class="text-xl font-bold mt-2">Vaquejada de Juazeiro do Norte</h3>
-                    <p class="text-gray-600 mt-1"><i class="fas fa-calendar-alt"></i> Junho</p>
-                    <p class="text-gray-600"><i class="fas fa-map-marker-alt"></i> Parque de Eventos, Juazeiro do Norte</p>
-                    <p class="text-gray-700 mt-2">Junte-se à festa da vaquejada, com competições, shows, e muito mais</p>
-                    <button class="mt-4 px-4 py-2 bg-blue-500 text-white font-semibold rounded">Leia mais</button>
-                </div>
+<!-- Upcoming Events -->
+<section class="container mx-auto px-4 py-8">
+    <h2 class="text-2xl font-bold mb-4">
+        Eventos Próximos
+    </h2>
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 overflow-x-auto">
+        {% for event in upcoming_events %}
+        <div class="bg-gray-100 p-4 rounded-lg" onclick="window.location.href='{% url 'event_detail' event.id %}'">
+            {% if event.image.exists %}
+            <img
+                src="{{ event.image.first.image.url }}"
+                alt="{{ event.title }}"
+                class="w-full h-48 object-cover rounded-lg mb-2"
+                height="200"
+                width="300"
+            />
+            {% else %}
+            <img
+                src="{% static 'eventos_cariri/images/no_photo.png' %}"
+                alt="No Image"
+                class="w-full h-48 object-cover rounded-lg mb-2"
+                height="200"
+                width="300"
+            />
+            {% endif %}
+            <div class="mt-4">
+                <span class="bg-purple-500 text-white text-xs px-2 py-1 rounded">Em breve</span>
+                <h3 class="text-xl font-bold mt-2">{{ event.title }}</h3>
+                <p class="text-gray-600 mt-1"><i class="fas fa-calendar-alt"></i> {{ event.date|date:"F" }}</p>
+                <p class="text-gray-600"><i class="fas fa-map-marker-alt"></i> {{ event.location }}</p>
+                <p class="text-gray-700 mt-2">{{ event.description }}</p>
+                <button class="mt-4 px-4 py-2 bg-blue-500 text-white font-semibold rounded">Leia mais</button>
             </div>
         </div>
-        <div class="text-center mt-8">
-            <button class="px-6 py-2 bg-blue-500 text-white font-semibold rounded">Veja todos os Eventos</button>
-        </div>
-    </section>
+        {% endfor %}
+    </div>
+    <div class="text-center mt-8">
+        <button class="px-6 py-2 bg-blue-500 text-white font-semibold rounded">Veja todos os Eventos</button>
+    </div>
+</section>
 
     <!-- Testimonials -->
     <section class="container mx-auto px-4 py-8">

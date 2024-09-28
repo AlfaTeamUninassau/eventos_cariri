@@ -55,32 +55,43 @@
                 <div class="space-y-4">
                     {{ form.non_field_errors }}
                     <div>
-                        <label for="id_title" class="block text-sm font-medium">Título do Evento</label>
+                        <label for="id_title" class="block text-sm font-medium" >Título do Evento</label>
                         {{ form.title }}
-                        {{ form.title.errors }}
+                        {% if form.title.errors %}
+                        <p class="text-red-500 text-xs mt-1">{{ form.title.errors }}</p>
+                        {% endif %}
                     </div>
                     <div class="grid grid-cols-2 gap-4">
                         <div>
                             <label for="id_date" class="block text-sm font-medium">Data do Evento</label>
                             {{ form.date }}
-                            {{ form.date.errors }}
+                            {% if form.date.errors %}
+                            <p class="text-red-500 text-xs mt-1">{{ form.date.errors }}</p>
+                            {% endif %}
                         </div>
                         <div>
                             <label for="id_time" class="block text-sm font-medium">Horário do Evento</label>
                             {{ form.time }}
-                            {{ form.time.errors }}
+                            {% if form.time.errors %}
+                            <p class="text-red-500 text-xs mt-1">{{ form.time.errors }}</p>
+                            {% endif %}
                         </div>
                         <div>
                             <label for="id_category" class="block text-sm font-medium">Categoria</label>
                             {{ form.category }}
-                            {{ form.category.errors }}
+                            {% if form.category.errors %}
+                            <p class="text-red-500 text-xs mt-1">{{ form.category.errors }}</p>
+                            {% endif %}
                         </div>
                     </div>
                     <div>
                         <label for="id_description" class="block text-sm font-medium">Descrição do Evento</label>
                         {{ form.description }}
-                        {{ form.description.errors }}
-                        <div class="text-right text-sm mt-1">
+                        
+                        {% if form.description.errors %}
+                        <p class="text-red-500 text-xs mt-1">{{ form.description.errors }}</p>
+                        {% endif %}
+                        <div class="text-right text-sm mt-1" >
                             <span id="char_count">0</span>/1000
                         </div>
                     </div>
@@ -94,32 +105,44 @@
                     <div>
                         <label for="id_cep" class="block text-sm font-medium">CEP</label>
                         {{ location_form.cep }}
-                        {{ location_form.cep.errors }}
+                        {% if location_form.cep.errors %}
+                        <p class="text-red-500 text-xs mt-1">{{ location_form.cep.errors }}</p>
+                        {% endif %}
                     </div>
                     <div>
                         <label for="id_street" class="block text-sm font-medium">Rua</label>
                         {{ location_form.street }}
-                        {{ location_form.street.errors }}
+                        {% if location_form.street.errors %}
+                        <p class="text-red-500 text-xs mt-1">{{ location_form.street.errors }}</p>
+                        {% endif %}
                     </div>
                     <div>
                         <label for="id_number" class="block text-sm font-medium">Número</label>
                         {{ location_form.number }}
-                        {{ location_form.number.errors }}
+                        {% if location_form.number.errors %}
+                        <p class="text-red-500 text-xs mt-1">{{ location_form.number.errors }}</p>
+                        {% endif %}
                     </div>
                     <div>
                         <label for="id_neighborhood" class="block text-sm font-medium">Bairro</label>
                         {{ location_form.neighborhood }}
-                        {{ location_form.neighborhood.errors }}
+                        {% if location_form.neighborhood.errors %}
+                        <p class="text-red-500 text-xs mt-1">{{ location_form.neighborhood.errors }}</p>
+                        {% endif %}
                     </div>
                     <div>
                         <label for="id_city" class="block text-sm font-medium">Cidade</label>
                         {{ location_form.city }}
-                        {{ location_form.city.errors }}
+                        {% if location_form.city.errors %}
+                        <p class="text-red-500 text-xs mt-1">{{ location_form.city.errors }}</p>
+                        {% endif %}
                     </div>
                     <div>
                         <label for="id_state" class="block text-sm font-medium">Estado</label>
                         {{ location_form.state }}
-                        {{ location_form.state.errors }}
+                        {% if location_form.state.errors %}
+                        <p class="text-red-500 text-xs mt-1">{{ location_form.state.errors }}</p>
+                        {% endif %}
                     </div>
                 </div>
             </div>
@@ -130,18 +153,18 @@
                     <div>
                         <label for="id_ticket_type" class="block text-sm font-medium">Tipo de Ingresso</label>
                         {{ form.ticket_type }}
-                        {{ form.ticket_type.errors }}
+                        {% if form.ticket_type.errors %}
+                        <p class="text-red-500 text-xs mt-1">{{ form.ticket_type.errors }}</p>
+                        {% endif %}
                     </div>
-                    <div id="ticket_price_container" style="display:none;">
-                        <label for="id_price" class="block text-sm font-medium">Preço (R$)</label>
-                        {{ form.price }}
-                        {{ form.price.errors }}
-                    </div>
-                    <div>
-                        <label for="id_tickets" class="block text-sm font-medium">Quantidade de Ingressos</label>
-                        {{ form.tickets }}
-                        {{ form.tickets.errors }}
-                    </div>
+                    <div id="ticket_price_container" style="display: none;">
+                        <label for="id_price_display" class="block text-sm font-medium">Preço do Ingresso (R$)</label>
+                        <input type="text" id="id_price_display" class="form-input mt-1 block w-full" placeholder="0,00">
+                        <input type="hidden" id="id_price" name="price">
+                        {% if form.price.errors %}
+                        <p class="text-red-500 text-xs mt-1">{{ form.price.errors }}</p>
+                        {% endif %}
+                    </div>           
                 </div>
             </div>
             <!-- Mídia -->
@@ -153,9 +176,11 @@
                         <p>Arraste e solte sua imagem aqui (máximo 1)</p>
                         <p class="text-sm text-gray-600">Tamanho máximo de imagem: 10MB.</p>
                     </div>
-                    <label for="id_images" class="sr-only">Imagem do Evento</label> <!-- Added label -->
+                    <label for="id_images" class="sr-only">Imagem do Evento</label>
                     <input type="file" name="images" id="id_images" multiple>
-                    {{ image_form.images.errors }}
+                    {% if image_form.images.errors %}
+                    <p class="text-red-500 text-xs mt-1">{{ image_form.images.errors }}</p>
+                    {% endif %}
                 </div>
                 <div class="mt-4 flex items-center space-x-4" id="preview-container"></div>
             </div>
@@ -164,19 +189,25 @@
                 <h2 class="text-lg font-semibold mb-2">Configurações do Evento</h2>
                 <div class="space-y-4">
                     <div>
-                        <label for="id_max_capacity" class="block text-sm font-medium">Capacidade Máxima do Evento (máximo 500.000)</label>
-                        {{ form.max_capacity }}
-                        {{ form.max_capacity.errors }}
+                        <label for="id_max_capacity" class="block text-sm font-medium">Capacidade Máxima</label>
+                        <input type="text" id="id_max_capacity" name="max_capacity" class="form-input mt-1 block w-full" placeholder="0">
+                        {% if form.max_capacity.errors %}
+                        <p class="text-red-500 text-xs mt-1">{{ form.max_capacity.errors }}</p>
+                        {% endif %}
                     </div>
                     <div>
                         <label for="id_age_group" class="block text-sm font-medium">Faixa Etária</label>
                         {{ form.age_group }}
-                        {{ form.age_group.errors }}
+                        {% if form.age_group.errors %}
+                        <p class="text-red-500 text-xs mt-1">{{ form.age_group.errors }}</p>
+                        {% endif %}
                     </div>
                     <div>
                         <label for="id_privacy" class="block text-sm font-medium">Privacidade</label>
                         {{ form.privacy }}
-                        {{ form.privacy.errors }}
+                        {% if form.privacy.errors %}
+                        <p class="text-red-500 text-xs mt-1">{{ form.privacy.errors }}</p>
+                        {% endif %}
                     </div>
                 </div>
             </div>
@@ -198,85 +229,58 @@
 </body>
 
 <script>
-    function togglePriceField(ticketType) {
-        const priceContainer = document.getElementById('ticket_price_container');
-        if (ticketType === 'pago') {
-            priceContainer.style.display = 'block';
-        } else {
-            priceContainer.style.display = 'none';
-            document.getElementById('id_price').value = ''; // Limpa o valor do campo de preço
+    // Função para validar e formatar campos de quantidade como inteiros
+    function validarInteiro(input) {
+        input.value = input.value.replace(/\D/g, ''); // Remove tudo que não for número
+    }
+
+    // Função para formatar o campo de preço
+    function formatarMoeda(input) {
+        let value = input.value.replace(/\D/g, ''); // Remove tudo que não for número
+        if (value.length > 0) {
+            value = (parseInt(value, 10) / 100).toFixed(2); // Converte para formato decimal
+            value = value.replace('.', ','); // Troca ponto por vírgula
+            value = value.replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1.'); // Adiciona pontos
+            input.value = value;
+
+            // Sincroniza o valor formatado com o campo oculto
+            const hiddenInput = document.getElementById('id_price');
+            hiddenInput.value = value.replace(/\./g, '').replace(',', '.'); // Converte para formato numérico
         }
     }
 
-    function formatarMoeda(input) {
-        let value = input.value.replace(/\D/g, '');
-        value = (value / 100).toFixed(2) + '';
-        value = value.replace('.', ',');
-        value = value.replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1.');
-        input.value = value;
-    }
-
-    document.addEventListener('DOMContentLoaded', (event) => {
-        const ticketTypeSelect = document.getElementById('id_ticket_type');
-        togglePriceField(ticketTypeSelect.value); // Inicializa a visibilidade do campo de preço com base no valor atual
+    document.addEventListener('DOMContentLoaded', function() {
+        const priceDisplayInput = document.getElementById('id_price_display');
+        if (priceDisplayInput) {
+            priceDisplayInput.addEventListener('input', function() {
+                formatarMoeda(this); // Chama a função de formatação ao digitar
+            });
+        }
     });
 
-    function validateForm() {
-        let isValid = true;
-        console.log("Validating form...");
-    
-        const ticketsInput = document.getElementById('id_tickets');
-        if (parseInt(ticketsInput.value) > maxTickets) {
-            alert(`A quantidade de ingressos não pode exceder ${maxTickets}.`);
-            ticketsInput.classList.add('border-red-500');
-            isValid = false;
-        } else {
-            ticketsInput.classList.remove('border-red-500');
-        }
-    
-        const files = document.getElementById('id_images').files;
-        for (let i = 0; i < files.length; i++) {
-            const file = files[i];
-            if (file.type.startsWith('image/') && file.size > maxImageSize) {
-                alert(`A imagem ${file.name} excede o tamanho máximo de 10MB.`);
-                isValid = false;
-            } else if (file.type.startsWith('video/')) {
-                const video = document.createElement('video');
-                video.preload = 'metadata';
-                video.onloadedmetadata = function() {
-                    window.URL.revokeObjectURL(video.src);
-                    if (video.duration > maxVideoDuration) {
-                        alert(`O vídeo ${file.name} excede a duração máxima de 1 minuto.`);
-                        isValid = false;
-                    }
-                }
-                video.src = URL.createObjectURL(file);
-            }
-        }
-        console.log("Form validation result: ", isValid);  // Log validation result
-        return isValid;
-    }
-
+    // Função para formatar números para capacidade e ingressos (e.g., 1.000)
     function mascaraNumero(input) {
-        // Remove tudo que não for número
-        input.value = input.value.replace(/\D/g, '');
-    
-        // Limita a entrada a 9 caracteres
-        if (input.value.length > 9) {
-            input.value = input.value.substring(0, 9);
+        let value = input.value.replace(/\D/g, ''); // Remove caracteres não numéricos
+        value = value.replace(/\B(?=(\d{3})+(?!\d))/g, '.'); // Adiciona pontos para milhares
+        input.value = value;
+
+        // Verifica se o valor excede 500.000
+        let numericValue = parseInt(value.replace(/\./g, ''), 10);
+        if (numericValue > 500000) {
+            input.value = '500.000';
         }
     }
 
-    // Máscara para o CEP no formato 63.030-000
+    // Função para formatar o CEP no formato XXXXX-XXX
     function mascaraCEP(input) {
-        let cep = input.value.replace(/\D/g, ''); // Remove tudo que não for número
+        let cep = input.value.replace(/\D/g, ''); // Remove caracteres não numéricos
         if (cep.length > 5) {
-            input.value = cep.substring(0, 2) + '.' + cep.substring(2, 5) + '-' + cep.substring(5, 8);
+            input.value = cep.substring(0, 5) + '-' + cep.substring(5, 8);
         } else {
             input.value = cep;
         }
 
-        // Quando o CEP estiver completo (8 dígitos sem o formato), busca o endereço automaticamente
+        // Quando o CEP estiver completo (8 dígitos), busca o endereço automaticamente
         if (cep.length === 8) {
             buscaEndereco(input.value);
         }
@@ -285,7 +289,7 @@
     // Função para buscar o endereço via API do ViaCEP
     function buscaEndereco(cep) {
         console.log(`Buscando endereço para o CEP: ${cep}`);
-        fetch(`https://viacep.com.br/ws/${cep.replace('.', '').replace('-', '')}/json/`)
+        fetch(`https://viacep.com.br/ws/${cep.replace('-', '')}/json/`)
             .then(response => {
                 if (!response.ok) {
                     throw new Error('Erro na resposta da API');
@@ -309,18 +313,101 @@
             });
     }
 
-    function mascaraCapacidade(input) {
-        let value = input.value.replace(/\D/g, ''); 
-        value = value.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
-        input.value = value;
+    document.addEventListener('DOMContentLoaded', function() {
+        const maxCapacityInput = document.getElementById('id_max_capacity');
+        const priceInput = document.getElementById('id_price');
+        const cepInput = document.getElementById('id_cep');
 
-        // Verifica se o valor é maior que 500.000
-        let numericValue = parseInt(value.replace(/\./g, ''), 10);
-        if (numericValue > 500000) {
-            input.value = '500.000';
+        if (maxCapacityInput) {
+            maxCapacityInput.addEventListener('input', function() {
+                validarInteiro(this); // Chama a função de validação ao digitar
+                mascaraNumero(this); // Chama a função de formatação ao digitar
+            });
+        }
+
+        if (priceInput) {
+            priceInput.addEventListener('input', function() {
+                formatarMoeda(this); // Chama a função de formatação ao digitar
+            });
+        }
+
+        if (cepInput) {
+            cepInput.addEventListener('input', function() {
+                mascaraCEP(this); // Chama a função de máscara ao digitar
+            });
+        }
+    });
+
+    // Toggle price field visibility based on ticket type (Pago/Gratuito)
+    function togglePriceField(ticketType) {
+        const priceContainer = document.getElementById('ticket_price_container');
+        if (ticketType === 'pago') {
+            priceContainer.style.display = 'block';
+        } else {
+            priceContainer.style.display = 'none';
+            document.getElementById('id_price').value = ''; // Clear the price field if not "Pago"
         }
     }
 
+    document.addEventListener('DOMContentLoaded', (event) => {
+        const ticketTypeSelect = document.getElementById('id_ticket_type');
+        ticketTypeSelect.addEventListener('change', () => {
+            togglePriceField(ticketTypeSelect.value);
+        });
+        togglePriceField(ticketTypeSelect.value); // Initialize the price field based on current value
+    });
+
+    // Validate description length
+    function validateDescription() {
+        const descriptionInput = document.getElementById('id_description');
+        const minLength = 70;
+        if (descriptionInput.value.length < minLength) {
+            alert(`A descrição deve ter pelo menos ${minLength} caracteres.`);
+            return false; // Retorna falso se a validação falhar
+        }
+        return true; // Retorna verdadeiro se a validação passar
+    }
+
+    // Validate form before submission
+    function validateForm() {
+        let isValid = true;
+
+        // Validate ticket count and max capacity fields (both max at 500,000)
+        const maxCapacityInput = document.getElementById('id_max_capacity');
+        const minDescription = 70;
+
+        // Validate image file size and video duration
+        const files = document.getElementById('id_images').files;
+        for (let i = 0; i < files.length; i++) {
+            const file = files[i];
+            if (file.type.startsWith('image/') && file.size > maxImageSize) {
+                alert(`A imagem ${file.name} excede o tamanho máximo de 10MB.`);
+                isValid = false;
+            } else if (file.type.startsWith('video/')) {
+                const video = document.createElement('video');
+                video.preload = 'metadata';
+                video.onloadedmetadata = function() {
+                    window.URL.revokeObjectURL(video.src);
+                    if (video.duration > maxVideoDuration) {
+                        alert(`O vídeo ${file.name} excede a duração máxima de 5 minutos.`);
+                        isValid = false;
+                    }
+                }
+                video.src = URL.createObjectURL(file);
+            }
+        }
+        
+        return isValid; // Return true if valid, false otherwise
+    }
+
+    // Attach validation to form submission
+    document.getElementById('form').addEventListener('submit', function(event) {
+        if (!validateDescription() || !validateForm()) {
+            event.preventDefault(); // Prevent form submission if validation fails
+        }
+    });
+
+    // Real-time character count for description
     document.addEventListener('DOMContentLoaded', (event) => {
         const descriptionInput = document.getElementById('id_description');
         const charCount = document.getElementById('char_count');
@@ -329,10 +416,12 @@
         descriptionInput.addEventListener('input', () => {
             const currentLength = descriptionInput.value.length;
             charCount.textContent = currentLength;
+
             if (currentLength > maxChars) {
                 descriptionInput.value = descriptionInput.value.substring(0, maxChars);
                 charCount.textContent = maxChars;
             }
+            
             if (currentLength >= maxChars) {
                 charCount.classList.add('text-red-500');
             } else {
@@ -340,11 +429,12 @@
             }
         });
 
+        // Image preview functionality
         const imageInput = document.getElementById('id_images');
         const previewContainer = document.getElementById('preview-container');
 
         imageInput.addEventListener('change', () => {
-            previewContainer.innerHTML = ''; // Limpa as miniaturas anteriores
+            previewContainer.innerHTML = ''; // Clear previous previews
             const files = imageInput.files;
             for (let i = 0; i < files.length; i++) {
                 const file = files[i];
@@ -359,49 +449,8 @@
             }
         });
     });
-    document.addEventListener('DOMContentLoaded', (event) => {
-        const imageInput = document.getElementById('id_images');
-        const previewContainer = document.getElementById('image-preview-container');
 
-        imageInput.addEventListener('change', () => {
-            previewContainer.innerHTML = ''; // Limpa as miniaturas anteriores
-            const files = imageInput.files;
-            for (let i = 0; i < files.length; i++) {
-                const file = files[i];
-                const reader = new FileReader();
-                reader.onload = (e) => {
-                    const img = document.createElement('img');
-                    img.src = e.target.result;
-                    img.classList.add('preview-image');
-                    previewContainer.appendChild(img);
-                };
-                reader.readAsDataURL(file);
-            }
-        });
-
-        const cepInput = document.getElementById('id_cep');
-        cepInput.addEventListener('blur', () => {
-            mascaraCEP(cepInput);
-        });
-
-        const dateInput = document.getElementById('id_date');
-        dateInput.setAttribute('type', 'date');
-        dateInput.setAttribute('min', new Date().toISOString().split('T')[0]);
-    });
-
-    // Adiciona o evento de input ao campo de CEP para aplicar a máscara
-    document.addEventListener('DOMContentLoaded', function () {
-        const cepInput = document.getElementById('id_cep');
-        cepInput.addEventListener('input', function () {
-            mascaraCEP(cepInput);
-        });
-    });
-
-    document.addEventListener('DOMContentLoaded', (event) => {
-        const dateInput = document.getElementById('id_date');
-        dateInput.setAttribute('type', 'date');
-        dateInput.setAttribute('min', new Date().toISOString().split('T')[0]);
-    });
+    // Function to update the time field based on selected date
     document.addEventListener('DOMContentLoaded', function() {
         const dateInput = document.getElementById('id_date');
         const timeInput = document.getElementById('id_time');
@@ -426,4 +475,5 @@
         updateMinTime();
     });
 </script>
+
 {% endblock content %}
