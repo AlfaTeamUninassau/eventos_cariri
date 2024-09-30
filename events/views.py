@@ -5,10 +5,12 @@ from .utils import get_lat_long
 from django.urls import reverse_lazy
 from .forms import EventForm, EventImageForm, LocationForm
 from django.core.files.uploadedfile import InMemoryUploadedFile
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
 from django.views.generic.edit import FormView
 from django.utils import timezone
+from django.http import HttpResponseForbidden
 from django.contrib import messages
 from django.urls import reverse_lazy
 from django.shortcuts import redirect
@@ -70,9 +72,12 @@ class EventUpdateView(View):
 class EventDeleteView(View):
     def get(self, request, pk):
         event = Event.objects.get(pk=pk)
-        event.delete()
-        messages.success(request, 'Evento excluído com sucesso.')
-        return redirect(self.request.META.get('HTTP_REFERER', '/'))
+        if request.user == event.creator or request.user.is_superuser:
+            event.delete()
+            messages.success(request, 'Evento excluído com sucesso.')
+            return redirect(self.request.META.get('HTTP_REFERER', '/'))
+        else:
+            return HttpResponseForbidden('Você não tem permissão para deletar este evento.')
 
 
 class EventListView(ListView):
@@ -122,7 +127,7 @@ def upcoming_events_view(request):
     return render(request, 'home.html', {'upcoming_events': upcoming_events})
 
 
-class EventCreateView(FormView):
+class EventCreateView(LoginRequiredMixin, FormView):
     template_name = 'create.html'
     form_class = EventForm
     success_url = reverse_lazy('home')
@@ -145,7 +150,7 @@ class EventCreateView(FormView):
             # Prepare the full address to send to the geocoder
             address = f"{location.street}, {location.number}, {location.neighborhood}, {location.city}, {location.state}"
 
-            # Get latitude and longitude using Nominatim
+            # Get latitude and longitude using the geocoder
             latitude, longitude = get_lat_long(address)
 
             if latitude and longitude:
@@ -163,6 +168,7 @@ class EventCreateView(FormView):
             event = form.save(commit=False)
             event.location = location
             event.status = Event.EM_ANALISE
+            event.creator = self.request.user  # Definindo o campo creator
 
             # Make the event date and time timezone-aware
             event_datetime = timezone.make_aware(timezone.datetime.combine(
@@ -180,6 +186,8 @@ class EventCreateView(FormView):
             messages.success(
                 self.request, 'Evento criado com sucesso e está em análise.')
             return super().form_valid(form)
+        else:
+            return self.form_invalid(form)
 
     def form_invalid(self, form):
         context = self.get_context_data()

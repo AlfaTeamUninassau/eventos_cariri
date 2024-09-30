@@ -40,6 +40,12 @@
           <button class="bg-blue-600 text-white px-4 py-2 rounded-lg" onclick="comprarIngresso()">
             Comprar Ingresso
           </button>
+          {% if user.is_superuser or user == event.creator %}
+          <a href="{% url 'event_delete' event.pk %}" class="bg-red-600 text-white px-4 py-2 rounded-lg" onclick="return confirmAction('deletar')">Excluir</a>
+          {% endif %}
+          {% if user == event.creator %}
+          <a href="{% url 'event_update' event.pk %}" class="bg-blue-950 text-white px-4 py-2 rounded-lg"> Editar </a>
+          {% endif %}
 
         </div>
       </div>

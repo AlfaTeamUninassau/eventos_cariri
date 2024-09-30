@@ -1,6 +1,13 @@
 #events.models.py
 
 from django.db import models
+from django.conf import settings
+from django.utils import timezone
+from django.urls import reverse_lazy
+from django.core.exceptions import ValidationError
+from django.utils.translation import gettext_lazy as _
+from django.core.validators import MinValueValidator
+from users.models import User
 import logging
 
 
@@ -97,7 +104,6 @@ class Event(models.Model):
     price = models.DecimalField(
         max_digits=7, decimal_places=2, null=True, blank=True)
     max_capacity = models.IntegerField(null=False, blank=False)
-    
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     status = models.CharField(
@@ -105,6 +111,7 @@ class Event(models.Model):
         choices=STATUS_CHOICES,
         default=EM_ANALISE
     )
+    creator = models.ForeignKey(User, on_delete=models.CASCADE)
     
     def save(self, *args, **kwargs):
         logger.debug("Saving event: %s", self.title)  # Log event title before saving
