@@ -1,27 +1,20 @@
 import requests
+from opencage.geocoder import OpenCageGeocode
+from dotenv import load_dotenv
+import os
+
+# Carregar as variáveis de ambiente do arquivo .env
+load_dotenv()
+
+# Obter a chave da API do OpenCage do arquivo .env
+key = os.getenv('OPENCAGE_API_KEY')
 
 def get_lat_long(address):
-    """
-    Uses the Nominatim API to get latitude and longitude for a given address.
-    Returns a tuple (latitude, longitude) or (None, None) if not found.
-    """
-    url = 'https://nominatim.openstreetmap.org/search'
-    params = {
-        'q': address,
-        'format': 'json',
-        'limit': 1
-    }
+    geocoder = OpenCageGeocode(key)
+    result = geocoder.geocode(address)
 
-    try:
-        response = requests.get(url, params=params)
-        response.raise_for_status()  # Raises a HTTPError if the HTTP request returned an unsuccessful status code
-        data = response.json()
-        if data:
-            lat = data[0].get('lat')
-            lon = data[0].get('lon')
-            return float(lat), float(lon)
-        return None, None
-    except (requests.RequestException, ValueError) as e:
-        # Handle API or parsing error
-        print(f"Error fetching geocode for address: {address}. Error: {e}")
-        return None, None
+    if result and len(result):
+        lat = result[0]['geometry']['lat']
+        lon = result[0]['geometry']['lng']
+        return lat, lon
+    return None, None
