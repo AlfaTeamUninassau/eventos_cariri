@@ -96,7 +96,7 @@
                 <h3 class="text-xl font-bold mt-2">{{ event.title }}</h3>
                 <p class="text-gray-600 mt-1"><i class="fas fa-calendar-alt"></i> {{ event.date|date:"F" }}</p>
                 <p class="text-gray-600"><i class="fas fa-map-marker-alt"></i> {{ event.location }}</p>
-                <p class="text-gray-700 mt-2">{{ event.description }}</p>
+                <p class="text-gray-700 mt-2 event-description">{{ event.description }}</p>
                 <button class="mt-4 px-4 py-2 bg-blue-500 text-white font-semibold rounded">Leia mais</button>
             </div>
         </div>
@@ -157,6 +157,16 @@
     </section>
 
 </section>
+
+<style>
+    .event-description {
+        display: -webkit-box;
+        -webkit-line-clamp: 3; /* Número máximo de linhas */
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+</style>
 
 <script>
     document.addEventListener('DOMContentLoaded', function() {
