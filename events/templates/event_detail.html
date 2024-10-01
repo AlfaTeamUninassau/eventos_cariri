@@ -223,6 +223,9 @@
           <a href="{% url 'comment_edit' comment.pk %}" class="text-blue-600"><i class="fas fa-edit mr-1"></i>Editar</a>
           <a href="{% url 'comment_delete' comment.pk %}" class="text-red-600"><i class="fas fa-trash mr-1"></i>Deletar</a>
           {% endif %}
+          {% if user.is_superuser %}
+          <a href="{% url 'comment_delete' comment.pk %}" class="text-red-600"><i class="fas fa-trash mr-1"></i>Deletar</a>
+          {% endif %}
         </div>
       </div>
       {% endfor %}
