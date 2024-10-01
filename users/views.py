@@ -1,7 +1,10 @@
 # users/views.py
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
-from .forms import EmailAuthenticationForm, UserCreationForm
+from django.shortcuts import render, get_object_or_404
+from django.contrib.auth.decorators import login_required
+from .models import User
+from .forms import EmailAuthenticationForm, UserCreationForm, UserProfileForm
 from django.contrib import messages
 
 
@@ -33,3 +36,21 @@ def register_view(request):
     else:
         form = UserCreationForm()
     return render(request, 'register.html', {'user_form': form})
+
+
+@login_required
+def profile_view(request):
+    if request.method == 'POST':
+        form = UserProfileForm(request.POST, request.FILES, instance=request.user)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Perfil atualizado com sucesso!')
+            return redirect('profile')
+    else:
+        form = UserProfileForm(instance=request.user)
+    return render(request, 'profile.html', {'form': form})
+
+
+def user_profile_view(request, username):
+    user = get_object_or_404(User, username=username)
+    return render(request, 'user_profile.html', {'user': user})

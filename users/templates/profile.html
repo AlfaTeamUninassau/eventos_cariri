@@ -1,0 +1,74 @@
+<!-- users/templates/profile.html -->
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<body class="bg-gray-100 flex items-center justify-center min-h-screen">
+    <div style="margin-top: 10px;"></div>
+
+    <div class="bg-white w-full max-w-2xl mx-auto p-8 rounded-lg shadow-lg">
+        <h1 class="text-2xl font-semibold text-center mb-6">Editar Perfil</h1>
+        {% if messages %}
+        <div>
+            {% for message in messages %}
+            <div class="alert {% if message.tags %}alert-{{ message.tags }}{% endif %}">
+                {{ message }}
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+        <form method="post" enctype="multipart/form-data" class="space-y-4">
+            {% csrf_token %}
+            <div>
+                <label for="username" class="block text-sm font-medium text-gray-700">Nome de Usuário:</label>
+                {{ form.username }}
+            </div>
+            <div>
+                <label for="name" class="block text-sm font-medium text-gray-700">Nome:</label>
+                {{ form.name }}
+            </div>
+            <div>
+                <label for="email" class="block text-sm font-medium text-gray-700">Email:</label>
+                {{ form.email }}
+            </div>
+            <div>
+                <label for="phone" class="block text-sm font-medium text-gray-700">Telefone:</label>
+                {{ form.phone }}
+            </div>
+            <div>
+                <label for="city" class="block text-sm font-medium text-gray-700">Cidade:</label>
+                {{ form.city }}
+            </div>
+            <div>
+                <label for="description" class="block text-sm font-medium text-gray-700">Descrição:</label>
+                {{ form.description }}
+            </div>
+            <div>
+                <label for="profile_picture" class="block text-sm font-medium text-gray-700">Foto de Perfil:</label>
+                {% if user.profile_picture %}
+                <img src="{{ user.profile_picture.url }}" alt="Profile Picture" class="w-full h-auto object-contain">
+                {% else %}
+                <img src="{% static 'eventos_cariri/images/no_profile_picture.png' %}" alt="No Image" class="w-full h-auto object-contain">
+                {% endif %}
+                {{ form.profile_picture }}
+                <div class="mt-2">
+                    <img id="preview" src="#" alt="Preview" class="w-full h-auto object-contain hidden">
+                </div>
+            </div>
+            <div class="flex justify-end space-x-4">
+                <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded-lg">Salvar</button>
+                <a href="{% url 'home' %}" class="bg-gray-600 text-white px-4 py-2 rounded-lg">Voltar</a>
+            </div>
+        </form>
+    </div>
+</body>
+<script>
+    document.getElementById('id_profile_picture').addEventListener('change', function(event) {
+        const [file] = event.target.files;
+        if (file) {
+            const preview = document.getElementById('preview');
+            preview.src = URL.createObjectURL(file);
+            preview.classList.remove('hidden');
+        }
+    });
+</script>
+{% endblock %}

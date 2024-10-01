@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<body class="bg-gray-100 text-gray-800">
+  <div class="max-w-3xl mx-auto p-40">
+    <!-- User Profile Section -->
+    <div class="bg-white shadow-md rounded-lg overflow-hidden p-6">
+      <div class="flex items-center mb-4">
+        {% if user.profile_picture %}
+        <img src="{{ user.profile_picture.url }}" alt="Profile picture of {{ user.username }}" class="w-24 h-24 rounded-full mr-6" />
+        {% else %}
+        <img src="{% static 'eventos_cariri/images/no_profile_picture.png' %}" alt="No Image" class="w-24 h-24 rounded-full mr-6" />
+        {% endif %}
+        <div>
+          <h1 class="text-2xl font-bold">{{ user.username }}</h1>
+          <p class="text-gray-600">{{ user.name }}</p>
+          <p class="text-gray-600">{{ user.get_city_display }}</p>
+        </div>
+      </div>
+      <div>
+          <h2 class="text-xl font-semibold mb-2">Sobre</h2>
+        {% if user.description %}
+        <p class="text-gray-700">{{ user.description }}</p>
+        </p>
+        {% else %}
+        <p class="text-gray-600 mb-4">
+          Esse usuário ainda não escreveu sobre ele.
+        </p>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</body>
+{% endblock %}

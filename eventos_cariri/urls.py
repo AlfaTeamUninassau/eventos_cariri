@@ -1,13 +1,15 @@
 
 from django.contrib import admin
 from django.urls import path, include
-from users.views import login_view, logout_view, register_view
+from users.views import login_view, logout_view, register_view, profile_view, user_profile_view
 from events.views import HomeView
 from django.conf import settings
 from django.conf.urls.static import static
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('profile/', profile_view, name='profile'),
+    path('profile/<str:username>/', user_profile_view, name='user_profile'),
     path('login/', login_view, name='login'),
     path('register/', register_view, name='register'),
     path('logout/', logout_view, name='logout'),

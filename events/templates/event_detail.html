@@ -57,26 +57,41 @@
       <p class="mb-4">{{ event.description }}</p>
     </div>
     <!-- Organizer Section -->
-    <div
-      class="bg-white shadow-md rounded-lg overflow-hidden mt-6 p-6 flex items-center"
-    >
+    <div class="bg-white shadow-md rounded-lg overflow-hidden mt-6 p-6 flex items-center">
+      {% if event.creator.profile_picture %}
+      <a href="{% url 'user_profile' event.creator.username %}">
       <img
-        src="{% static 'eventos_cariri/images/organizer.jpeg' %}"
+        src="{{ event.creator.profile_picture.url }}"
         alt="Organizer's profile picture"
         class="w-24 h-24 rounded-full mr-6"
       />
+      </a>
+      {% else %}
+      <a href="{% url 'user_profile' event.creator.username %}">
+
+      <img
+        src="{% static 'eventos_cariri/images/no_profile_picture.png' %}"
+        alt="No Image"
+        class="w-24 h-24 rounded-full mr-6"
+      />
+      </a>
+      {% endif %}
       <div>
-        <h3 class="text-xl font-bold">João Lima</h3>
+        <a href="{% url 'user_profile' event.creator.username %}">
+
+        <h3 class="text-xl font-bold">{{ event.creator.username }}</h3>
+        </a>
+        {% if event.creator.description %}
         <p class="text-gray-600 mb-4">
-          Apaixonado por nossa cultura e tradição, João Lima 
-          dedica sua vida a manter viva a chama da vaquejada. 
-          Com anos de experiência no evento, ele é o responsável
-          por garantir que cada edição seja ainda mais emocionante 
-          e inesquecível.
+          {{ event.creator.description }}
         </p>
+        {% else %}
+        <p class="text-gray-600 mb-4">
+          Esse usuário ainda não escreveu sobre ele.
+        </p>
+        {% endif %}
         <button class="bg-blue-600 text-white px-4 py-2 rounded-lg">
           Fale com o organizador
-        
         </button>
       </div>
     </div>
@@ -209,14 +224,27 @@
       {% if comments %}
       {% for comment in comments %}
       <div class="bg-gray-100 p-4 rounded-lg">
-        <div class="flex items-center mb-2"></div>
-        <img src="{% static 'eventos_cariri/images/profile.png' %}" alt="Profile picture of {{ comment.author.username }}" class="w-12 h-12 rounded-full mr-4"/>
+        <div class="flex items-center mb-2">
+
+          {% if comment.author.profile_picture %}
+          <a href="{% url 'user_profile' comment.author.username %}">
+          <img src="{{ comment.author.profile_picture.url }}" alt="Profile picture of {{ comment.author.username }}" class="w-12 h-12 rounded-full mr-4" />
+          </a>
+          {% else %}
+          <a href="{% url 'user_profile' comment.author.username %}">
+          <img src="{% static 'eventos_cariri/images/no_profile_picture.png' %}" alt="No Image" class="w-12 h-12 rounded-full mr-4" />
+          </a>
+          {% endif %}        
+        </div>
         <div>
+          <p class="text-gray-600">{{ user.get_city_display }}</p>
+          <a href="{% url 'user_profile' comment.author.username %}">
           <h3 class="text-lg font-semibold">{{ comment.author.username }}:</h3>
+          </a>
           <div class="flex items-center text-yellow-500">
             <p class="text-gray-600 mb-2">{{ comment.comment }}</p>
           </div>
-          <p class="text-gray-600 mb-2">{{ comment.created_at }}</p>
+          <p class="text-gray-600">{{ comment.created_at|date:"d/m/Y H:i" }}</p>
         </div>
         <div class="flex space-x-4">
           {% if comment.author == user %}

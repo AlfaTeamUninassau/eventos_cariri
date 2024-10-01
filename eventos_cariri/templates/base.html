@@ -46,10 +46,10 @@
                     <button id="close-search" class="hidden ml-2 text-gray-700 hover:text-black cursor-pointer">&times;</button>
                 </div>
                 
-                {% if user.is_authenticated %}
-                    <span id="hi" class="text-gray-700">Olá, {{ user.username }}</span>
-                    <a id="exit" class="text-red hover:text-white border border-gray-700 rounded-full px-2 py-1 hover:bg-red-500" href="{% url 'logout' %}">Sair</a>
-                {% else %}
+                {% if request.user.is_authenticated %}
+                <span id="hi" class="text-gray-700">Olá, <a href="{% url 'profile' %}" class="text-blue-500 hover:underline">{{ request.user.username }}</a></span>
+                <a id="exit" class="text-red hover:text-white border border-gray-700 rounded-full px-2 py-1 hover:bg-red-500" href="{% url 'logout' %}">Sair</a>
+            {% else %}
                     <a id="login" class="text-gray-700 rounded-full px-2 py-1 hover:text-white hover:bg-green-500" href="{% url 'login' %}">Login</a>
                     <a id="singin" class="text-gray-700 hover:text-black border border-gray-700 rounded-full px-2 py-1 hover:bg-blue-500 hover:text-white" href="{% url 'register' %}">Cadastre-se</a>
                 {% endif %}

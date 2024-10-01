@@ -114,7 +114,12 @@
                 {% for comment in recent_comments %}
                 <div class="bg-white p-4 rounded shadow">
                     <div class="flex items-center">
-                        <img alt="User Image" class="h-12 w-12 rounded-full" src="{% static 'eventos_cariri/images/profile.png' %}"/>
+                        {% if comment.author.profile_picture %}
+                            
+                        <img alt="User Image" class="h-12 w-12 rounded-full" src="{{ comment.author.profile_picture.url }}"/>
+                        {% else %}
+                        <img alt="User Image" class="h-12 w-12 rounded-full" src="{% static 'eventos_cariri/images/no_profile_picture.png' %}"/>
+                        {% endif %}
                         <div class="ml-4">
                             <p class="font-semibold">{{ comment.author.username }}</p>
                             <p class="text-gray-600">{{ comment.created_at|date:"d/m/Y H:i" }}</p>

@@ -31,6 +31,21 @@ class EmailAuthenticationForm(AuthenticationForm):
         return self.cleaned_data
 
 
+class UserProfileForm(forms.ModelForm):
+    class Meta:
+        model = User
+        fields = ['username', 'name', 'email', 'phone', 'city', 'description', 'profile_picture']
+        widgets = {
+            'username': forms.TextInput(attrs={'class': 'w-full mt-1 p-2 border rounded'}),
+            'name': forms.TextInput(attrs={'class': 'w-full mt-1 p-2 border rounded'}),
+            'email': forms.EmailInput(attrs={'class': 'w-full mt-1 p-2 border rounded'}),
+            'phone': forms.TextInput(attrs={'class': 'w-full mt-1 p-2 border rounded'}),
+            'city': forms.Select(attrs={'class': 'w-full mt-1 p-2 border rounded'}),
+            'description': forms.Textarea(attrs={'class': 'w-full mt-1 p-2 border rounded', 'rows': 4}),
+            'profile_picture': forms.FileInput(attrs={'class': 'w-full mt-1 p-2 border rounded'}),
+        }
+
+
 class UserCreationForm(forms.ModelForm):
     password1 = forms.CharField(label='Senha', widget=forms.PasswordInput(
         attrs={'class': 'w-full mt-1 p-2 border rounded'}))

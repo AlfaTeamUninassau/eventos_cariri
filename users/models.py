@@ -50,7 +50,8 @@ class User(AbstractUser):
         ('ARU', 'Araripe'),
         # Adicione as outras opções de cidade
     ], default='JDO')
-    
+    description = models.TextField(max_length=1000, blank=True, null=True, default='', help_text='Fale um pouco sobre você')
+    profile_picture = models.ImageField(upload_to='profile_pictures/', null=True, blank=True)
     date_joined = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     
