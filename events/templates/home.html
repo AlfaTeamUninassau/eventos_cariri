@@ -107,46 +107,25 @@
     </div>
 </section>
 
-    <!-- Testimonials -->
-    <section class="container mx-auto px-4 py-8">
-        <h2 class="text-2xl font-bold mb-4 text-center">O que os nossos usuários estão comentando</h2>
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <div class="bg-white p-4 rounded shadow">
-                <div class="flex items-center">
-                    <img alt="User Image" class="h-12 w-12 rounded-full" src="https://placehold.co/50x50"/>
-                    <div class="ml-4">
-                        <p class="font-semibold">Jane Doe</p>
-                        <p class="text-gray-600">User</p>
+        <!-- Testimonials -->
+        <section class="container mx-auto px-4 py-8">
+            <h2 class="text-2xl font-bold mb-4 text-center">O que os nossos usuários estão comentando</h2>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                {% for comment in recent_comments %}
+                <div class="bg-white p-4 rounded shadow">
+                    <div class="flex items-center">
+                        <img alt="User Image" class="h-12 w-12 rounded-full" src="{% static 'eventos_cariri/images/profile.png' %}"/>
+                        <div class="ml-4">
+                            <p class="font-semibold">{{ comment.author.username }}</p>
+                            <p class="text-gray-600">{{ comment.created_at|date:"d/m/Y H:i" }}</p>
+                        </div>
                     </div>
+                    <p class="text-gray-700 mt-4">"{{ comment.comment }}"</p>
+                    <p class="text-gray-500 mt-2">Evento: <a href="{% url 'event_detail' comment.event.id %}" class="text-blue-500">{{ comment.event.title }}</a></p>
                 </div>
-                <p class="text-gray-700 mt-4">"Eu tô é lá!"</p>
-                <div class="mt-4">
-                    <i class="fas fa-star text-yellow-500"></i>
-                    <i class="fas fa-star text-yellow-500"></i>
-                    <i class="fas fa-star text-yellow-500"></i>
-                    <i class="fas fa-star text-yellow-500"></i>
-                    <i class="fas fa-star text-yellow-500"></i>
-                </div>
+                {% endfor %}
             </div>
-            <div class="bg-white p-4 rounded shadow">
-                <div class="flex items-center">
-                    <img alt="User Image" class="h-12 w-12 rounded-full" src="https://placehold.co/50x50"/>
-                    <div class="ml-4">
-                        <p class="font-semibold">Jane Doe</p>
-                        <p class="text-gray-600">User</p>
-                    </div>
-                </div>
-                <p class="text-gray-700 mt-4">"Toda festa da vaquejada eu tô lá!"</p>
-                <div class="mt-4">
-                    <i class="fas fa-star text-yellow-500"></i>
-                    <i class="fas fa-star text-yellow-500"></i>
-                    <i class="fas fa-star text-yellow-500"></i>
-                    <i class="fas fa-star text-yellow-500"></i>
-                    <i class="fas fa-star text-yellow-500"></i>
-                </div>
-            </div>
-        </div>
-    </section>
+        </section>
 
     <!-- About Section -->
     <section class="container mx-auto px-4 py-8">

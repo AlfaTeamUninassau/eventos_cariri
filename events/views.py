@@ -1,5 +1,5 @@
 # events.views.py
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from events.models import Event, EventImage, Location
 from .utils import get_lat_long
 from django.urls import reverse_lazy
@@ -9,6 +9,8 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
 from django.views.generic.edit import FormView
+from comments.forms import CommentForm
+from comments.models import Comment
 from django.utils import timezone
 from django.http import HttpResponseForbidden
 from django.contrib import messages
@@ -41,7 +43,9 @@ class HomeView(ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['upcoming_events'] = Event.objects.filter(date__gte=timezone.now(), status=Event.APROVADO).order_by('date')[:3]  # Limit to 6 events
+        context['upcoming_events'] = Event.objects.filter(date__gte=timezone.now(), status=Event.APROVADO).order_by('date')[:3]  # 3 lasts events
+        context['recent_comments'] = Comment.objects.select_related('event', 'author').order_by('-created_at')[:5]  # Limit to 5 recent comments
+
         return context
 
 
@@ -118,7 +122,21 @@ class EventDetailView(DetailView):
             date__gte=timezone.now(),
             status=Event.APROVADO
         ).exclude(id=event.id)[:4]
+        context['comment_form'] = CommentForm()
+        context['comments'] = event.comments.all()
         return context
+
+    @method_decorator(login_required)
+    def post(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        form = CommentForm(request.POST)
+        if form.is_valid():
+            comment = form.save(commit=False)
+            comment.author = request.user
+            comment.event = self.object
+            comment.save()
+            return redirect('event_detail', pk=self.object.pk)
+        return self.render_to_response(self.get_context_data(form=form))
 
 
 def upcoming_events_view(request):
@@ -127,7 +145,7 @@ def upcoming_events_view(request):
     return render(request, 'home.html', {'upcoming_events': upcoming_events})
 
 
-class EventCreateView(LoginRequiredMixin, FormView):
+class EventCreateView(FormView):
     template_name = 'create.html'
     form_class = EventForm
     success_url = reverse_lazy('home')

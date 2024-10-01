@@ -1,0 +1,36 @@
+
+                {% extends 'base.html' %}
+                {% block content %}
+                <body class="bg-gray-100 flex items-center justify-center min-h-screen">
+                    {% if messages %}
+                    <div>
+                        {% for message in messages %}
+                        <div class="alert {% if message.tags %}alert-{{ message.tags }}{% endif %}">
+                            {{ message }}
+                        </div>
+                        {% endfor %}
+                    </div>
+                    {% endif %}
+
+                    <div class="bg-white w-full max-w-lg mx-auto p-8 rounded-lg shadow-lg">
+                        <h2 class="text-2xl font-semibold text-center mb-6">Editar Comentário</h2>
+                        <form method="post" class="space-y-4">
+                            {% csrf_token %}
+                            <div>
+                                {% if recent_comments %}
+                                    <p class="text-gray-500 mt-2">Evento: <a href="{% url 'event_detail' recent_comments.0.event.id %}" class="text-blue-500">{{ recent_comments.0.event.title }}</a></p>
+                                {% endif %}
+                            </div>                 
+                            <label for="comment" class="block text-sm font-medium text-gray-700">Comentário:</label>
+                                <div class="bg-gray-100 flex items-center justify-center" style="padding: 5px;">
+                                    {{ form.comment }}
+                                </div>
+                                <div class="flex justify-end space-x-4">
+                                    <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded-lg">Salvar</button>
+                                    <button type="button" class="bg-gray-600 text-white px-4 py-2 rounded-lg" onclick="window.history.back();">Voltar</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </body>
+                {% endblock %}

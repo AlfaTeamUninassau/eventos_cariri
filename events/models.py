@@ -88,7 +88,7 @@ class Event(models.Model):
 
     id = models.AutoField(primary_key=True)
     title = models.CharField(max_length=255, null=False, blank=False)
-    description = models.TextField(max_length=1000, null=False, blank=False)
+    description = models.TextField(max_length=3000, null=False, blank=False)
     date = models.DateTimeField( null=False, blank=False)
     time = models.TimeField(null=False, blank=False)
     category = models.CharField(

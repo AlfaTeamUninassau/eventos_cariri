@@ -86,6 +86,11 @@
       <i class="fas fa-map-marker-alt"></i>
       <span>{{ event.location.street }}, {{ event.location.number }} - {{ event.location.neighborhood }}, {{ event.location.city }}</span>
       <div id="event-map" class="w-full h-64 rounded-lg"></div>
+      <div class="flex justify-center mt-4">
+        <button class="bg-blue-600 text-white px-4 py-2 rounded-lg" onclick="openGoogleMaps()">
+          Ver no Google Maps
+        </button>
+      </div>
 
       <!-- Leaflet.js CSS and JS -->
       <link
@@ -188,91 +193,71 @@
         </button>
         </div>
     </div>
-    <!-- Comments and Ratings Section -->
-    <div class="bg-white shadow-md rounded-lg overflow-hidden mt-6 p-6">
-      <h2 class="text-2xl font-bold mb-4">Comments and Ratings</h2>
-      <div class="flex justify-between items-center mb-4">
-        {% if user.is_authenticated %}
-        <button class="bg-blue-600 text-white px-4 py-2 rounded-lg">
-          Write a Review
-        </button>
-        {% else %}
-        <a href="{% url 'login' %}" class="bg-blue-600 text-white px-4 py-2 rounded-lg">
-          Fazer login para escrever uma avaliação</a>
-        {% endif %}
-        <span class="text-gray-600">Showing 1-5 of 20 comments</span>
-      </div>
-      <div class="space-y-4">
-        <!-- Comment 1 -->
-        <div class="bg-gray-100 p-4 rounded-lg">
-          <div class="flex items-center mb-2">
-            <img
-              src="{% static 'eventos_cariri/images/profile.png' %}"
-              alt="Profile picture of Jane Doe"
-              class="w-12 h-12 rounded-full mr-4"
-            />
-            <div>
-              <h3 class="text-lg font-semibold">Jane Doe</h3>
-              <div class="flex items-center text-yellow-500">
-                <i class="fas fa-star"></i>
-                <i class="fas fa-star"></i>
-                <i class="fas fa-star"></i>
-                <i class="fas fa-star"></i>
-                <i class="fas fa-star"></i>
-              </div>
-            </div>
-          </div>
-          <p class="text-gray-600 mb-2">
-            The event was amazing! The speakers were top-notch and the
-            networking opportunities were fantastic. Highly recommend!
-          </p>
-          <div class="flex space-x-4">
-            <button class="text-blue-600">
-              <i class="fas fa-reply mr-1"></i> Reply
-            </button>
-            <button class="text-blue-600">
-              <i class="fas fa-flag mr-1"></i> Report
-            </button>
-          </div>
+  <!-- Comments and Ratings Section -->
+  <div class="bg-white shadow-md rounded-lg overflow-hidden mt-6 p-6">
+    {% if messages %}
+    <div>
+        {% for message in messages %}
+        <div class="alert {% if message.tags %}alert-{{ message.tags }}{% endif %}">
+            {{ message }}
         </div>
-        <!-- Comment 2 -->
-        <div class="bg-gray-100 p-4 rounded-lg">
-          <div class="flex items-center mb-2">
-            <img
-              src="{% static 'eventos_cariri/images/profile.png' %}"
-              alt="Profile picture of John Smith"
-              class="w-12 h-12 rounded-full mr-4"
-            />
-            <div>
-              <h3 class="text-lg font-semibold">John Smith</h3>
-              <div class="flex items-center text-yellow-500">
-                <i class="fas fa-star"></i>
-                <i class="fas fa-star"></i>
-                <i class="fas fa-star"></i>
-                <i class="fas fa-star"></i>
-                <i class="fas fa-star"></i>
-              </div>
-            </div>
-          </div>
-          <p class="text-gray-600 mb-2">
-            Great event! Learned a lot and met some amazing people.
-          </p>
-          <div class="flex space-x-4">
-            <button class="text-blue-600">
-              <i class="fas fa-reply mr-1"></i> Reply
-            </button>
-            <button class="text-blue-600">
-              <i class="fas fa-flag mr-1"></i> Report
-            </button>
-          </div>
-        </div>
-        <!-- Add more comments as needed -->
-      </div>
+        {% endfor %}
     </div>
+    {% endif %}
+    <h2 class="text-2xl font-bold mb-4">Comentários e Avaliações</h2>
+    <div class="space-y-4">
+      {% if comments %}
+      {% for comment in comments %}
+      <div class="bg-gray-100 p-4 rounded-lg">
+        <div class="flex items-center mb-2"></div>
+        <img src="{% static 'eventos_cariri/images/profile.png' %}" alt="Profile picture of {{ comment.author.username }}" class="w-12 h-12 rounded-full mr-4"/>
+        <div>
+          <h3 class="text-lg font-semibold">{{ comment.author.username }}:</h3>
+          <div class="flex items-center text-yellow-500">
+            <p class="text-gray-600 mb-2">{{ comment.comment }}</p>
+          </div>
+          <p class="text-gray-600 mb-2">{{ comment.created_at }}</p>
+        </div>
+        <div class="flex space-x-4">
+          {% if comment.author == user %}
+          <a href="{% url 'comment_edit' comment.pk %}" class="text-blue-600"><i class="fas fa-edit mr-1"></i>Editar</a>
+          <a href="{% url 'comment_delete' comment.pk %}" class="text-red-600"><i class="fas fa-trash mr-1"></i>Deletar</a>
+          {% endif %}
+        </div>
+      </div>
+      {% endfor %}
+      {% else %}
+      <p class="text-gray-600">Nenhum comentário disponível.</p>
+      {% endif %}
+    </div>
+    <div class="flex justify-between items-center mb-4">
+      {% if user.is_authenticated %}
+      <div class="bg-gray-100 p-4 rounded-lg" style="margin: 2px;">
+        <form method="post">
+          {% csrf_token %}
+          <h4 class="text-lg font-semibold">Deixe seu comentário:</h4>
+          {{ comment_form.comment }}
+          
+          <div>
+            <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded-lg">Adicionar Comentário</button>
+          </div>
+        </form>
+      </div>
+      {% else %}
+      <a href="{% url 'login' %}" class="bg-blue-600 text-white px-4 py-2 rounded-lg" style="margin: 5px;">Fazer login para escrever um comentário</a>
+      {% endif %}
+    </div>
+  </div>
   </div>
 </body>
 
 <script>
+  function openGoogleMaps() {
+    var latitude = {{ event.location.latitude }};
+    var longitude = {{ event.location.longitude }};
+    var url = `https://www.google.com/maps?q=${latitude},${longitude}`;
+    window.open(url, '_blank');
+  }
     function comprarIngresso(event){
         alert("Em breve você poderá comprar o ingresso clicando nesse botão!")
         event.preventDefault();

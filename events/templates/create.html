@@ -92,7 +92,7 @@
                         <p class="text-red-500 text-xs mt-1">{{ form.description.errors }}</p>
                         {% endif %}
                         <div class="text-right text-sm mt-1" >
-                            <span id="char_count">0</span>/1000
+                            <span id="char_count">0</span>/2000
                         </div>
                     </div>
                 </div>
@@ -411,7 +411,7 @@
     document.addEventListener('DOMContentLoaded', (event) => {
         const descriptionInput = document.getElementById('id_description');
         const charCount = document.getElementById('char_count');
-        const maxChars = 1000;
+        const maxChars = 2000;
 
         descriptionInput.addEventListener('input', () => {
             const currentLength = descriptionInput.value.length;
