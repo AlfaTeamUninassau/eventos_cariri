@@ -80,6 +80,7 @@
         <a href="{% url 'user_profile' event.creator.username %}">
 
         <h3 class="text-xl font-bold">{{ event.creator.username }}</h3>
+        <p>entrou em: {{ event.created_at|date:"d/m/Y" }}</p>
         </a>
         {% if event.creator.description %}
         <p class="text-gray-600 mb-4">
