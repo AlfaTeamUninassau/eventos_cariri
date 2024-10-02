@@ -31,6 +31,10 @@ Com Python instalado, crie o ambiente virtual:
 
 `python3 -m venv venv`
 
+Habilitar execução de scripts no terminal:
+
+`Set-ExecutionPolicy -Scope Process -Executi Bypass`
+
 ### 4. Ativar o Ambiente Virtual
 
 Ative o ambiente virtual para que todas as dependências do projeto sejam instaladas no ambiente isolado.
