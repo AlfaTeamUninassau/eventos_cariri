@@ -49,16 +49,20 @@ Agora, com o ambiente virtual ativo, instale as dependências do projeto. As dep
 
 `pip install -r requirements.txt`
 
-Se o arquivo **`requirements.txt`** ainda não existir, crie um com as dependências básicas do projeto:
+Copie e renomeie o arquivo `.env.example` para `.env`:
+    ```bash
+    copy .env.example.txt .env
+    ```
+e coloque sua apikey do opencage, caso não tenha, basta criar uma nesse site:
 
-`Django>=4.0
-pillow`
+`https://opencagedata.com/api#quickstart`
+
 
 ### 6. Realizar Migrações do Banco de Dados
 
 O Django utiliza um sistema de migrações para criar e manter a estrutura do banco de dados. Execute os comandos abaixo para criar as tabelas necessárias:
 
-`python manage.py makemigrations comments, events, reviews, users`
+`python manage.py makemigrations`
 
 `python manage.py migrate`
 
@@ -96,10 +100,6 @@ As principais dependências do projeto são:
 - **Django**: Framework web usado para o back-end.
 - **Django rest api**: Usado para a api.
 - **Pillow**: Biblioteca de manipulação de imagens (necessária para upload de fotos nos eventos).
-
-As dependências adicionais podem ser instaladas automaticamente com o comando:
-
-`pip install -r requirements.txt`
 
 ## 🚀 Testes
 
