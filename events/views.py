@@ -68,8 +68,31 @@ class EventApproveView(View):
         return redirect('analysis_events')
 
 
-class EventUpdateView(View):
-    ...
+class EventUpdateView(LoginRequiredMixin, UpdateView):
+    model = Event
+    form_class = EventForm
+    template_name = 'edit_event.html'
+    success_url = reverse_lazy('events')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['image_form'] = EventImageForm()
+        return context
+
+    def form_valid(self, form):
+        context = self.get_context_data()
+        image_form = EventImageForm(self.request.POST, self.request.FILES)
+        if image_form.is_valid():
+            event = form.save(commit=False)
+            event.save()
+            if 'images' in self.request.FILES:
+                EventImage.objects.filter(event=event).delete()
+                for image in self.request.FILES.getlist('images'):
+                    EventImage.objects.create(event=event, image=image)
+            messages.success(self.request, 'Evento atualizado com sucesso.')
+            return super().form_valid(form)
+        else:
+            return self.form_invalid(form)
 
 
 @method_decorator(login_required, name='dispatch')

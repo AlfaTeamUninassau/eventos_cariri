@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<body class="bg-gray-100 flex items-center justify-center min-h-screen">
+    <div class="bg-white w-full max-w-2xl mx-auto p-8 rounded-lg shadow-lg">
+        <h1 class="text-2xl font-semibold text-center mb-6">Editar Evento</h1>
+        {% if user.is_authenticated %}
+        {% if messages %}
+        <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative" role="alert">
+            {% for message in messages %}
+            <p class="mb-1">{{ message }}</p>
+            {% endfor %}
+        </div>
+        {% endif %}
+
+        <form method="post" enctype="multipart/form-data" class="space-y-4">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <div>
+                <label for="id_images" class="block text-sm font-medium text-gray-700">Imagem do Evento</label>
+                <input type="file" name="images" id="id_images" class="w-full mt-1 p-2 border rounded">
+                {% if object.image.exists %}
+                <img src="{{ object.image.first.image.url }}" alt="{{ object.title }}" class="w-full h-48 object-cover mt-4">
+                {% endif %}
+            </div>
+            <button class="w-full p-3 rounded bg-blue-600 text-white" type="submit">Salvar Alterações</button>
+        </form>
+        {% else %}
+        <div class="flex justify-center mt-20">
+            <p class="text-center text-red-500">Você precisa estar logado para editar um evento.</p>
+        </div>
+        {% endif %}
+    </div>
+</body>
+{% endblock %}
