@@ -10,6 +10,57 @@
     margin-bottom: 10px;
 }
 
+.event-image {
+  transition: transform 0.3s ease-in-out;
+}
+
+.event-card {
+  transition: transform 0.3s ease-in-out;
+}
+
+.event-card:hover .event-image {
+  transform: scale(1.05);
+}
+
+.event-image:hover {
+  transform: scale(1.05);
+}.border-red-500 {
+    border-color: #f56565;
+}
+
+.alert-error {
+    background-color: #f56565;
+    color: white;
+    padding: 10px;
+    border-radius: 5px;
+    margin-bottom: 10px;
+}
+
+.event-image {
+  transition: transform 0.3s ease-in-out;
+}
+
+.event-image:hover {
+  transform: scale(1.05);
+}
+
+#message-container {
+    background: none; /* Sem plano de fundo */
+    max-width: 300px; /* Ajuste o tamanho máximo conforme necessário */
+}
+
+.alert-success {
+    background-color: #029b0f; /* Cor de fundo para a mensagem de sucesso */
+    color: #d3d4d3; /* Cor do texto */
+    border: 1px solid #c3e6cb; /* Borda */
+    padding: 10px; /* Espaçamento interno */
+    border-radius: 5px; /* Bordas arredondadas */
+}
+
+.hidden {
+    display: none;
+}
+
 
 #message-container {
     background: none; /* Sem plano de fundo */

@@ -8,7 +8,7 @@
         <p class="mb-1">{{ message }}</p>
         {% endfor %}
     </div>
-    {% endif %}
+{% endif %}
 
 <body class="bg-gray-100 font-sans">
   <div class="flex">
@@ -114,63 +114,62 @@
     
     <!-- Main Content -->
         <div class="container mx-auto px-4 py-8">
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {% for event in events %}
-            <div class="bg-white rounded-lg shadow-md overflow-hidden transform transition-transform duration-300 hover:scale-105">
-                {% if event.image.exists %}
-                <img src="{{ event.image.first.image.url }}" alt="{{ event.title }}" class="w-full h-48 object-cover">
-                {% else %}
-                <img src="{% static 'eventos_cariri/images/no_photo.png' %}" alt="No Image" class="w-full h-48 object-cover">
-                {% endif %}
-                <div class="p-4">
-                    <h3 class="text-xl font-semibold mb-2">{{ event.title }}</h3>
-                    <p class="text-gray-600 mb-2">
-                      {{ event.date|date:"d \d\e F" }}
-
-                    </p>
-                    {% if event.ticket_type == 'gratuito' %}
-                    <i class="fas fa-money-bill-wave text-green-500"> {{ event.ticket_type }} </i>
-                    {% else %}
-                    <i class="fas fa-money-bill-wave text-blue-500"> {{ event.ticket_type }} | R$ {{ event.price}} </i>
-                    {% endif %}
-                    <p class="text-gray-600 mb-2">{{ event.location.city }}, {{ event.location.state }}</p>
-                    <p class="text-gray-700 mb-4">{{ event.description|truncatewords:20 }}</p>
-                    <a href="{% url 'event_detail' event.pk %}" class="bg-blue-600 text-white py-2 px-4 rounded-lg">Saiba Mais</a>
-                    {% if user.is_superuser or user == event.creator %}
-                    <a href="{% url 'event_delete' event.pk %}" class="bg-red-600 text-white py-2 px-6 rounded-lg" onclick="return confirmAction('deletar')">Excluir</a>
-                    {% endif %}
-                    {% if user == event.creator %}
-                    <a href="{% url 'event_update' event.pk %}" class="bg-blue-950 text-white px-4 py-2 rounded-lg"> Editar </a>
-                    {% endif %}
-                </div>
-            </div>
-            {% endfor %}
-        </div>
-        <div class="flex justify-center mt-6">
-            <button class="bg-blue-600 text-white py-2 px-6 rounded-lg shadow-md overflow-hidden transform transition-transform duration-300 hover:scale-105">
-                Load More Events
-            </button>
-        </div>
-        <div class="flex justify-center mt-6">
-            {% if is_paginated %}
-            <div class="pagination">
-                <span class="page-links">
-                    {% if page_obj.has_previous %}
-                    <a href="?page=1">&laquo; first</a>
-                    <a href="?page={{ page_obj.previous_page_number }}">previous</a>
-                    {% endif %}
-                    <span class="current">
-                        Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
-                    </span>
-                    {% if page_obj.has_next %}
-                    <a href="?page={{ page_obj.next_page_number }}">next</a>
-                    <a href="?page={{ page_obj.paginator.num_pages }}">last &raquo;</a>
-                    {% endif %}
-                </span>
-            </div>
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {% for event in events %}
+        <div class="bg-white rounded-lg shadow-md overflow-hidden event-card">
+          {% if event.image.exists %}
+          <img src="{{ event.image.first.image.url }}" alt="{{ event.title }}" class="w-full h-48 object-cover event-image">
+          {% else %}
+          <img src="{% static 'eventos_cariri/images/no_photo.png' %}" alt="No Image" class="w-full h-48 object-cover event-image">
+          {% endif %}
+          <div class="p-4">
+            <h3 class="text-xl font-semibold mb-2">{{ event.title }}</h3>
+            <p class="text-gray-600 mb-2">{{ event.date|date:"d \d\e F" }}</p>
+            {% if event.ticket_type == 'gratuito' %}
+            <i class="fas fa-money-bill-wave text-green-500"> {{ event.ticket_type }} </i>
+            {% else %}
+            <i class="fas fa-money-bill-wave text-blue-500"> {{ event.ticket_type }} | R$ {{ event.price}} </i>
             {% endif %}
+            <p class="text-gray-600 mb-2">{{ event.location.city }}, {{ event.location.state }}</p>
+            <p class="text-gray-700 mb-4">{{ event.description|truncatewords:20 }}</p>
+            <a href="{% url 'event_detail' event.pk %}" class="bg-blue-600 text-white py-2 px-4 rounded-lg">Saiba Mais</a>
+            {% if user.is_superuser or user == event.creator %}
+            <a href="{% url 'event_delete' event.pk %}" class="bg-red-600 text-white py-2 px-6 rounded-lg" onclick="return confirmAction('deletar')">Excluir</a>
+            {% endif %}
+            {% if user == event.creator %}
+            <a href="{% url 'event_update' event.pk %}" class="bg-blue-950 text-white px-4 py-2 rounded-lg"> Editar </a>
+            {% endif %}
+          </div>
         </div>
+        {% endfor %}
+      </div>
+      <div class="flex justify-center mt-6">
+        <button class="bg-blue-600 text-white py-2 px-6 rounded-lg shadow-md overflow-hidden transform transition-transform duration-300 hover:scale-105">
+          Carregar mais Eventos
+        </button>
+      </div>
     </div>
+      <div class="flex justify-center mt-6">
+        {% if is_paginated %}
+        <div class="pagination">
+          <span class="page-links">
+            {% if page_obj.has_previous %}
+            <a href="?page=1">&laquo; first</a>
+            <a href="?page={{ page_obj.previous_page_number }}">previous</a>
+            {% endif %}
+            <span class="current">
+              Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+            </span>
+            {% if page_obj.has_next %}
+            <a href="?page={{ page_obj.next_page_number }}">next</a>
+            <a href="?page={{ page_obj.paginator.num_pages }}">last &raquo;</a>
+            {% endif %}
+          </span>
+        </div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
 </body>
 <script>
   function confirmAction(action) {
