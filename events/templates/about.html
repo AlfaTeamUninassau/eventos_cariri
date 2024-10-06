@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<body class="bg-gray-100 font-sans leading-normal tracking-normal">
+  <div class="container mx-auto px-4 py-8">
+    <div class="bg-white p-6 rounded-lg shadow-md">
+      <h1 class="text-3xl font-bold mb-4">Sobre o Projeto</h1>
+      <p class="text-gray-700 mb-6">
+        O "Eventos Cariri" é uma plataforma dedicada a promover e divulgar eventos na região do Cariri, Ceará. Nosso objetivo é conectar pessoas com a rica cultura e diversidade de eventos que a região tem a oferecer. Desde festas tradicionais e públicas até eventos privados, queremos garantir que todos tenham acesso às melhores experiências que o Cariri pode proporcionar.
+      </p>
+      <h2 class="text-2xl font-semibold mb-4">Entre em Contato</h2>
+      <p class="text-gray-700 mb-6">
+        Se você tiver alguma dúvida, sugestão ou quiser entrar em contato com a equipe do "Eventos Cariri", por favor, preencha o formulário abaixo. Estamos ansiosos para ouvir de você!
+      </p>
+      {% if messages %}
+      <div id="message-container">
+        {% for message in messages %}
+        <div class="alert {% if message.tags %}alert-{{ message.tags }}{% endif %}">
+          {{ message }}
+        </div>
+        {% endfor %}
+      </div>
+      {% endif %}
+      <form method="post" action="{% url 'contact' %}" class="space-y-4">
+        {% csrf_token %}
+        <div>
+          <label for="name" class="block text-sm font-medium text-gray-700">Nome</label>
+          <input type="text" name="name" id="name" class="w-full p-2 border rounded" required>
+        </div>
+        <div>
+          <label for="email" class="block text-sm font-medium text-gray-700">Email</label>
+          <input type="email" name="email" id="email" class="w-full p-2 border rounded" required>
+        </div>
+        <div>
+          <label for="message" class="block text-sm font-medium text-gray-700">Mensagem</label>
+          <textarea name="message" id="message" rows="4" class="w-full p-2 border rounded" required></textarea>
+        </div>
+        <div class="flex justify-end">
+          <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded-lg">Enviar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</body>
+{% endblock %}

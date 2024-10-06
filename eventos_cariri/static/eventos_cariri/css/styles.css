@@ -14,6 +14,23 @@
   transition: transform 0.3s ease-in-out;
 }
 
+.alert-success {
+    background-color: #029b0f; /* Cor de fundo para a mensagem de sucesso */
+    color: #d3d4d3; /* Cor do texto */
+    border: 1px solid #c3e6cb; /* Borda */
+    padding: 10px; /* Espaçamento interno */
+    border-radius: 5px; /* Bordas arredondadas */
+    margin-bottom: 10px; /* Espaçamento inferior */
+}
+
+.alert-error {
+    background-color: #f56565; /* Cor de fundo para a mensagem de erro */
+    color: white; /* Cor do texto */
+    padding: 10px; /* Espaçamento interno */
+    border-radius: 5px; /* Bordas arredondadas */
+    margin-bottom: 10px; /* Espaçamento inferior */
+}
+
 .event-card {
   transition: transform 0.3s ease-in-out;
 }
