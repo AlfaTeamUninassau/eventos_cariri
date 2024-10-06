@@ -5,16 +5,21 @@ from .utils import get_lat_long
 from django.urls import reverse_lazy
 from .forms import EventForm, EventImageForm, LocationForm
 from django.core.files.uploadedfile import InMemoryUploadedFile
+from django.db.models import Min, Max
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
+from django.views.generic import TemplateView
+from django.shortcuts import render
+from django.core.mail import send_mail
+from django.conf import settings
+from django.contrib import messages
 from django.views.generic.edit import FormView
 from comments.forms import CommentForm
 from comments.models import Comment
 from django.utils import timezone
 from django.http import HttpResponseForbidden
 from django.contrib import messages
-from django.urls import reverse_lazy
 from django.shortcuts import redirect
 
 from django.views.generic import View
@@ -107,6 +112,34 @@ class EventDeleteView(View):
             return HttpResponseForbidden('Você não tem permissão para deletar este evento.')
 
 
+class AboutView(TemplateView):
+    template_name = 'about.html'
+
+def contact_view(request):
+    if request.method == 'POST':
+        name = request.POST.get('name')
+        email = request.POST.get('email')
+        message = request.POST.get('message')
+
+        try:
+            # Enviar email (ajuste as configurações de email no settings.py)
+            send_mail(
+                f'Mensagem de {name} - Eventos Cariri',
+                message,
+                email,
+                [settings.DEFAULT_FROM_EMAIL],
+                fail_silently=False,
+            )
+            messages.success(request, 'Sua mensagem foi enviada com sucesso!')
+        except Exception as e:
+            logger.error(f"Erro ao enviar email: {e}")
+            messages.error(request, 'Ocorreu um erro ao enviar sua mensagem. Por favor, tente novamente mais tarde.')
+
+        return render(request, 'about.html')
+
+    return render(request, 'about.html')
+
+
 class EventListView(ListView):
     model = Event
     template_name = 'events.html'
@@ -114,7 +147,40 @@ class EventListView(ListView):
     paginate_by = 10
 
     def get_queryset(self):
-        return Event.objects.filter(status=Event.APROVADO)
+        queryset = Event.objects.filter(status=Event.APROVADO).order_by('-date')
+        category = self.request.GET.get('category')
+        start_date = self.request.GET.get('start_date')
+        end_date = self.request.GET.get('end_date')
+        location = self.request.GET.get('location')
+        min_price = self.request.GET.get('min_price')
+        max_price = self.request.GET.get('max_price')
+
+        if category:
+            queryset = queryset.filter(category=category)
+        if start_date:
+            queryset = queryset.filter(date__gte=start_date)
+        if end_date:
+            queryset = queryset.filter(date__lte=end_date)
+        if location:
+            queryset = queryset.filter(location__city=location)
+        if min_price:
+            queryset = queryset.filter(price__gte=min_price)
+        if max_price:
+            queryset = queryset.filter(price__lte=max_price)
+
+        return queryset
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['categories'] = [choice[0] for choice in Event.CATEGORY_CHOICES]
+        context['locations'] = Location.objects.values_list('city', flat=True).distinct()
+        context['selected_categories'] = self.request.GET.getlist('category')
+        context['start_date'] = self.request.GET.get('start_date')
+        context['end_date'] = self.request.GET.get('end_date')
+        context['selected_location'] = self.request.GET.get('location')
+        context['min_price'] = self.request.GET.get('min_price')
+        context['max_price'] = self.request.GET.get('max_price')
+        return context
 
 
 class EventSearchView(ListView):

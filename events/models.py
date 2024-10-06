@@ -111,7 +111,7 @@ class Event(models.Model):
         choices=STATUS_CHOICES,
         default=EM_ANALISE
     )
-    creator = models.ForeignKey(User, on_delete=models.CASCADE)
+    creator = models.ForeignKey(User, on_delete=models.CASCADE) 
     
     def save(self, *args, **kwargs):
         logger.debug("Saving event: %s", self.title)  # Log event title before saving

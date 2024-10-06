@@ -1,4 +1,4 @@
-{% extends 'base.html' %} 
+{% extends 'base.html' %}
 {% load static %}
 
 {% block content %}
@@ -14,106 +14,50 @@
   <div class="flex">
     <!-- Sidebar -->
     <div class="w-1/4 bg-white p-6 shadow-md">
-      <h2 class="text-2xl font-bold mb-6">Filters</h2>
-      <div class="mb-6">
-        <h3 class="text-lg font-semibold mb-2">Category</h3>
-        <div class="flex flex-col space-y-2">
-          <label class="inline-flex items-center">
-            <input class="form-checkbox text-blue-600" type="checkbox" />
-            <span class="ml-2"> Cultural </span>
-          </label>
-          <label class="inline-flex items-center">
-            <input class="form-checkbox text-blue-600" type="checkbox" />
-            <span class="ml-2"> Sports </span>
-          </label>
-          <label class="inline-flex items-center">
-            <input class="form-checkbox text-blue-600" type="checkbox" />
-            <span class="ml-2"> Educational </span>
-          </label>
-          <label class="inline-flex items-center">
-            <input class="form-checkbox text-blue-600" type="checkbox" />
-            <span class="ml-2"> Leisure </span>
-          </label>
+      <h2 class="text-2xl font-bold mb-6">Filtros</h2>
+      <form method="get" action="{% url 'events' %}">
+        <div class="mb-6">
+          <h3 class="text-lg font-semibold mb-2">Categoria</h3>
+          <select class="w-full p-2 border border-gray-300 rounded-lg" name="category">
+            <option value="">Selecione uma Categoria</option>
+            {% for category in categories %}
+            <option value="{{ category }}" {% if category == selected_categories.0 %}selected{% endif %}>{{ category }}</option>
+            {% endfor %}
+          </select>
         </div>
-      </div>
-      <div class="mb-6">
-        <h3 class="text-lg font-semibold mb-2">Date Range</h3>
-        <div class="bg-gray-100 p-4 rounded-lg">
-          <div class="flex justify-between items-center mb-2">
-            <button class="text-gray-500">
-              <i class="fas fa-chevron-left"> </i>
-            </button>
-            <span> September 2024 </span>
-            <button class="text-gray-500">
-              <i class="fas fa-chevron-right"> </i>
-            </button>
-          </div>
-          <div class="grid grid-cols-7 gap-1 text-center text-sm">
-            <div>Su</div>
-            <div>Mo</div>
-            <div>Tu</div>
-            <div>We</div>
-            <div>Th</div>
-            <div>Fr</div>
-            <div>Sa</div>
-            <div class="text-gray-400">1</div>
-            <div class="text-gray-400">2</div>
-            <div class="text-gray-400">3</div>
-            <div class="text-gray-400">4</div>
-            <div class="text-gray-400">5</div>
-            <div class="text-gray-400">6</div>
-            <div class="text-gray-400">7</div>
-            <div>8</div>
-            <div>9</div>
-            <div>10</div>
-            <div>11</div>
-            <div>12</div>
-            <div>13</div>
-            <div>14</div>
-            <div>15</div>
-            <div>16</div>
-            <div>17</div>
-            <div>18</div>
-            <div>19</div>
-            <div>20</div>
-            <div>21</div>
-            <div>22</div>
-            <div>23</div>
-            <div>24</div>
-            <div>25</div>
-            <div>26</div>
-            <div>27</div>
-            <div>28</div>
-            <div>29</div>
-            <div>30</div>
-            <div class="text-gray-400">1</div>
-            <div class="text-gray-400">2</div>
-            <div class="text-gray-400">3</div>
-            <div class="text-gray-400">4</div>
+        <div class="mb-6">
+          <h3 class="text-lg font-semibold mb-2">Escolha a Data</h3>
+          <div class="bg-gray-100 p-4 rounded-lg">
+            <input type="date" name="start_date" class="w-full p-2 border rounded" value="{{ start_date }}">
+            <input type="date" name="end_date" class="w-full p-2 border rounded mt-2" value="{{ end_date }}">
           </div>
         </div>
-      </div>
-      <div class="mb-6">
-        <h3 class="text-lg font-semibold mb-2">Location</h3>
-        <select class="w-full p-2 border border-gray-300 rounded-lg">
-          <option>Select a location</option>
-        </select>
-      </div>
-      <div class="mb-6">
-        <h3 class="text-lg font-semibold mb-2">Price Range</h3>
-        <div class="flex items-center justify-between mb-2">
-          <span> R$0 </span>
-          <span> R$1000 </span>
+        <div class="mb-6">
+          <h3 class="text-lg font-semibold mb-2">Cidade</h3>
+          <select class="w-full p-2 border border-gray-300 rounded-lg" name="location">
+            <option value="">Selecione uma cidade</option>
+            {% for location in locations %}
+            <option value="{{ location }}" {% if location == selected_location %}selected{% endif %}>{{ location }}</option>
+            {% endfor %}
+          </select>
         </div>
-        <input class="w-full" type="range" />
-      </div>
-      <button class="w-full bg-blue-600 text-white py-2 rounded-lg">
-        Apply Filters
-      </button>
+        <div class="mb-6">
+          <h3 class="text-lg font-semibold mb-2">Faixa de Preço</h3>
+          <div class="flex items-center justify-between mb-2">
+            <input type="number" name="min_price" class="w-1/2 p-2 border rounded" placeholder="Mínimo" min="0" max="9999" value="{{ min_price }}">
+            <input type="number" name="max_price" class="w-1/2 p-2 border rounded" placeholder="Máximo" min="0" max="9999" value="{{ max_price }}">
+          </div>
+        </div>
+        <div class="flex justify-between">
+          <button class="bg-blue-600 text-white py-2 px-4 rounded-lg" type="submit">Aplicar Filtros</button>
+          <a href="{% url 'events' %}" class="bg-gray-300 text-gray-700 py-2 px-4 rounded-lg">Limpar Filtros</a>
+        </div>
+      </form>
     </div>
     
     <!-- Main Content -->
-        <div class="container mx-auto px-4 py-8">
+    <div class="container mx-auto px-4 py-8">
+      {% if events %}
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {% for event in events %}
         <div class="bg-white rounded-lg shadow-md overflow-hidden event-card">
@@ -144,12 +88,6 @@
         {% endfor %}
       </div>
       <div class="flex justify-center mt-6">
-        <button class="bg-blue-600 text-white py-2 px-6 rounded-lg shadow-md overflow-hidden transform transition-transform duration-300 hover:scale-105">
-          Carregar mais Eventos
-        </button>
-      </div>
-    </div>
-      <div class="flex justify-center mt-6">
         {% if is_paginated %}
         <div class="pagination">
           <span class="page-links">
@@ -168,6 +106,12 @@
         </div>
         {% endif %}
       </div>
+      {% else %}
+      <div class="bg-white p-6 rounded-lg shadow-md text-center">
+        <h3 class="text-xl font-semibold mb-2">Nenhum evento encontrado</h3>
+        <p class="text-gray-600">Tente ajustar os filtros para encontrar eventos.</p>
+      </div>
+      {% endif %}
     </div>
   </div>
 </body>
@@ -179,6 +123,22 @@
     }
     return confirm(message);
 }
+
+document.addEventListener('DOMContentLoaded', function() {
+  const priceRangeInput = document.getElementById('price-range-input');
+  const priceRangeValue = document.getElementById('price-range-value');
+
+  function updatePriceRangeValue() {
+    priceRangeValue.textContent = `R$${priceRangeInput.value}`;
+  }
+
+  priceRangeInput.addEventListener('input', updatePriceRangeValue);
+
+  // Inicializa o valor exibido
+  updatePriceRangeValue();
+});
+
+
 </script>
 
 {% endblock %}
