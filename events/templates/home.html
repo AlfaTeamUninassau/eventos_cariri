@@ -40,22 +40,22 @@
             Categorias de Eventos
         </h2>
         <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 overflow-x-auto">
-            <div class="bg-white p-4 rounded shadow text-center">
+            <a href="{% url 'events' %}?category=Cultura" class="bg-white p-4 rounded shadow text-center">
                 <i class="fas fa-palette text-purple-500 text-3xl mb-2"></i>
                 <p class="font-semibold">Cultura</p>
-            </div>
-            <div class="bg-white p-4 rounded shadow text-center">
+            </a>
+            <a href="{% url 'events' %}?category=Esporte" class="bg-white p-4 rounded shadow text-center">
                 <i class="fas fa-futbol text-blue-500 text-3xl mb-2"></i>
                 <p class="font-semibold">Esportes</p>
-            </div>
-            <div class="bg-white p-4 rounded shadow text-center">
+            </a>
+            <a href="{% url 'events' %}?category=Educacional" class="bg-white p-4 rounded shadow text-center">
                 <i class="fas fa-book text-green-500 text-3xl mb-2"></i>
                 <p class="font-semibold">Educacional</p>
-            </div>
-            <div class="bg-white p-4 rounded shadow text-center">
+            </a>
+            <a href="{% url 'events' %}?category=Literatura" class="bg-white p-4 rounded shadow text-center">
                 <i class="fas fa-coffee text-yellow-500 text-3xl mb-2"></i>
-                <p class="font-semibold">Leitura</p>
-            </div>
+                <p class="font-semibold">Literatura</p>
+            </a>
         </div>
     </section>
 
