@@ -35,10 +35,22 @@ from django.views.generic import (
     ListView,
     CreateView,
 )
+from django.http import JsonResponse
 import logging
 
 
 logger = logging.getLogger(__name__)
+
+
+class EventSearchAjaxView(View):
+    def get(self, request):
+        query = request.GET.get('query', '')
+        if query:
+            events = Event.objects.filter(title__icontains=query, status=Event.APROVADO)
+            results = [{'id': event.id, 'title': event.title} for event in events]
+        else:
+            results = []
+        return JsonResponse(results, safe=False)
 
 
 class HomeView(ListView):
@@ -115,6 +127,7 @@ class EventDeleteView(View):
 class AboutView(TemplateView):
     template_name = 'about.html'
 
+
 def contact_view(request):
     if request.method == 'POST':
         name = request.POST.get('name')
@@ -154,6 +167,7 @@ class EventListView(ListView):
         location = self.request.GET.get('location')
         min_price = self.request.GET.get('min_price')
         max_price = self.request.GET.get('max_price')
+        query = self.request.GET.get('query')
 
         if category:
             queryset = queryset.filter(category=category)
@@ -162,11 +176,13 @@ class EventListView(ListView):
         if end_date:
             queryset = queryset.filter(date__lte=end_date)
         if location:
-            queryset = queryset.filter(location__city=location)
+            queryset = queryset.filter(location__city__icontains=location)
         if min_price:
             queryset = queryset.filter(price__gte=min_price)
         if max_price:
             queryset = queryset.filter(price__lte=max_price)
+        if query:
+            queryset = queryset.filter(title__icontains=query)
 
         return queryset
 
@@ -175,11 +191,6 @@ class EventListView(ListView):
         context['categories'] = [choice[0] for choice in Event.CATEGORY_CHOICES]
         context['locations'] = Location.objects.values_list('city', flat=True).distinct()
         context['selected_categories'] = self.request.GET.getlist('category')
-        context['start_date'] = self.request.GET.get('start_date')
-        context['end_date'] = self.request.GET.get('end_date')
-        context['selected_location'] = self.request.GET.get('location')
-        context['min_price'] = self.request.GET.get('min_price')
-        context['max_price'] = self.request.GET.get('max_price')
         return context
 
 

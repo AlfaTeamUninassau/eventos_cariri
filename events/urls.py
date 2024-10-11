@@ -7,7 +7,8 @@ from .views import (
     EventApproveView,
     EventUpdateView,
     EventDeleteView,
-    EventSearchView
+    EventSearchView,
+    EventSearchAjaxView,
     )
 from django.conf import settings
 from django.conf.urls.static import static
@@ -20,5 +21,7 @@ urlpatterns = [
     path('<int:pk>/edit/', EventUpdateView.as_view(), name='event_update'),
     path('<int:pk>/delete/', EventDeleteView.as_view(), name='event_delete'),
     path('search/<int:pk>/', EventSearchView.as_view(), name='event_search'),
-    path('<int:pk>/approve/', EventApproveView.as_view(), name='event_approve')
+    path('<int:pk>/approve/', EventApproveView.as_view(), name='event_approve'),
+    path('search/ajax/', EventSearchAjaxView.as_view(), name='event_search_ajax'),
+
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

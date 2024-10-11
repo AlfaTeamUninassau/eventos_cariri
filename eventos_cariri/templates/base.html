@@ -44,10 +44,9 @@
                     {% endif %}
                 </nav>
                 <div id="search" class="relative flex items-center">
-                    <input id="search-input" type="text" class="hidden p-2 border rounded" placeholder="Pesquisar...">
-                    <input id="event-name" type="hidden" value="">
+                    <input id="search-input" type="text" class="p-2 border rounded" placeholder="Pesquisar eventos...">
                     <i id="search-icon" class="fas fa-search text-gray-700 rounded-full px-2 py-2 hover:text-black cursor-pointer"></i>
-                    <button id="close-search" class="hidden ml-2 text-gray-700 hover:text-black cursor-pointer">&times;</button>
+                    <div id="search-results" class="hidden"></div>
                 </div>
                 
                 {% if request.user.is_authenticated %}
@@ -105,50 +104,48 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            const searchIcon = document.getElementById('search-icon');
             const searchInput = document.getElementById('search-input');
-            const closeSearch = document.getElementById('close-search');
-            const menuToggle = document.getElementById('menu-toggle');
-            const menu = document.getElementById('menu');
-            const siteTitle = document.getElementById('site-title');
-            const login = document.getElementById('login');
-            const singin = document.getElementById('singin');
-            const hi = document.getElementById('hi');
-            const exit = document.getElementById('exit');
-            const user = document.getElementById('user');
-            const userName = document.getElementById('user_name');
-
+            const searchResults = document.getElementById('search-results');
+            const searchIcon = document.getElementById('search-icon');
+    
             searchIcon.addEventListener('click', function() {
-                searchInput.classList.toggle('hidden');
-                closeSearch.classList.toggle('hidden');
-                if (!searchInput.classList.contains('hidden')) {
-                    searchInput.focus();
+                if (window.innerWidth <= 768) {
+                    searchInput.classList.toggle('active');
                 } else {
-                    searchEvents();
+                    const query = searchInput.value;
+                    if (query) {
+                        window.location.href = `/events/?query=${query}`;
+                    }
                 }
             });
-
-            closeSearch.addEventListener('click', function() {
-                searchInput.classList.add('hidden');
-                closeSearch.classList.add('hidden');
-            });
-
-            menuToggle.addEventListener('click', function() {
-                menu.classList.toggle('hidden');
-                siteTitle.classList.toggle('hidden');
-                if (login) login.classList.toggle('hidden');
-                if (exit) exit.classList.toggle('hidden');
-                if (singin) singin.classList.toggle('hidden');
-                if (hi) hi.classList.toggle('hidden');
-                if (user) user.classList.toggle('hidden');
-                if (userName) userName.classList.toggle('hidden');
+    
+            searchInput.addEventListener('input', function() {
+                const query = searchInput.value;
+                if (query.length > 2) {
+                    fetch(`/events/search/ajax/?query=${query}`)
+                        .then(response => response.json())
+                        .then(data => {
+                            searchResults.innerHTML = '';
+                            if (data.length > 0) {
+                                data.forEach(event => {
+                                    const resultItem = document.createElement('div');
+                                    resultItem.classList.add('search-result-item');
+                                    resultItem.textContent = event.title;
+                                    resultItem.addEventListener('click', function() {
+                                        window.location.href = `/events/${event.id}/`;
+                                    });
+                                    searchResults.appendChild(resultItem);
+                                });
+                                searchResults.classList.remove('hidden');
+                            } else {
+                                searchResults.classList.add('hidden');
+                            }
+                        });
+                } else {
+                    searchResults.classList.add('hidden');
+                }
             });
         });
-
-        function searchEvents() {
-            var eventId = document.getElementById('event-id').value;
-            window.location.href = '/events/search/' + eventId;
-        }
     </script>
 </body>
 </html>
