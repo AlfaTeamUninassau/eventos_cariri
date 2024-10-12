@@ -43,12 +43,12 @@
                     <a class="text-gray-700 rounded-full px-2 py-1 hover:bg-gray-500 hover:text-white" href="{% url 'analysis_events' %}">Análise</a>
                     {% endif %}
                 </nav>
-                <div id="search" class="relative flex items-center">
-                    <input id="search-input" type="text" class="p-2 border rounded" placeholder="Pesquisar eventos...">
+                <div id="search" class="relative flex items-center hidden md:flex">
+                    <input id="search-input" type="text" class="p-2 border rounded" placeholder="Pesquisar...">
+                    <input id="event-name" type="hidden" value="">
                     <i id="search-icon" class="fas fa-search text-gray-700 rounded-full px-2 py-2 hover:text-black cursor-pointer"></i>
-                    <div id="search-results" class="hidden"></div>
+                    <button id="close-search" class="hidden ml-2 text-gray-700 hover:text-black cursor-pointer">&times;</button>
                 </div>
-                
                 {% if request.user.is_authenticated %}
                 <span id="hi" class="text-gray-700">Olá, <a href="{% url 'profile' %}" class="text-blue-500 hover:underline">{{ request.user.username }}</a></span>
                 <a id="exit" class="text-red hover:text-white border border-gray-700 rounded-full px-2 py-1 hover:bg-red-500" href="{% url 'logout' %}">Sair</a>
@@ -104,18 +104,36 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            const searchInput = document.getElementById('search-input');
-            const searchResults = document.getElementById('search-results');
             const searchIcon = document.getElementById('search-icon');
+            const searchInput = document.getElementById('search-input');
+            const closeSearch = document.getElementById('close-search');
+            const menuToggle = document.getElementById('menu-toggle');
+            const menu = document.getElementById('menu');
+            const siteTitle = document.getElementById('site-title');
+            const login = document.getElementById('login');
+            const singin = document.getElementById('singin');
+            const hi = document.getElementById('hi');
+            const exit = document.getElementById('exit');
+            const user = document.getElementById('user');
+            const userName = document.getElementById('user_name');
+            const search = document.getElementById('search');
+    
+            menuToggle.addEventListener('click', function() {
+                menu.classList.toggle('show');
+                search.classList.toggle('show'); // Exibe/oculta a barra de pesquisa
+                siteTitle.classList.toggle('hidden');
+                if (login) login.classList.toggle('hidden');
+                if (exit) exit.classList.toggle('hidden');
+                if (singin) singin.classList.toggle('hidden');
+                if (hi) hi.classList.toggle('hidden');
+                if (user) user.classList.toggle('hidden');
+                if (userName) userName.classList.toggle('hidden');
+            });
     
             searchIcon.addEventListener('click', function() {
-                if (window.innerWidth <= 768) {
-                    searchInput.classList.toggle('active');
-                } else {
-                    const query = searchInput.value;
-                    if (query) {
-                        window.location.href = `/events/?query=${query}`;
-                    }
+                const query = searchInput.value;
+                if (query.length > 0) {
+                    window.location.href = `/events/?query=${query}`;
                 }
             });
     

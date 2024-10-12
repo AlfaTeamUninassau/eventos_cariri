@@ -40,11 +40,22 @@
 }
 
 @media (max-width: 768px) {
-  #search-input {
+  #menu, #search {
       display: none;
+      flex-direction: column; /* Exibir itens em modo cascata */
+      align-items: center; /* Alinhar itens ao centro */
+      width: 100%; /* Ocupa toda a largura */
   }
-  #search-input.active {
-      display: block;
+  #menu.show, #search.show {
+      display: flex; /* Exibir quando a classe 'show' for adicionada */
+  }
+  #search {
+      order: -1; /* Coloca a barra de pesquisa no topo */
+  }
+  #menu a {
+      width: 100%; /* Ocupa toda a largura */
+      text-align: center; /* Centraliza o texto */
+      padding: 10px 0; /* Espaçamento interno */
   }
 }
 
