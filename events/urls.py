@@ -20,7 +20,7 @@ urlpatterns = [
     path('new/', EventCreateView.as_view(), name='event_create'),
     path('<int:pk>/edit/', EventUpdateView.as_view(), name='event_update'),
     path('<int:pk>/delete/', EventDeleteView.as_view(), name='event_delete'),
-    path('search/<int:pk>/', EventSearchView.as_view(), name='event_search'),
+    path('search/', EventSearchView.as_view(), name='event_search'),
     path('<int:pk>/approve/', EventApproveView.as_view(), name='event_approve'),
     path('search/ajax/', EventSearchAjaxView.as_view(), name='event_search_ajax'),
 

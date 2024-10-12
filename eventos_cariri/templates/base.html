@@ -44,10 +44,12 @@
                     {% endif %}
                 </nav>
                 <div id="search" class="relative flex items-center hidden md:flex">
-                    <input id="search-input" type="text" class="p-2 border rounded" placeholder="Pesquisar...">
-                    <input id="event-name" type="hidden" value="">
-                    <i id="search-icon" class="fas fa-search text-gray-700 rounded-full px-2 py-2 hover:text-black cursor-pointer"></i>
-                    <button id="close-search" class="hidden ml-2 text-gray-700 hover:text-black cursor-pointer">&times;</button>
+                    <form method="get" action="{% url 'event_search' %}">
+                        <input type="text" name="query" id="search-input" class="w-full p-2 border rounded" placeholder="Pesquisar eventos...">
+                        <button type="submit" class="absolute right-0 top-0 mt-2 mr-2">
+                            <i class="fas fa-search"></i>
+                        </button>
+                    </form>
                 </div>
                 {% if request.user.is_authenticated %}
                 <span id="hi" class="text-gray-700">Olá, <a href="{% url 'profile' %}" class="text-blue-500 hover:underline">{{ request.user.username }}</a></span>

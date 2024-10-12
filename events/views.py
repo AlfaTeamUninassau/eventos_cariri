@@ -196,17 +196,21 @@ class EventListView(ListView):
 
 class EventSearchView(ListView):
     model = Event
-    template_name = 'base.html'
+    template_name = 'events.html'
     context_object_name = 'events'
     paginate_by = 10
 
     def get_queryset(self):
-        event = Event.objects.get(pk=self.kwargs['pk'])
-        search_query = event.title
-        if search_query:
-            return Event.objects.filter(title__icontains=search_query)
+        query = self.request.GET.get('query', '')
+        if query:
+            return Event.objects.filter(title__icontains=query, status=Event.APROVADO)
         else:
             return Event.objects.none()
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['query'] = self.request.GET.get('query', '')
+        return context
 
 
 class EventDetailView(DetailView):
