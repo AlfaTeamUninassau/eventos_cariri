@@ -21,6 +21,9 @@ from django.utils import timezone
 from django.http import HttpResponseForbidden
 from django.contrib import messages
 from django.shortcuts import redirect
+from reviews.forms import ReviewForm
+from reviews.models import Review
+
 
 from django.views.generic import View
 from django.views.generic.edit import FormView
@@ -228,19 +231,38 @@ class EventDetailView(DetailView):
         ).exclude(id=event.id)[:4]
         context['comment_form'] = CommentForm()
         context['comments'] = event.comments.all()
+        context['review_form'] = ReviewForm()
+
+        # Verifica se o usuário já fez uma avaliação
+        if self.request.user.is_authenticated:
+            try:
+                context['user_review'] = Review.objects.get(event=event, user=self.request.user)
+            except Review.DoesNotExist:
+                context['user_review'] = None
+
+        context['reviews'] = event.review_set.all()
         return context
 
     @method_decorator(login_required)
     def post(self, request, *args, **kwargs):
         self.object = self.get_object()
-        form = CommentForm(request.POST)
+        form = ReviewForm(request.POST)
+
         if form.is_valid():
-            comment = form.save(commit=False)
-            comment.author = request.user
-            comment.event = self.object
-            comment.save()
-            return redirect('event_detail', pk=self.object.pk)
-        return self.render_to_response(self.get_context_data(form=form))
+            # Verifica se o usuário já avaliou o evento
+            if Review.objects.filter(event=self.object, user=request.user).exists():
+                messages.error(request, 'Você já avaliou este evento.')
+                return self.render_to_response(self.get_context_data(form=form))
+            
+            review = form.save(commit=False)
+            review.user = request.user
+            review.event = self.object
+            review.save()
+            messages.success(request, 'Avaliação enviada com sucesso.')
+            return self.render_to_response(self.get_context_data(form=form))
+        else:
+            messages.error(request, 'Erro ao enviar a avaliação. Verifique os dados e tente novamente.')
+            return self.render_to_response(self.get_context_data(form=form))
 
 
 def upcoming_events_view(request):

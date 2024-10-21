@@ -35,6 +35,8 @@
           {% endif %}
           <i class="fas fa-users ml-4 mr-2"></i>
           <span>{{ event.age_group }}</span>
+          <i class="fas fa-star ml-4 mr-2"></i>
+          <span>{{ event.get_average_rating }}/5</span>
         </div>
         <div class="mt-4">
           <button class="bg-blue-600 text-white px-4 py-2 rounded-lg" onclick="comprarIngresso()">
@@ -209,76 +211,91 @@
         </button>
         </div>
     </div>
-  <!-- Comments and Ratings Section -->
-  <div class="bg-white shadow-md rounded-lg overflow-hidden mt-6 p-6">
-    {% if messages %}
-    <div>
-        {% for message in messages %}
-        <div class="alert {% if message.tags %}alert-{{ message.tags }}{% endif %}">
-            {{ message }}
-        </div>
-        {% endfor %}
-    </div>
-    {% endif %}
-    <h2 class="text-2xl font-bold mb-4">Comentários e Avaliações</h2>
-    <div class="space-y-4">
+<!-- Comments and Ratings Section -->
+<div class="bg-white shadow-md rounded-lg overflow-hidden mt-6 p-6">
+  <h2 class="text-2xl font-bold mb-4">Comentários e Avaliações</h2>
+    <!-- Event Rating -->
+<p class="text-lg font-semibold">Nota Média: {{ event.get_average_rating }}/5</p>
+
+  <!-- Formulário de Avaliação -->
+  <div class="bg-gray-100 p-4 rounded-lg mt-4">
+      <h4 class="text-lg font-semibold">Deixe sua avaliação:</h4>
+      <form method="post">
+          {% csrf_token %}
+          {{ review_form.as_p }}
+          <div>
+              <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded-lg">Adicionar Avaliação</button>
+          </div>
+      </form>
+  </div>
+
+  <!-- Avaliações -->
+  <div class="space-y-4">
+      {% if reviews %}
+      {% for review in reviews %}
+      <div class="bg-gray-100 p-4 rounded-lg">
+          <div class="flex items-center mb-2">
+              <p class="text-yellow-500">
+                  {% for i in "12345" %}
+                      {% if i|add:0 <= review.rating %}
+                          ★
+                      {% else %}
+                          ☆
+                      {% endif %}
+                  {% endfor %}
+              </p>
+          </div>
+          <p class="text-gray-600">{{ review.comment }}</p>
+          <p class="text-gray-600">{{ review.created_at|date:"d/m/Y H:i" }}</p>
+      </div>
+      {% endfor %}
+      {% else %}
+      <p class="text-gray-600">Nenhuma avaliação disponível.</p>
+      {% endif %}
+  </div>
+
+  <!-- Comentários -->
+  <div class="space-y-4 mt-6">
+      <h3 class="text-lg font-semibold">Comentários</h3>
       {% if comments %}
       {% for comment in comments %}
       <div class="bg-gray-100 p-4 rounded-lg">
-        <div class="flex items-center mb-2">
-
-          {% if comment.author.profile_picture %}
-          <a href="{% url 'user_profile' comment.author.username %}">
-          <img src="{{ comment.author.profile_picture.url }}" alt="Profile picture of {{ comment.author.username }}" class="w-12 h-12 rounded-full mr-4" />
-          </a>
-          {% else %}
-          <a href="{% url 'user_profile' comment.author.username %}">
-          <img src="{% static 'eventos_cariri/images/no_profile_picture.png' %}" alt="No Image" class="w-12 h-12 rounded-full mr-4" />
-          </a>
-          {% endif %}        
-        </div>
-        <div>
-          <p class="text-gray-600">{{ user.get_city_display }}</p>
-          <a href="{% url 'user_profile' comment.author.username %}">
-          <h3 class="text-lg font-semibold">{{ comment.author.username }}:</h3>
-          </a>
-          <div class="flex items-center text-yellow-500">
-            <p class="text-gray-600 mb-2">{{ comment.comment }}</p>
+          <div class="flex items-center mb-2">
+              {% if comment.author.profile_picture %}
+              <a href="{% url 'user_profile' comment.author.username %}">
+                  <img src="{{ comment.author.profile_picture.url }}" alt="Profile picture of {{ comment.author.username }}" class="w-12 h-12 rounded-full mr-4" />
+              </a>
+              {% else %}
+              <a href="{% url 'user_profile' comment.author.username %}">
+                  <img src="{% static 'eventos_cariri/images/no_profile_picture.png' %}" alt="No Image" class="w-12 h-12 rounded-full mr-4" />
+              </a>
+              {% endif %}
+              <a href="{% url 'user_profile' comment.author.username %}">
+                  <h3 class="text-lg font-semibold">{{ comment.author.username }}:</h3>
+              </a>
           </div>
+          <p class="text-gray-600">{{ comment.comment }}</p>
           <p class="text-gray-600">{{ comment.created_at|date:"d/m/Y H:i" }}</p>
-        </div>
-        <div class="flex space-x-4">
-          {% if comment.author == user %}
-          <a href="{% url 'comment_edit' comment.pk %}" class="text-blue-600"><i class="fas fa-edit mr-1"></i>Editar</a>
-          <a href="{% url 'comment_delete' comment.pk %}" class="text-red-600"><i class="fas fa-trash mr-1"></i>Deletar</a>
-          {% endif %}
-          {% if user.is_superuser %}
-          <a href="{% url 'comment_delete' comment.pk %}" class="text-red-600"><i class="fas fa-trash mr-1"></i>Deletar</a>
-          {% endif %}
-        </div>
       </div>
       {% endfor %}
       {% else %}
       <p class="text-gray-600">Nenhum comentário disponível.</p>
       {% endif %}
-    </div>
-    <div class="flex justify-between items-center mb-4">
-      {% if user.is_authenticated %}
-      <div class="bg-gray-100 p-4 rounded-lg" style="margin: 2px;">
-        <form method="post">
+  </div>
+
+
+  <!-- Formulário de Comentário -->
+  <div class="bg-gray-100 p-4 rounded-lg mt-4">
+      <h4 class="text-lg font-semibold">Deixe seu comentário:</h4>
+      <form method="post">
           {% csrf_token %}
-          <h4 class="text-lg font-semibold">Deixe seu comentário:</h4>
-          {{ comment_form.comment }}
-          
+          {{ comment_form.as_p }}
           <div>
-            <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded-lg">Adicionar Comentário</button>
+              <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded-lg">Adicionar Comentário</button>
           </div>
-        </form>
-      </div>
-      {% else %}
-      <a href="{% url 'login' %}" class="bg-blue-600 text-white px-4 py-2 rounded-lg" style="margin: 5px;">Fazer login para escrever um comentário</a>
-      {% endif %}
-    </div>
+      </form>
+  </div>
+</div>
     <div id="captcha-icon" class="fixed bottom-10 right-10 bg-gray-100 p-4 rounded-full shadow-lg cursor-pointer">
       <img src="{% static 'eventos_cariri/images/recaptcha-icon.png' %}" alt="reCAPTCHA Icon" class="w-10 h-10">
     </div>
@@ -287,6 +304,36 @@
 </body>
 
 <script>
+  const starRatings = document.querySelectorAll('.star-rating');
+  starRatings.forEach(starRating => {
+      const stars = starRating.children;
+      let rating = 0;
+
+      stars.forEach(star => {
+          star.addEventListener('click', () => {
+              rating = parseFloat(star.getAttribute('data-value'));
+              document.getElementById('rating').value = rating;
+              updateStars(stars, rating);
+          });
+      });
+
+      document.getElementById('submit-review').addEventListener('click', () => {
+          // Enviar a avaliação para o servidor
+          const reviewComment = document.getElementById('review-comment').value;
+          const ratingValue = document.getElementById('rating').value;
+          // Implemente a lógica para enviar a avaliação para o servidor
+      });
+  });
+
+  function updateStars(stars, rating) {
+      stars.forEach(star => {
+          if (parseFloat(star.getAttribute('data-value')) <= rating) {
+              star.innerHTML = '&#9733;';
+          } else {
+              star.innerHTML = '&#9734;';
+          }
+      });
+  }
   function openGoogleMaps() {
     var latitude = {{ event.location.latitude }};
     var longitude = {{ event.location.longitude }};

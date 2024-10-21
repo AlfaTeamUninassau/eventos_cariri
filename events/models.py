@@ -111,7 +111,14 @@ class Event(models.Model):
         choices=STATUS_CHOICES,
         default=EM_ANALISE
     )
-    creator = models.ForeignKey(User, on_delete=models.CASCADE) 
+    creator = models.ForeignKey(User, on_delete=models.CASCADE)
+    
+    def get_average_rating(self):
+        reviews = self.review_set.all()
+        if reviews:
+            return sum(review.rating for review in reviews) / len(reviews)
+        else:
+            return 0 
     
     def save(self, *args, **kwargs):
         logger.debug("Saving event: %s", self.title)  # Log event title before saving
