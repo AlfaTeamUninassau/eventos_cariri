@@ -219,15 +219,85 @@
 
   <!-- Formulário de Avaliação -->
   <div class="bg-gray-100 p-4 rounded-lg mt-4">
-      <h4 class="text-lg font-semibold">Deixe sua avaliação:</h4>
-      <form method="post">
-          {% csrf_token %}
-          {{ review_form.as_p }}
-          <div>
-              <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded-lg">Adicionar Avaliação</button>
-          </div>
-      </form>
-  </div>
+    <h4 class="text-lg font-semibold">Deixe sua avaliação:</h4>
+    {% if user_review %}
+        <p>Você já avaliou este evento. Sua avaliação:</p>
+        <div class="flex items-center mb-2">
+            <div class="stars-container">
+                {% for i in "12345" %}
+                    {% if i|add:"0" <= user_review.rating %}
+                        <i class="fas fa-star text-yellow-500"></i>
+                    {% else %}
+                        <i class="far fa-star text-yellow-500"></i>
+                    {% endif %}
+                {% endfor %}
+            </div>
+            {% if user == user_review.user %}
+                <a href="{% url 'review_update' user_review.pk %}" class="ml-2 text-blue-600">
+                    <i class="fas fa-edit"></i> Editar
+                </a>
+                <a href="{% url 'review_delete' user_review.pk %}" class="ml-2 text-red-600" 
+                   onclick="return confirm('Tem certeza que deseja excluir esta avaliação?')">
+                    <i class="fas fa-trash"></i> Excluir
+                </a>
+            {% endif %}
+        </div>
+        <p>{{ user_review.comment }}</p>
+    {% else %}
+        <form method="post">
+            {% csrf_token %}
+            <div class="stars-container mb-4">
+                <i class="far fa-star text-yellow-500 cursor-pointer star-rating" data-value="1"></i>
+                <i class="far fa-star text-yellow-500 cursor-pointer star-rating" data-value="2"></i>
+                <i class="far fa-star text-yellow-500 cursor-pointer star-rating" data-value="3"></i>
+                <i class="far fa-star text-yellow-500 cursor-pointer star-rating" data-value="4"></i>
+                <i class="far fa-star text-yellow-500 cursor-pointer star-rating" data-value="5"></i>
+            </div>
+            {{ review_form.rating }}
+            {{ review_form.comment }}
+            <button type="submit" class="mt-2 bg-blue-600 text-white px-4 py-2 rounded-lg">
+                Adicionar Avaliação
+            </button>
+        </form>
+
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                const stars = document.querySelectorAll('.star-rating');
+                const ratingInput = document.getElementById('rating-input');
+
+                function updateStars(rating) {
+                    stars.forEach((star, index) => {
+                        if (index < rating) {
+                            star.classList.remove('far');
+                            star.classList.add('fas');
+                        } else {
+                            star.classList.remove('fas');
+                            star.classList.add('far');
+                        }
+                    });
+                }
+
+                stars.forEach(star => {
+                    star.addEventListener('mouseover', function() {
+                        const rating = this.getAttribute('data-value');
+                        updateStars(rating);
+                    });
+
+                    star.addEventListener('mouseout', function() {
+                        const currentRating = ratingInput.value || 0;
+                        updateStars(currentRating);
+                    });
+
+                    star.addEventListener('click', function() {
+                        const rating = this.getAttribute('data-value');
+                        ratingInput.value = rating;
+                        updateStars(rating);
+                    });
+                });
+            });
+        </script>
+    {% endif %}
+</div>
 
   <!-- Avaliações -->
   <div class="space-y-4">
@@ -286,15 +356,24 @@
 
   <!-- Formulário de Comentário -->
   <div class="bg-gray-100 p-4 rounded-lg mt-4">
-      <h4 class="text-lg font-semibold">Deixe seu comentário:</h4>
-      <form method="post">
-          {% csrf_token %}
-          {{ comment_form.as_p }}
-          <div>
-              <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded-lg">Adicionar Comentário</button>
-          </div>
-      </form>
-  </div>
+    <h4 class="text-lg font-semibold">Deixe seu comentário:</h4>
+    {% if user.is_authenticated %}
+        <form method="post" action="{% url 'event_detail' event.pk %}">
+            {% csrf_token %}
+            {{ comment_form.as_p }}
+            <div>
+                <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded-lg">
+                    Adicionar Comentário
+                </button>
+            </div>
+        </form>
+    {% else %}
+        <p class="text-gray-600">
+            <a href="{% url 'login' %}" class="text-blue-600">Faça login</a> para deixar um comentário.
+        </p>
+    {% endif %}
+</div>
+
 </div>
     <div id="captcha-icon" class="fixed bottom-10 right-10 bg-gray-100 p-4 rounded-full shadow-lg cursor-pointer">
       <img src="{% static 'eventos_cariri/images/recaptcha-icon.png' %}" alt="reCAPTCHA Icon" class="w-10 h-10">

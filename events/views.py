@@ -246,23 +246,40 @@ class EventDetailView(DetailView):
     @method_decorator(login_required)
     def post(self, request, *args, **kwargs):
         self.object = self.get_object()
-        form = ReviewForm(request.POST)
+        if 'rating' in request.POST:
+            # Processamento do formulário de avaliação
+            form = ReviewForm(request.POST)
 
-        if form.is_valid():
-            # Verifica se o usuário já avaliou o evento
-            if Review.objects.filter(event=self.object, user=request.user).exists():
-                messages.error(request, 'Você já avaliou este evento.')
+            if form.is_valid():
+                # Verifica se o usuário já avaliou o evento
+                if Review.objects.filter(event=self.object, user=request.user).exists():
+                    messages.error(request, 'Você já avaliou este evento.')
+                    return self.render_to_response(self.get_context_data(form=form))
+                
+                review = form.save(commit=False)
+                review.user = request.user
+                review.event = self.object
+                review.save()
+                messages.success(request, 'Avaliação enviada com sucesso.')
                 return self.render_to_response(self.get_context_data(form=form))
-            
-            review = form.save(commit=False)
-            review.user = request.user
-            review.event = self.object
-            review.save()
-            messages.success(request, 'Avaliação enviada com sucesso.')
-            return self.render_to_response(self.get_context_data(form=form))
+            else:
+                messages.error(request, 'Erro ao enviar a avaliação. Verifique os dados e tente novamente.')
+                return self.render_to_response(self.get_context_data(form=form))
         else:
-            messages.error(request, 'Erro ao enviar a avaliação. Verifique os dados e tente novamente.')
-            return self.render_to_response(self.get_context_data(form=form))
+            # Processamento do formulário de comentário
+            comment_form = CommentForm(request.POST)
+            if comment_form.is_valid():
+                comment = comment_form.save(commit=False)
+                comment.author = request.user
+                comment.event = self.object
+                comment.save()
+                messages.success(request, 'Comentário adicionado com sucesso!')
+                return redirect('event_detail', pk=self.object.pk)
+            else:
+                messages.error(request, 'Erro ao adicionar comentário.')
+                return self.render_to_response(self.get_context_data(comment_form=comment_form))
+
+        return redirect('event_detail', pk=self.object.pk)
 
 
 def upcoming_events_view(request):
@@ -342,3 +359,4 @@ class EventCreateView(FormView):
         messages.error(
             self.request, 'Erro ao criar o evento. Verifique os dados e tente novamente.')
         return self.render_to_response(context)
+        return reverse_lazy('event_detail', kwargs={'pk': self.object.event.pk})

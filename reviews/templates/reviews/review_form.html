@@ -1,0 +1,69 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="max-w-2xl mx-auto p-4">
+    <div class="bg-white shadow-md rounded-lg p-6">
+        <h2 class="text-2xl font-bold mb-4">{% if form.instance.pk %}Editar{% else %}Nova{% endif %} Avaliação</h2>
+        
+        <form method="post">
+            {% csrf_token %}
+            <div class="mb-4">
+                <div class="stars-container mb-4">
+                    <i class="far fa-star text-yellow-500 cursor-pointer star-rating" data-value="1"></i>
+                    <i class="far fa-star text-yellow-500 cursor-pointer star-rating" data-value="2"></i>
+                    <i class="far fa-star text-yellow-500 cursor-pointer star-rating" data-value="3"></i>
+                    <i class="far fa-star text-yellow-500 cursor-pointer star-rating" data-value="4"></i>
+                    <i class="far fa-star text-yellow-500 cursor-pointer star-rating" data-value="5"></i>
+                </div>
+                {{ form.rating }}
+                {{ form.comment }}
+            </div>
+            <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded-lg">
+                {% if form.instance.pk %}Atualizar{% else %}Criar{% endif %} Avaliação
+            </button>
+        </form>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const stars = document.querySelectorAll('.star-rating');
+    const ratingInput = document.getElementById('id_rating');
+    
+    function updateStars(rating) {
+        stars.forEach((star, index) => {
+            if (index < rating) {
+                star.classList.remove('far');
+                star.classList.add('fas');
+            } else {
+                star.classList.remove('fas');
+                star.classList.add('far');
+            }
+        });
+    }
+
+    // Inicializar com a avaliação existente (se houver)
+    if (ratingInput.value) {
+        updateStars(ratingInput.value);
+    }
+
+    stars.forEach(star => {
+        star.addEventListener('mouseover', function() {
+            const rating = this.getAttribute('data-value');
+            updateStars(rating);
+        });
+
+        star.addEventListener('mouseout', function() {
+            const currentRating = ratingInput.value || 0;
+            updateStars(currentRating);
+        });
+
+        star.addEventListener('click', function() {
+            const rating = this.getAttribute('data-value');
+            ratingInput.value = rating;
+            updateStars(rating);
+        });
+    });
+});
+</script>
+{% endblock %}
