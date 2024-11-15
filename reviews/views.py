@@ -3,6 +3,8 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse_lazy
 from django.contrib import messages
 from django.shortcuts import get_object_or_404
+from django.http import HttpResponseBadRequest
+from django.db import IntegrityError
 from .models import Review
 from .forms import ReviewForm
 from events.models import Event
@@ -15,7 +17,20 @@ class ReviewCreateView(LoginRequiredMixin, CreateView):
     def form_valid(self, form):
         form.instance.user = self.request.user
         form.instance.event_id = self.kwargs['event_id']
-        return super().form_valid(form)
+        
+        # Verificar se já existe uma review deste usuário para este evento
+        existing_review = Review.objects.filter(
+            user=self.request.user,
+            event_id=self.kwargs['event_id']
+        ).exists()
+        
+        if existing_review:
+            return HttpResponseBadRequest("Você já avaliou este evento.")
+        
+        try:
+            return super().form_valid(form)
+        except IntegrityError:
+            return HttpResponseBadRequest("Você já avaliou este evento.")
 
     def get_success_url(self):
         return reverse_lazy('event_detail', kwargs={'pk': self.kwargs['event_id']})
