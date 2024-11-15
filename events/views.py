@@ -69,6 +69,7 @@ class HomeView(ListView):
         return context
 
 
+@method_decorator(login_required, name='dispatch')
 class AnalysisEventListView(ListView):
     model = Event
     template_name = 'admin_events.html'
@@ -88,6 +89,7 @@ class EventApproveView(View):
         return redirect('analysis_events')
 
 
+@method_decorator(login_required, name='dispatch')
 class EventUpdateView(LoginRequiredMixin, UpdateView):
     model = Event
     form_class = EventForm
@@ -291,7 +293,8 @@ def upcoming_events_view(request):
 class EventCreateView(FormView):
     template_name = 'create.html'
     form_class = EventForm
-    success_url = reverse_lazy('home')
+    success_url = reverse_lazy('events')  # Alterado de 'home' para 'events'
+
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
