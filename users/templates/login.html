@@ -19,6 +19,15 @@
     <div class="w-full md:w-1/2 flex justify-center items-center bg-cover bg-center"
          style="background-image: url('{% static "eventos_cariri/images/back_login.png" %}');">
         <div class="bg-white bg-opacity-80 p-8 rounded-lg shadow-lg w-full max-w-md">
+            <!-- Adicionar mensagens de erro do formulário -->
+            {% if login_form.non_field_errors %}
+            <div class="mb-4 p-4 rounded-lg bg-red-100 border border-red-400 text-red-700">
+                {% for error in login_form.non_field_errors %}
+                    <p>{{ error }}</p>
+                {% endfor %}
+            </div>
+            {% endif %}
+
             {% if messages %}
             <div id="message-container" class="fixed top-20 right-30 p-1 rounded-lg shadow-lg">
                 {% for message in messages %}

@@ -16,8 +16,14 @@ def login_view(request):
             login(request, user)
             messages.success(request, 'Logado com sucesso!')
             return redirect('home')
+        else:
+            # Adicionar mensagem de erro explícita
+            messages.error(request, 'Email ou senha inválidos.')
     else:
         login_form = EmailAuthenticationForm()
+    
+    # Forçar a avaliação dos erros
+    login_form.is_valid()
     return render(request, 'login.html', {'login_form': login_form})
 
 
