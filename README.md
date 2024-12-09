@@ -55,15 +55,6 @@ As dependências adicionais podem ser instaladas automaticamente com o comando:
 
 `pip install -r requirements.txt`
 
-## 🚀 Testes
-
-Para garantir que tudo está funcionando corretamente, você pode rodar os testes da aplicação com o Django:
-
-`python manage.py test`
-
-<br/>
-
-
 ### 6. Realizar Migrações do Banco de Dados
 
 O Django utiliza um sistema de migrações para criar e manter a estrutura do banco de dados. Execute os comandos abaixo para criar as tabelas necessárias:
@@ -71,6 +62,14 @@ O Django utiliza um sistema de migrações para criar e manter a estrutura do ba
 `python manage.py makemigrations`
 
 `python manage.py migrate`
+
+## 🚀 Testes
+
+Para garantir que tudo está funcionando corretamente, você pode rodar os testes da aplicação com o Django:
+
+`python manage.py test`
+
+<br/>
 
 ### 7. Criar um Superusuário (Opcional, para Acesso ao Admin)
 
